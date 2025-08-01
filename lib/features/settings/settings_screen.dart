@@ -1,14 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:secure_accounts/features/auth/screens/sign_in/sign_in_screen.dart';
 
 import '../../core/services/database_services.dart';
+import '../../core/services/navigation_service.dart';
 import '../../core/services/settings_service.dart';
 import '../../core/theme/theme_cubit.dart';
 import '../../core/widgets/custom_text.dart';
 import '../auth/cubit/auth_cubit/cubit.dart';
+import '../auth/cubit/auth_cubit/states.dart';
 import '../change_password/change_password_screen.dart';
 import 'cubit/cubit.dart';
 import 'cubit/states.dart';
+
 
 class SettingsScreen extends StatelessWidget {
   const SettingsScreen({super.key});
@@ -27,82 +31,105 @@ class SettingsView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: const Text("Settings")),
-      body: BlocBuilder<SettingsCubit, SettingsState>(
-        builder: (context, settingsState) {
-          if (settingsState is SettingsInitial) {
-            return ListView(
-              children: [
-                // --- Theme Section ---
-                _SettingsGroupTitle(title: "Appearance"),
-                BlocBuilder<ThemeCubit, ThemeState>(
-                  builder: (context, themeState) {
-                    return Column(
-                      children: [
-                        RadioListTile<ThemeMode>(
-                          title: const Text("System Default"),
-                          value: ThemeMode.system,
-                          groupValue: themeState.themeMode,
-                          onChanged: (val) => context.read<ThemeCubit>().setTheme(val!),
-                        ),
-                        RadioListTile<ThemeMode>(
-                          title: const Text("Light"),
-                          value: ThemeMode.light,
-                          groupValue: themeState.themeMode,
-                          onChanged: (val) => context.read<ThemeCubit>().setTheme(val!),
-                        ),
-                        RadioListTile<ThemeMode>(
-                          title: const Text("Dark"),
-                          value: ThemeMode.dark,
-                          groupValue: themeState.themeMode,
-                          onChanged: (val) => context.read<ThemeCubit>().setTheme(val!),
-                        ),
-                      ],
-                    );
-                  },
-                ),
-                const Divider(),
-                // --- Security Section ---
-                _SettingsGroupTitle(title: "Security"),
-                SwitchListTile(
-                  title: const Text("Enable Biometric Lock"),
-                  subtitle: const Text("Use fingerprint/Face ID to unlock the app."),
-                  value: settingsState.isBiometricEnabled,
-                  onChanged: (val) => context.read<SettingsCubit>().toggleBiometrics(val),
-                ),
-                ListTile(
-                  title: const Text("Change Password"),
-                  leading: const Icon(Icons.password),
-                  onTap: () {
-                    // Navigate while providing the existing cubit
-                    Navigator.push(context, MaterialPageRoute(
-                      builder: (_) => BlocProvider.value(
-                        value: context.read<SettingsCubit>(),
-                        child: const ChangePasswordScreen(),
-                      ),
-                    ));
-                  },
-                ),
-                const Divider(),
-
-                // --- NEW: Account Section ---
-                const _SettingsGroupTitle(title: "Account"),
-                ListTile(
-                  title: Text(
-                    "Logout",
-                    style: TextStyle(color: Theme.of(context).colorScheme.error),
+    return BlocListener<AuthCubit, AuthState>(
+      listener: (context, state) {
+        if (state is AuthLoggedOut) {
+          NavigationService.pushAndRemoveUntil(const SignInScreen());
+        }
+      },
+      child: Scaffold(
+        appBar: AppBar(title: const Text("Settings")),
+        body: BlocBuilder<SettingsCubit, SettingsState>(
+          builder: (context, settingsState) {
+            if (settingsState is SettingsInitial) {
+              return ListView(
+                children: [
+                  // --- Theme Section ---
+                  const _SettingsGroupTitle(title: "Appearance"),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+                    child: BlocBuilder<ThemeCubit, ThemeState>(
+                      builder: (context, themeState) {
+                        // --- NEW: Modern SegmentedButton ---
+                        return SegmentedButton<ThemeMode>(
+                          segments: const <ButtonSegment<ThemeMode>>[
+                            ButtonSegment<ThemeMode>(
+                              value: ThemeMode.light,
+                              icon: Icon(Icons.wb_sunny_outlined),
+                              label: Text('Light'),
+                            ),
+                            ButtonSegment<ThemeMode>(
+                              value: ThemeMode.dark,
+                              icon: Icon(Icons.nightlight_outlined),
+                              label: Text('Dark'),
+                            ),
+                            ButtonSegment<ThemeMode>(
+                              value: ThemeMode.system,
+                              icon: Icon(Icons.brightness_auto_outlined),
+                              label: Text('Auto'),
+                            ),
+                          ],
+                          selected: <ThemeMode>{themeState.themeMode},
+                          onSelectionChanged: (Set<ThemeMode> newSelection) {
+                            context.read<ThemeCubit>().setTheme(newSelection.first);
+                          },
+                          // Make it fill the width
+                          style: ButtonStyle(
+                            tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                            visualDensity: VisualDensity.compact,
+                            // Ensure the style adapts to the theme
+                            backgroundColor: MaterialStateProperty.resolveWith<Color?>(
+                                  (Set<MaterialState> states) {
+                                if (states.contains(MaterialState.selected)) {
+                                  return Theme.of(context).colorScheme.primary.withOpacity(0.2);
+                                }
+                                return null;
+                              },
+                            ),
+                          ),
+                        );
+                      },
+                    ),
                   ),
-                  leading: Icon(Icons.logout, color: Theme.of(context).colorScheme.error),
-                  onTap: () {
-                    context.read<AuthCubit>().logout();
-                  },
-                ),
-              ],
-            );
-          }
-          return const Center(child: CircularProgressIndicator());
-        },
+                  const Divider(),
+
+                  // --- Security Section ---
+                  const _SettingsGroupTitle(title: "Security"),
+                  SwitchListTile(
+                    title: const Text("Enable Biometric Lock"),
+                    subtitle: const Text("Use fingerprint/Face ID to unlock the app."),
+                    value: settingsState.isBiometricEnabled,
+                    onChanged: (val) => context.read<SettingsCubit>().toggleBiometrics(val),
+                  ),
+                  ListTile(
+                    title: const Text("Change Password"),
+                    leading: const Icon(Icons.password),
+                    onTap: () {
+                      Navigator.push(context, MaterialPageRoute(
+                        builder: (_) => BlocProvider.value(
+                          value: context.read<SettingsCubit>(),
+                          child: const ChangePasswordScreen(),
+                        ),
+                      ));
+                    },
+                  ),
+                  const Divider(),
+
+                  // --- Account Section ---
+                  const _SettingsGroupTitle(title: "Account"),
+                  ListTile(
+                    title: Text("Logout", style: TextStyle(color: Theme.of(context).colorScheme.error)),
+                    leading: Icon(Icons.logout, color: Theme.of(context).colorScheme.error),
+                    onTap: () {
+                      context.read<AuthCubit>().logout();
+                    },
+                  ),
+                ],
+              );
+            }
+            return const Center(child: CircularProgressIndicator());
+          },
+        ),
       ),
     );
   }
