@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:secure_accounts/core/services/navigation_service.dart';
 
 import '../../../core/widgets/custom_text.dart';
 import '../../auth/cubit/auth_cubit/cubit.dart';
+import '../../settings/settings_screen.dart';
 import '../cubit/account_cubit/cubit.dart';
 import '../cubit/home_cubit/cubit.dart';
 import '../cubit/home_cubit/states.dart';
@@ -35,15 +37,22 @@ class HomeScreenAppBar extends StatelessWidget implements PreferredSizeWidget {
             ),
             actions: [
               IconButton(icon: const Icon(Icons.close), onPressed: () => searchController.clear()),
+              // NEW: Settings Button
             ],
           );
         } else {
           return AppBar(
-            title: const CustomText('My Accounts'),
+            title: const CustomText('PassKeeper'),
             automaticallyImplyLeading: false,
             actions: [
               IconButton(icon: const Icon(Icons.search), onPressed: () => context.read<HomeScreenCubit>().toggleSearch()),
-              IconButton(icon: const Icon(Icons.logout), tooltip: 'Logout', onPressed: () => context.read<AuthCubit>().logout()),
+              IconButton(
+                icon: const Icon(Icons.settings_outlined),
+                tooltip: 'Settings',
+                onPressed: () {
+                  NavigationService.push(SettingsScreen());
+                },
+              ),
             ],
           );
         }

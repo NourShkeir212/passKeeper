@@ -46,7 +46,7 @@ class HomeScreenView extends StatelessWidget {
         builder: (context, homeState) {
           return Scaffold(
             appBar: HomeScreenAppBar(searchController: searchController),
-            body: const AccountList(), // The entire body is now one clean widget
+            body: const AccountList(),
             floatingActionButton: homeState.isSearching
                 ? null
                 : FloatingActionButton(

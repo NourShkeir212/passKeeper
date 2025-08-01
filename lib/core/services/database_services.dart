@@ -141,4 +141,27 @@ class DatabaseService {
       whereArgs: [id],
     );
   }
+
+
+  /// Verifies if the provided password matches the user's current password.
+  Future<bool> verifyPassword(int userId, String password) async {
+    final db = await database;
+    final List<Map<String, dynamic>> result = await db.query(
+      'users',
+      where: 'id = ? AND password = ?',
+      whereArgs: [userId, password],
+    );
+    return result.isNotEmpty;
+  }
+
+  /// Updates the user's password in the database.
+  Future<int> updatePassword(int userId, String newPassword) async {
+    final db = await database;
+    return await db.update(
+      'users',
+      {'password': newPassword},
+      where: 'id = ?',
+      whereArgs: [userId],
+    );
+  }
 }

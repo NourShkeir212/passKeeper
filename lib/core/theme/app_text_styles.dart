@@ -15,15 +15,12 @@ class AppTextStyles {
     final TextTheme baseTextTheme = GoogleFonts.poppinsTextTheme();
 
     return baseTextTheme.copyWith(
-      headlineLarge: baseTextTheme.headlineLarge!
-          .copyWith(
-          fontSize: 32.0, fontWeight: FontWeight.bold, color: textColor),
-      headlineSmall: baseTextTheme.headlineSmall!
-          .copyWith(
-          fontSize: 24.0, fontWeight: FontWeight.bold, color: textColor),
+      headlineLarge: baseTextTheme.headlineLarge!.copyWith(fontSize: 32.0, fontWeight: FontWeight.bold, color: textColor),
+      headlineMedium: baseTextTheme.headlineMedium!.copyWith(fontSize: 28.0, fontWeight: FontWeight.bold, color: textColor),
+      headlineSmall: baseTextTheme.headlineSmall!.copyWith(fontSize: 24.0, fontWeight: FontWeight.bold, color: textColor),
       titleLarge: baseTextTheme.labelLarge!
           .copyWith(
-          fontSize: 18, fontWeight: FontWeight.w600, color: AppColors.white),
+          fontSize: 18, fontWeight: FontWeight.w600, color: textColor),
       titleMedium: baseTextTheme.titleMedium!
           .copyWith(
           fontSize: 16, fontWeight: FontWeight.bold, color: textColor),

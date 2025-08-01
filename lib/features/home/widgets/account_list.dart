@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
-
 import '../../../core/widgets/custom_text.dart';
 import '../../../model/account_model.dart';
 import '../cubit/account_cubit/cubit.dart';
@@ -47,7 +46,7 @@ class AccountList extends StatelessWidget {
                     children: [
                       Padding(
                         padding: const EdgeInsets.fromLTRB(20, 20, 20, 8),
-                        child: CustomText(category.name, style: Theme.of(context).textTheme.titleMedium),
+                        child: CustomText(category.name, style: Theme.of(context).textTheme.headlineSmall!)
                       ),
                       ...accountsInCategory.map((account) {
                         return Slidable(
