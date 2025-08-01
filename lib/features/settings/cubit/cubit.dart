@@ -1,13 +1,11 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../core/services/database_services.dart';
+import '../../../core/services/export_service.dart';
 import '../../../core/services/session_manager.dart';
 import '../../../core/services/settings_service.dart';
 import 'states.dart';
 
-// --- STATES ---
 
-
-// --- CUBIT ---
 class SettingsCubit extends Cubit<SettingsState> {
   final SettingsService _settingsService;
   final DatabaseService _databaseService;
@@ -44,6 +42,20 @@ class SettingsCubit extends Cubit<SettingsState> {
       emit(ChangePasswordSuccess());
     } catch (e) {
       emit(ChangePasswordFailure(e.toString().replaceFirst("Exception: ", "")));
+    }
+  }
+
+  final ExportService _exportService = ExportService();
+
+  Future<void> exportData() async {
+    emit(SettingsExporting());
+    try {
+      await _exportService.exportAccountsToExcel();
+      emit(SettingsExportSuccess());
+      // Revert to initial state after success
+      loadSettings();
+    } catch (e) {
+      emit(SettingsExportFailure(e.toString()));
     }
   }
 }

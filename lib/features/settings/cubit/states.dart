@@ -17,3 +17,10 @@ class ChangePasswordFailure extends SettingsState {
   final String error;
   const ChangePasswordFailure(this.error);
 }
+
+class SettingsExporting extends SettingsState {}
+class SettingsExportSuccess extends SettingsState {}
+class SettingsExportFailure extends SettingsState {
+  final String error;
+  const SettingsExportFailure(this.error);
+}

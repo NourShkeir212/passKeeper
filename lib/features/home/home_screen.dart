@@ -44,29 +44,31 @@ class HomeScreenView extends StatelessWidget {
       },
       child: BlocBuilder<HomeScreenCubit, HomeScreenState>(
         builder: (context, homeState) {
-          return Scaffold(
-            appBar: HomeScreenAppBar(searchController: searchController),
-            body: const AccountList(),
-            floatingActionButton: homeState.isSearching
-                ? null
-                : FloatingActionButton(
-              onPressed: () {
-                showModalBottomSheet(
-                  context: context,
-                  isScrollControlled: true,
-                  shape: const RoundedRectangleBorder(borderRadius: BorderRadius.vertical(top: Radius.circular(25.0))),
-                  builder: (_) {
-                    return MultiBlocProvider(
-                      providers: [
-                        BlocProvider.value(value: context.read<AccountCubit>()),
-                        BlocProvider.value(value: context.read<CategoryCubit>()),
-                      ],
-                      child: const AccountForm(),
-                    );
-                  },
-                );
-              },
-              child: const Icon(Icons.add),
+          return SafeArea(
+            child: Scaffold(
+              appBar: HomeScreenAppBar(searchController: searchController),
+              body: const AccountList(),
+              floatingActionButton: homeState.isSearching
+                  ? null
+                  : FloatingActionButton(
+                onPressed: () {
+                  showModalBottomSheet(
+                    context: context,
+                    isScrollControlled: true,
+                    shape: const RoundedRectangleBorder(borderRadius: BorderRadius.vertical(top: Radius.circular(25.0))),
+                    builder: (_) {
+                      return MultiBlocProvider(
+                        providers: [
+                          BlocProvider.value(value: context.read<AccountCubit>()),
+                          BlocProvider.value(value: context.read<CategoryCubit>()),
+                        ],
+                        child: const AccountForm(),
+                      );
+                    },
+                  );
+                },
+                child: const Icon(Icons.add),
+              ),
             ),
           );
         },

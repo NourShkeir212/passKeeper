@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:secure_accounts/features/auth/screens/sign_in/sign_in_screen.dart';
-
 import '../../core/services/database_services.dart';
 import '../../core/services/navigation_service.dart';
 import '../../core/services/settings_service.dart';
@@ -9,10 +7,10 @@ import '../../core/theme/theme_cubit.dart';
 import '../../core/widgets/custom_text.dart';
 import '../auth/cubit/auth_cubit/cubit.dart';
 import '../auth/cubit/auth_cubit/states.dart';
+import '../auth/screens/sign_in/sign_in_screen.dart';
 import '../change_password/change_password_screen.dart';
 import 'cubit/cubit.dart';
 import 'cubit/states.dart';
-
 
 class SettingsScreen extends StatelessWidget {
   const SettingsScreen({super.key});
@@ -20,7 +18,8 @@ class SettingsScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (context) => SettingsCubit(SettingsService(), DatabaseService())..loadSettings(),
+      create: (context) =>
+      SettingsCubit(SettingsService(), DatabaseService())..loadSettings(),
       child: const SettingsView(),
     );
   }
@@ -31,12 +30,48 @@ class SettingsView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocListener<AuthCubit, AuthState>(
-      listener: (context, state) {
-        if (state is AuthLoggedOut) {
-          NavigationService.pushAndRemoveUntil(const SignInScreen());
-        }
-      },
+    return MultiBlocListener(
+      listeners: [
+        BlocListener<AuthCubit, AuthState>(
+          listener: (context, state) {
+            if (state is AuthLoggedOut) {
+              // Navigate to login screen after logout
+              NavigationService.pushAndRemoveUntil(const SignInScreen());
+            }
+          },
+        ),
+        BlocListener<SettingsCubit, SettingsState>(
+          listener: (context, state) {
+            if (state is SettingsExporting) {
+              // Show a loading dialog during export
+              showDialog(
+                context: context,
+                barrierDismissible: false,
+                builder: (_) => const PopScope(
+                  canPop: false,
+                  child: AlertDialog(
+                    content: Row(
+                      children: [
+                        CircularProgressIndicator(),
+                        SizedBox(width: 20),
+                        Text("Exporting..."),
+                      ],
+                    ),
+                  ),
+                ),
+              );
+            } else if (state is SettingsExportSuccess) {
+              Navigator.of(context).pop(); // Close loading dialog
+            } else if (state is SettingsExportFailure) {
+              Navigator.of(context).pop(); // Close loading dialog
+              ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                content: Text("Export failed: ${state.error}"),
+                backgroundColor: Theme.of(context).colorScheme.error,
+              ));
+            }
+          },
+        ),
+      ],
       child: Scaffold(
         appBar: AppBar(title: const Text("Settings")),
         body: BlocBuilder<SettingsCubit, SettingsState>(
@@ -47,10 +82,10 @@ class SettingsView extends StatelessWidget {
                   // --- Theme Section ---
                   const _SettingsGroupTitle(title: "Appearance"),
                   Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 16.0, vertical: 8.0),
                     child: BlocBuilder<ThemeCubit, ThemeState>(
                       builder: (context, themeState) {
-                        // --- NEW: Modern SegmentedButton ---
                         return SegmentedButton<ThemeMode>(
                           segments: const <ButtonSegment<ThemeMode>>[
                             ButtonSegment<ThemeMode>(
@@ -71,17 +106,21 @@ class SettingsView extends StatelessWidget {
                           ],
                           selected: <ThemeMode>{themeState.themeMode},
                           onSelectionChanged: (Set<ThemeMode> newSelection) {
-                            context.read<ThemeCubit>().setTheme(newSelection.first);
+                            context
+                                .read<ThemeCubit>()
+                                .setTheme(newSelection.first);
                           },
-                          // Make it fill the width
                           style: ButtonStyle(
                             tapTargetSize: MaterialTapTargetSize.shrinkWrap,
                             visualDensity: VisualDensity.compact,
-                            // Ensure the style adapts to the theme
-                            backgroundColor: MaterialStateProperty.resolveWith<Color?>(
+                            backgroundColor:
+                            MaterialStateProperty.resolveWith<Color?>(
                                   (Set<MaterialState> states) {
                                 if (states.contains(MaterialState.selected)) {
-                                  return Theme.of(context).colorScheme.primary.withOpacity(0.2);
+                                  return Theme.of(context)
+                                      .colorScheme
+                                      .primary
+                                      .withOpacity(0.2);
                                 }
                                 return null;
                               },
@@ -97,20 +136,37 @@ class SettingsView extends StatelessWidget {
                   const _SettingsGroupTitle(title: "Security"),
                   SwitchListTile(
                     title: const Text("Enable Biometric Lock"),
-                    subtitle: const Text("Use fingerprint/Face ID to unlock the app."),
+                    subtitle:
+                    const Text("Use fingerprint/Face ID to unlock the app."),
                     value: settingsState.isBiometricEnabled,
-                    onChanged: (val) => context.read<SettingsCubit>().toggleBiometrics(val),
+                    onChanged: (val) =>
+                        context.read<SettingsCubit>().toggleBiometrics(val),
                   ),
                   ListTile(
                     title: const Text("Change Password"),
                     leading: const Icon(Icons.password),
                     onTap: () {
-                      Navigator.push(context, MaterialPageRoute(
-                        builder: (_) => BlocProvider.value(
-                          value: context.read<SettingsCubit>(),
-                          child: const ChangePasswordScreen(),
-                        ),
-                      ));
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (_) => BlocProvider.value(
+                              value: context.read<SettingsCubit>(),
+                              child: const ChangePasswordScreen(),
+                            ),
+                          ));
+                    },
+                  ),
+                  const Divider(),
+
+                  // --- Data Management Section ---
+                  const _SettingsGroupTitle(title: "Data Management"),
+                  ListTile(
+                    title: const Text("Export to Excel"),
+                    subtitle:
+                    const Text("Save a copy of your accounts to a file."),
+                    leading: const Icon(Icons.upload_file),
+                    onTap: () {
+                      context.read<SettingsCubit>().exportData();
                     },
                   ),
                   const Divider(),
@@ -118,8 +174,11 @@ class SettingsView extends StatelessWidget {
                   // --- Account Section ---
                   const _SettingsGroupTitle(title: "Account"),
                   ListTile(
-                    title: Text("Logout", style: TextStyle(color: Theme.of(context).colorScheme.error)),
-                    leading: Icon(Icons.logout, color: Theme.of(context).colorScheme.error),
+                    title: Text("Logout",
+                        style: TextStyle(
+                            color: Theme.of(context).colorScheme.error)),
+                    leading: Icon(Icons.logout,
+                        color: Theme.of(context).colorScheme.error),
                     onTap: () {
                       context.read<AuthCubit>().logout();
                     },
