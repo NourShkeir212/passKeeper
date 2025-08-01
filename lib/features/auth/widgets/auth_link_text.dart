@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:secure_accounts/core/widgets/custom_text.dart';
+import '../../../core/widgets/custom_text.dart';
 import '../../../core/widgets/custom_text_button.dart';
 
 class AuthLinkText extends StatelessWidget {

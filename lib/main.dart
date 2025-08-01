@@ -4,7 +4,7 @@ import 'core/services/database_services.dart';
 import 'core/services/navigation_service.dart';
 import 'core/theme/app_themes.dart';
 import 'features/auth/cubit/auth_cubit/cubit.dart';
-import 'features/auth/screens/splash/splash_screen.dart';
+import 'features/splash/splash_screen.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();

@@ -15,7 +15,6 @@ class CustomText extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final baseStyle = Theme.of(context).textTheme.bodyLarge;
-
     final finalStyle = baseStyle?.merge(style);
 
     return Text(

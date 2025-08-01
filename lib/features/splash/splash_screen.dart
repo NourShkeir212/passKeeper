@@ -2,10 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import '../../../../core/services/navigation_service.dart';
-import '../../../home/home_screen.dart';
-import '../../cubit/auth_cubit/cubit.dart';
-import '../../cubit/auth_cubit/states.dart';
-import '../sign_in/sign_in_screen.dart';
+import '../auth/cubit/auth_cubit/cubit.dart';
+import '../auth/cubit/auth_cubit/states.dart';
+import '../auth/screens/sign_in/sign_in_screen.dart';
+import '../home/home_screen.dart';
+
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
 

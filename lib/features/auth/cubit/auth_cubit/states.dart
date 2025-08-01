@@ -9,7 +9,8 @@ abstract class AuthState extends Equatable {
 class AuthInitial extends AuthState {}
 class AuthLoading extends AuthState {}
 class AuthSuccess extends AuthState {}
-class AuthLoggedOut extends AuthState {} // New state for explicit logout
+class AuthSuccessSignUp extends AuthState {} // To differentiate for navigation
+class AuthLoggedOut extends AuthState {}
 class AuthFailure extends AuthState {
   final String error;
   const AuthFailure(this.error);

@@ -1,0 +1,37 @@
+import 'package:equatable/equatable.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import '../../../../core/services/database_services.dart';
+import '../../../../core/services/session_manager.dart';
+import '../../../../model/category_model.dart';
+import 'states.dart';
+
+
+class CategoryCubit extends Cubit<CategoryState> {
+  final DatabaseService _databaseService;
+
+  CategoryCubit(this._databaseService) : super(CategoryInitial());
+
+  Future<void> loadCategories() async {
+    try {
+      emit(CategoryLoading());
+      final userId = await SessionManager.getUserId();
+      if (userId == null) throw Exception("User not logged in.");
+      final categories = await _databaseService.getCategories(userId);
+      emit(CategoryLoaded(categories));
+    } catch (e) {
+      emit(CategoryFailure(e.toString()));
+    }
+  }
+
+  Future<void> addCategory(String name) async {
+    try {
+      final userId = await SessionManager.getUserId();
+      if (userId == null) throw Exception("User not logged in.");
+      final newCategory = Category(userId: userId, name: name);
+      await _databaseService.insertCategory(newCategory);
+      loadCategories();
+    } catch (e) {
+      emit(CategoryFailure(e.toString()));
+    }
+  }
+}

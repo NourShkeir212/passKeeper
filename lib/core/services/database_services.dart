@@ -1,6 +1,10 @@
-import 'package:sqflite/sqflite.dart';
 import 'package:path/path.dart';
+import 'package:sqflite/sqflite.dart';
+
+import '../../model/account_model.dart';
+import '../../model/category_model.dart';
 import '../../model/user_model.dart';
+
 
 class DatabaseService {
   static final DatabaseService _instance = DatabaseService._internal();
@@ -21,10 +25,12 @@ class DatabaseService {
       path,
       version: 1,
       onCreate: _onCreate,
+      onConfigure: (db) async {
+        await db.execute('PRAGMA foreign_keys = ON');
+      },
     );
   }
 
-  // Create the users table
   Future<void> _onCreate(Database db, int version) async {
     await db.execute('''
       CREATE TABLE users(
@@ -33,21 +39,43 @@ class DatabaseService {
         password TEXT NOT NULL
       )
     ''');
+
+    await db.execute('''
+      CREATE TABLE categories(
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        userId INTEGER NOT NULL,
+        name TEXT NOT NULL,
+        FOREIGN KEY (userId) REFERENCES users (id) ON DELETE CASCADE
+      )
+    ''');
+
+    await db.execute('''
+      CREATE TABLE accounts(
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        userId INTEGER NOT NULL,
+        categoryId INTEGER NOT NULL,
+        serviceName TEXT NOT NULL,
+        username TEXT NOT NULL,
+        password TEXT NOT NULL,
+        recoveryAccount TEXT,
+        phoneNumbers TEXT,
+        FOREIGN KEY (userId) REFERENCES users (id) ON DELETE CASCADE,
+        FOREIGN KEY (categoryId) REFERENCES categories (id) ON DELETE CASCADE
+      )
+    ''');
   }
 
-  // Method to insert a new user
+  // --- User Methods ---
   Future<int> insertUser(User user) async {
     try {
       final db = await database;
       return await db.insert('users', user.toMap(),
           conflictAlgorithm: ConflictAlgorithm.fail);
     } catch (e) {
-      print('Error inserting user: $e');
-      return -1; // Indicate failure
+      return -1;
     }
   }
 
-  // Method to get a user for sign_in
   Future<User?> getUser(String username, String password) async {
     final db = await database;
     final List<Map<String, dynamic>> maps = await db.query(
@@ -57,13 +85,60 @@ class DatabaseService {
     );
 
     if (maps.isNotEmpty) {
-      // Convert the Map to a User object
-      return User(
-        id: maps[0]['id'],
-        username: maps[0]['username'],
-        password: maps[0]['password'],
-      );
+      return User.fromMap(maps.first);
     }
-    return null; // Return null if no user is found
+    return null;
+  }
+
+  // --- Category Methods ---
+  Future<int> insertCategory(Category category) async {
+    final db = await database;
+    return await db.insert('categories', category.toMap());
+  }
+
+  Future<List<Category>> getCategories(int userId) async {
+    final db = await database;
+    final List<Map<String, dynamic>> maps = await db.query(
+      'categories',
+      where: 'userId = ?',
+      whereArgs: [userId],
+      orderBy: 'name ASC',
+    );
+    return List.generate(maps.length, (i) => Category.fromMap(maps[i]));
+  }
+
+  // --- Account Methods ---
+  Future<int> insertAccount(Account account) async {
+    final db = await database;
+    return await db.insert('accounts', account.toMap());
+  }
+
+  Future<int> updateAccount(Account account) async {
+    final db = await database;
+    return await db.update(
+      'accounts',
+      account.toMap(),
+      where: 'id = ?',
+      whereArgs: [account.id],
+    );
+  }
+
+  Future<List<Account>> getAccounts(int userId) async {
+    final db = await database;
+    final List<Map<String, dynamic>> maps = await db.query(
+      'accounts',
+      where: 'userId = ?',
+      whereArgs: [userId],
+    );
+    return List.generate(maps.length, (i) => Account.fromMap(maps[i]));
+  }
+
+  Future<int> deleteAccount(int id) async {
+    final db = await database;
+    return await db.delete(
+      'accounts',
+      where: 'id = ?',
+      whereArgs: [id],
+    );
   }
 }
