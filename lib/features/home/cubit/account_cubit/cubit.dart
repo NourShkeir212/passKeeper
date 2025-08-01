@@ -49,4 +49,28 @@ class AccountCubit extends Cubit<AccountState> {
       emit(AccountFailure(e.toString()));
     }
   }
+
+  /// Filters the list of accounts based on a search query.
+  void searchAccounts(String query) {
+    // Only perform search if the state is AccountLoaded
+    final currentState = state;
+    if (currentState is AccountLoaded) {
+      if (query.isEmpty) {
+        // If query is empty, clear the filter
+        emit(AccountLoaded(currentState.accounts, filteredAccounts: null));
+        return;
+      }
+
+      // Filter the master list of accounts
+      final filteredList = currentState.accounts.where((account) {
+        final queryLower = query.toLowerCase();
+        final serviceLower = account.serviceName.toLowerCase();
+        final usernameLower = account.username.toLowerCase();
+
+        return serviceLower.contains(queryLower) || usernameLower.contains(queryLower);
+      }).toList();
+
+      emit(AccountLoaded(currentState.accounts, filteredAccounts: filteredList));
+    }
+  }
 }

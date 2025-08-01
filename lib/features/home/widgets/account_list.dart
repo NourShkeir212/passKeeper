@@ -1,0 +1,251 @@
+import 'package:collection/collection.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_slidable/flutter_slidable.dart';
+
+import '../../../core/widgets/custom_text.dart';
+import '../../../model/account_model.dart';
+import '../cubit/account_cubit/cubit.dart';
+import '../cubit/account_cubit/states.dart';
+import '../cubit/category_cubit/cubit.dart';
+import '../cubit/category_cubit/states.dart';
+import 'account_card.dart';
+import 'account_form.dart';
+class AccountList extends StatelessWidget {
+  const AccountList({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocBuilder<AccountCubit, AccountState>(
+      builder: (context, accountState) {
+        return BlocBuilder<CategoryCubit, CategoryState>(
+          builder: (context, categoryState) {
+            if (accountState is AccountLoading || categoryState is CategoryLoading) {
+              return const Center(child: CircularProgressIndicator());
+            }
+
+            if (accountState is AccountLoaded && categoryState is CategoryLoaded) {
+              final accountsToDisplay = accountState.filteredAccounts ?? accountState.accounts;
+              if (accountsToDisplay.isEmpty) {
+                return const Center(child: Text("Your vault is empty."));
+              }
+
+              final groupedAccounts = groupBy(accountsToDisplay, (Account acc) => acc.categoryId);
+              final categories = categoryState.categories;
+
+              return ListView.builder(
+                padding: const EdgeInsets.only(top: 8, bottom: 80),
+                itemCount: categories.length,
+                itemBuilder: (context, index) {
+                  final category = categories[index];
+                  final accountsInCategory = groupedAccounts[category.id] ?? [];
+                  if (accountsInCategory.isEmpty) return const SizedBox.shrink();
+
+                  return Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.fromLTRB(20, 20, 20, 8),
+                        child: CustomText(category.name, style: Theme.of(context).textTheme.titleMedium),
+                      ),
+                      ...accountsInCategory.map((account) {
+                        return Slidable(
+                          key: ValueKey(account.id),
+                          startActionPane: ActionPane(
+                            motion: const StretchMotion(),
+                            children: [
+                              SlidableAction(
+                                onPressed: (_) => _showAccountForm(context, account: account),
+                                backgroundColor: Colors.blue, icon: Icons.edit, label: 'Edit',
+                              ),
+                            ],
+                          ),
+                          endActionPane: ActionPane(
+                            motion: const StretchMotion(),
+                            children: [
+                              SlidableAction(
+                                onPressed: (_) => _showDeleteConfirmation(context, account.id!),
+                                backgroundColor: Colors.red, icon: Icons.delete, label: 'Delete',
+                              ),
+                            ],
+                          ),
+                          child: AccountCard(
+                            account: account,
+                            onTap: () => _showAccountDetails(context, account),
+                          ),
+                        );
+                      })
+                    ],
+                  );
+                },
+              );
+            }
+            return const Center(child: Text("Something went wrong."));
+          },
+        );
+      },
+    );
+  }
+  Widget _buildDetailRow(BuildContext context, IconData icon, String title,
+      String value,
+      {Widget? trailing}) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 8.0),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Icon(icon, size: 20, color: Theme
+              .of(context)
+              .colorScheme
+              .primary),
+          const SizedBox(width: 16),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                CustomText(title,
+                    style: TextStyle(
+                        fontSize: 12,
+                        color:
+                        Theme
+                            .of(context)
+                            .textTheme
+                            .bodySmall
+                            ?.color)),
+                const SizedBox(height: 2),
+                CustomText(value,
+                    style: const TextStyle(
+                        fontSize: 16, fontWeight: FontWeight.w500)),
+              ],
+            ),
+          ),
+          if (trailing != null) trailing,
+          IconButton(
+            icon: const Icon(Icons.copy, size: 20),
+            onPressed: () {
+              Clipboard.setData(ClipboardData(text: value));
+              ScaffoldMessenger.of(context)
+                ..hideCurrentSnackBar()
+                ..showSnackBar(
+                    SnackBar(content: Text('$title copied to clipboard')));
+            },
+          )
+        ],
+      ),
+    );
+  }
+  void _showAccountForm(BuildContext context, {Account? account}) {
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      shape: const RoundedRectangleBorder(borderRadius: BorderRadius.vertical(top: Radius.circular(25.0))),
+      builder: (_) {
+        return MultiBlocProvider(
+          providers: [
+            BlocProvider.value(value: context.read<AccountCubit>()),
+            BlocProvider.value(value: context.read<CategoryCubit>()),
+          ],
+          child: AccountForm(accountToEdit: account),
+        );
+      },
+    );
+  }
+
+  void _showAccountDetails(BuildContext context, Account account) {
+    // This state variable is scoped to this function and the modal.
+    bool isPasswordVisible = false;
+
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(25.0)),
+      ),
+      builder: (ctx) {
+        return StatefulBuilder(
+          // This builder gives us a special `setModalState` function
+          builder: (BuildContext context, StateSetter setModalState) {
+            return Container(
+              padding: const EdgeInsets.all(24),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Center(
+                    child: Container(
+                      width: 40,
+                      height: 5,
+                      decoration: BoxDecoration(
+                          color: Colors.grey[400],
+                          borderRadius: BorderRadius.circular(10)),
+                    ),
+                  ),
+                  const SizedBox(height: 24),
+                  CustomText(account.serviceName,
+                      style: Theme
+                          .of(context)
+                          .textTheme
+                          .headlineSmall),
+                  const Divider(height: 32),
+                  _buildDetailRow(
+                      context, Icons.person_outline, "Username",
+                      account.username),
+                  _buildDetailRow(context, Icons.lock_outline, "Password",
+                      isPasswordVisible ? account.password : '••••••••••',
+                      trailing: IconButton(
+                        icon: Icon(isPasswordVisible
+                            ? Icons.visibility_off_outlined
+                            : Icons.visibility_outlined),
+                        // --- THE FIX IS HERE ---
+                        onPressed: () {
+                          setModalState(() {
+                            isPasswordVisible = !isPasswordVisible;
+                          });
+                        },
+                      )),
+                  if (account.recoveryAccount != null &&
+                      account.recoveryAccount!.isNotEmpty)
+                    _buildDetailRow(context, Icons.email_outlined,
+                        "Recovery Email", account.recoveryAccount!),
+                  if (account.phoneNumbers != null &&
+                      account.phoneNumbers!.isNotEmpty)
+                    _buildDetailRow(context, Icons.phone_outlined,
+                        "Phone Numbers", account.phoneNumbers!),
+                  const SizedBox(height: 20),
+                ],
+              ),
+            );
+          },
+        );
+      },
+    );
+  }
+
+  void _showDeleteConfirmation(BuildContext context, int accountId) {
+    showDialog(
+      context: context,
+      builder: (BuildContext ctx) {
+        return AlertDialog(
+          title: const CustomText('Confirm Deletion'),
+          content: const CustomText(
+              'Are you sure you want to delete this account? This action cannot be undone.'),
+          actions: <Widget>[
+            TextButton(
+              child: const CustomText('Cancel'),
+              onPressed: () => Navigator.of(ctx).pop(),
+            ),
+            TextButton(
+              child: CustomText('Delete',
+                  style: TextStyle(color: Colors.red.shade700)),
+              onPressed: () {
+                context.read<AccountCubit>().deleteAccount(accountId);
+                Navigator.of(ctx).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+}
