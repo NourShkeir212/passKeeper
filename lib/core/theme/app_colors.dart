@@ -13,6 +13,8 @@ class AppColors {
 
 
   // --- ألوان الثيم الفاتح (Light) ---
+  static const Color backgroundLightStart = Color(0xFFE0F2F1); // Light Teal
+  static const Color backgroundLightEnd = Color(0xFFE3F2FD); // Light Blue
   static const Color primaryLight = Color(0xFF009688); // Teal remains the primary color
   static const Color accentLight = Color(0xFF00796B);
   static const Color backgroundLight = Color(0xFFF1F8E9); // A very light green/grey
