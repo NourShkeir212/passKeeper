@@ -5,13 +5,12 @@ import 'app_colors.dart';
 class AppTextStyles {
   AppTextStyles._();
 
-
   static TextTheme getCustomTextTheme(Brightness brightness) {
+    final Color textColor = brightness == Brightness.dark ? AppColors.textDark : AppColors.textLight;
+    final Color labelColor = brightness == Brightness.dark ? AppColors.textDarkSecondary : AppColors.textLightSecondary;
 
-    final Color textColor = brightness == Brightness.dark ? AppColors.white : AppColors.textLight;
-    final Color labelColor = brightness == Brightness.dark ? AppColors.white.withOpacity(0.7) : AppColors.lightGrey;
-
-    final TextTheme baseTextTheme = GoogleFonts.cairoTextTheme();
+    // Change from Cairo to Poppins
+    final TextTheme baseTextTheme = GoogleFonts.poppinsTextTheme();
 
     return baseTextTheme.copyWith(
       headlineLarge: baseTextTheme.headlineLarge!.copyWith(
@@ -21,15 +20,15 @@ class AppTextStyles {
       ),
       titleLarge: baseTextTheme.labelLarge!.copyWith(
         fontSize: 18,
-        fontWeight: FontWeight.w700,
-        color: AppColors.white, // Button text is always white in our design
+        fontWeight: FontWeight.w600,
+        color: AppColors.white,
       ),
       bodyLarge: baseTextTheme.bodyLarge!.copyWith(
         fontSize: 16,
         color: textColor,
       ),
       labelLarge: baseTextTheme.bodyMedium!.copyWith(
-        color: labelColor, // For input field labels
+        color: labelColor,
       ),
     );
   }

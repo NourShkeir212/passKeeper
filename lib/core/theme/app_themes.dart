@@ -5,7 +5,7 @@ import 'app_text_styles.dart';
 class AppTheme {
   AppTheme._();
 
-  // --- الثيم الفاتح ---
+  // --- Light Theme ---
   static final ThemeData lightTheme = ThemeData(
     brightness: Brightness.light,
     primaryColor: AppColors.primaryLight,
@@ -19,63 +19,39 @@ class AppTheme {
     elevatedButtonTheme: ElevatedButtonThemeData(
       style: ElevatedButton.styleFrom(
         backgroundColor: AppColors.primaryLight,
-        foregroundColor: AppColors.white, // لون النص والأيقونات داخل الزر
-        padding: const EdgeInsets.symmetric(vertical: 16.0),
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(30.0),
-        ),
+        foregroundColor: AppColors.white,
       ),
     ),
     inputDecorationTheme: InputDecorationTheme(
       filled: true,
       fillColor: AppColors.cardLight,
-      prefixIconColor: AppColors.lightGrey,
-      suffixIconColor: AppColors.lightGrey,
-      border: OutlineInputBorder(
-        borderRadius: BorderRadius.circular(30.0),
-        borderSide: BorderSide(color: Colors.grey.shade300),
-      ),
-      focusedBorder: OutlineInputBorder(
-        borderRadius: BorderRadius.circular(30.0),
-        borderSide: const BorderSide(color: AppColors.primaryLight, width: 2),
-      ),
+      prefixIconColor: AppColors.textLightSecondary,
+      // ... a باقي الأنماط
     ),
   );
 
-  // --- الثيم الداكن ---
+  // --- Dark Theme ---
   static final ThemeData darkTheme = ThemeData(
     brightness: Brightness.dark,
     primaryColor: AppColors.primaryDark,
-    scaffoldBackgroundColor: AppColors.backgroundDarkStart,
+    scaffoldBackgroundColor: AppColors.backgroundDark,
     colorScheme: const ColorScheme.dark(
       primary: AppColors.primaryDark,
       secondary: AppColors.accentDark,
-      background: AppColors.backgroundDarkStart,
+      background: AppColors.backgroundDark,
     ),
     textTheme: AppTextStyles.getCustomTextTheme(Brightness.dark),
     elevatedButtonTheme: ElevatedButtonThemeData(
       style: ElevatedButton.styleFrom(
-        backgroundColor: AppColors.primaryDark.withOpacity(0.8),
+        backgroundColor: AppColors.primaryDark,
         foregroundColor: AppColors.white,
-        padding: const EdgeInsets.symmetric(vertical: 16.0),
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(30.0),
-        ),
       ),
     ),
     inputDecorationTheme: InputDecorationTheme(
       filled: true,
-      fillColor: AppColors.darkGrey,
-      prefixIconColor: AppColors.white.withOpacity(0.7),
-      suffixIconColor: AppColors.white.withOpacity(0.7),
-      border: OutlineInputBorder(
-        borderRadius: BorderRadius.circular(30.0),
-        borderSide: BorderSide.none,
-      ),
-      focusedBorder: OutlineInputBorder(
-        borderRadius: BorderRadius.circular(30.0),
-        borderSide: const BorderSide(color: AppColors.primaryDark, width: 2),
-      ),
+      fillColor: AppColors.cardDark,
+      prefixIconColor: AppColors.textDarkSecondary,
+      // ... a باقي الأنماط
     ),
   );
 }

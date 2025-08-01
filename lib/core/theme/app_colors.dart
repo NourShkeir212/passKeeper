@@ -3,22 +3,22 @@ import 'package:flutter/material.dart';
 class AppColors {
   AppColors._();
 
-  // --- ألوان الثيم الداكن (Dark) ---
-  static const Color primaryDark = Color(0xFF009688); // Teal
-  static const Color accentDark = Color(0xFF00796B); // Teal Darker
-  static const Color backgroundDarkStart = Color(0xFF004D40);
-  static const Color backgroundDarkEnd = Color(0xFF1A237E);
+  // --- Dark Theme Colors ---
+  static const Color primaryDark = Color(0xFFA17FFF); // A vibrant purple
+  static const Color accentDark = Color(0xFFB599FF);
+  static const Color backgroundDark = Color(0xFF16161E); // A very dark, slightly blueish-grey
+  static const Color cardDark = Color(0xFF1E1E28); // A slightly lighter card color
+  static const Color textDark = Colors.white;
+  static const Color textDarkSecondary = Colors.white70;
+
+  // --- Light Theme Colors ---
+  static const Color primaryLight = Color(0xFF007AFF); // Apple's classic blue
+  static const Color accentLight = Color(0xFF3395FF);
+  static const Color backgroundLight = Color(0xFFF5F5F7); // A very light, clean grey
+  static const Color textLight = Color(0xFF1D1D1F); // Nearly black, but softer
+  static const Color cardLight = Colors.white;
+  static const Color textLightSecondary = Colors.black54;
+
+  // --- Common Colors ---
   static const Color white = Colors.white;
-  static const Color darkGrey = Color(0x33FFFFFF); // White with 20% opacity
-
-
-  // --- ألوان الثيم الفاتح (Light) ---
-  static const Color backgroundLightStart = Color(0xFFE0F2F1); // Light Teal
-  static const Color backgroundLightEnd = Color(0xFFE3F2FD); // Light Blue
-  static const Color primaryLight = Color(0xFF009688); // Teal remains the primary color
-  static const Color accentLight = Color(0xFF00796B);
-  static const Color backgroundLight = Color(0xFFF1F8E9); // A very light green/grey
-  static const Color textLight = Color(0xFF212121); // Nearly black
-  static const Color cardLight = Colors.white; // For cards and input fields
-  static const Color lightGrey = Colors.black54;
 }
