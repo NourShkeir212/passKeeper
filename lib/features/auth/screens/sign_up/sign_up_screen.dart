@@ -16,8 +16,6 @@ class SignUpScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // Both Cubits are provided at a higher level or here if needed.
-    // Providing SignUpCubit here for this screen's scope.
     return BlocProvider(
       create: (context) => SignUpCubit(),
       child: const SignUpView(),
@@ -25,7 +23,6 @@ class SignUpScreen extends StatelessWidget {
   }
 }
 
-// Converted from StatefulWidget to StatelessWidget
 class SignUpView extends StatelessWidget {
   const SignUpView({super.key});
 
@@ -64,7 +61,7 @@ class SignUpView extends StatelessWidget {
 
     return BlocListener<AuthCubit, AuthState>(
       listener: (context, state) {
-        if (state is AuthSuccess) {
+        if (state is AuthSuccessSignUp) {
           ScaffoldMessenger.of(context)
             ..hideCurrentSnackBar()
             ..showSnackBar(
