@@ -4,8 +4,8 @@ import 'package:flutter_animate/flutter_animate.dart';
 import '../../../../core/services/navigation_service.dart';
 import '../auth/cubit/auth_cubit/cubit.dart';
 import '../auth/cubit/auth_cubit/states.dart';
+import '../auth/screens/lock_screen/lock_screen.dart';
 import '../auth/screens/sign_in/sign_in_screen.dart';
-import '../home/home_screen.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
@@ -31,9 +31,10 @@ class _SplashScreenState extends State<SplashScreen> {
     return BlocListener<AuthCubit, AuthState>(
       listener: (context, state) {
         if (state is AuthSuccess) {
-          NavigationService.pushAndRemoveUntil(const HomeScreen());
+          NavigationService.pushReplacement(const LockScreen());
         } else if (state is AuthLoggedOut) {
-          NavigationService.pushAndRemoveUntil(const SignInScreen());
+          // If no session, go to LoginScreen as before
+          NavigationService.pushReplacement(const SignInScreen());
         }
       },
       child: Scaffold(
@@ -45,15 +46,25 @@ class _SplashScreenState extends State<SplashScreen> {
               Icon(
                 Icons.shield_rounded,
                 size: 100,
-                color: Theme.of(context).colorScheme.primary,
+                color: Theme
+                    .of(context)
+                    .colorScheme
+                    .primary,
               ),
               const SizedBox(height: 24),
 
               // App Name
               Text(
                 'PassKeeper',
-                style: Theme.of(context).textTheme.headlineLarge?.copyWith(
-                  color: Theme.of(context).colorScheme.primary,
+                style: Theme
+                    .of(context)
+                    .textTheme
+                    .headlineLarge
+                    ?.copyWith(
+                  color: Theme
+                      .of(context)
+                      .colorScheme
+                      .primary,
                   fontWeight: FontWeight.w600,
                 ),
               ),
