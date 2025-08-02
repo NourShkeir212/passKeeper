@@ -52,4 +52,27 @@ class CategoryCubit extends Cubit<CategoryState> {
       // Handle error
     }
   }
+
+  Future<void> reorderCategories(int oldIndex, int newIndex) async {
+    final currentState = state;
+    if (currentState is CategoryLoaded) {
+      if (newIndex > oldIndex) {
+        newIndex -= 1;
+      }
+      final categories = List<Category>.from(currentState.categories);
+      final item = categories.removeAt(oldIndex);
+      categories.insert(newIndex, item);
+
+      // Update order index for all items
+      for (int i = 0; i < categories.length; i++) {
+        categories[i] = categories[i].copyWith(categoryOrder: i);
+      }
+
+      // Optimistically update the UI
+      emit(CategoryLoaded(categories));
+
+      // Persist the new order to the database
+      await _databaseService.updateCategoryOrder(categories);
+    }
+  }
 }

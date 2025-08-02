@@ -89,4 +89,36 @@ class AccountCubit extends Cubit<AccountState> {
       emit(AccountLoaded(currentState.accounts, filteredAccounts: filteredList));
     }
   }
+
+
+  Future<void> reorderAccounts(int oldIndex, int newIndex, int categoryId) async {
+    final currentState = state;
+    if (currentState is AccountLoaded) {
+
+      if (newIndex > oldIndex) {
+        newIndex -= 1;
+      }
+      // Separate the accounts for the specific category
+      final accountsInCat = currentState.accounts.where((a) => a.categoryId == categoryId).toList();
+      final otherAccounts = currentState.accounts.where((a) => a.categoryId != categoryId).toList();
+
+      // Reorder the list for the specific category
+      final item = accountsInCat.removeAt(oldIndex);
+      accountsInCat.insert(newIndex, item);
+
+      // Update order index for the reordered items
+      for (int i = 0; i < accountsInCat.length; i++) {
+        accountsInCat[i] = accountsInCat[i].copyWith(accountOrder: i);
+      }
+
+      // Combine the lists back together
+      final fullList = [...otherAccounts, ...accountsInCat];
+
+      // Optimistically update the UI
+      emit(AccountLoaded(fullList));
+
+      // Persist the new order to the database
+      await _databaseService.updateAccountOrder(accountsInCat);
+    }
+  }
 }

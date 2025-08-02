@@ -1,3 +1,4 @@
+import 'package:excel/excel.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'core/services/database_services.dart';
@@ -8,9 +9,13 @@ import 'core/theme/theme_cubit.dart';
 import 'features/auth/cubit/auth_cubit/cubit.dart';
 import 'features/splash/splash_screen.dart';
 
-void main() {
+void main() async{
   WidgetsFlutterBinding.ensureInitialized();
   runApp(const MyApp());
+
+  DatabaseService db = DatabaseService();
+
+  //await db.deleteDatabaseFile();
 }
 
 class MyApp extends StatelessWidget {

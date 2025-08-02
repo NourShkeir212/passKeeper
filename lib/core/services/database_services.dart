@@ -23,8 +23,9 @@ class DatabaseService {
     String path = join(await getDatabasesPath(), 'passkeeper.db');
     return await openDatabase(
       path,
-      version: 1,
+      version: 3,
       onCreate: _onCreate,
+      onUpgrade: _onUpgrade,
       onConfigure: (db) async {
         await db.execute('PRAGMA foreign_keys = ON');
       },
@@ -38,13 +39,14 @@ class DatabaseService {
         username TEXT NOT NULL UNIQUE,
         password TEXT NOT NULL
       )
-    ''');
+    '''); // FIX: Removed trailing comma
 
     await db.execute('''
       CREATE TABLE categories(
         id INTEGER PRIMARY KEY AUTOINCREMENT,
         userId INTEGER NOT NULL,
         name TEXT NOT NULL,
+        categoryOrder INTEGER NOT NULL DEFAULT 0, -- FIX: Added comma
         FOREIGN KEY (userId) REFERENCES users (id) ON DELETE CASCADE
       )
     ''');
@@ -59,10 +61,28 @@ class DatabaseService {
         password TEXT NOT NULL,
         recoveryAccount TEXT,
         phoneNumbers TEXT,
+        accountOrder INTEGER NOT NULL DEFAULT 0, -- FIX: Added comma
         FOREIGN KEY (userId) REFERENCES users (id) ON DELETE CASCADE,
         FOREIGN KEY (categoryId) REFERENCES categories (id) ON DELETE CASCADE
       )
     ''');
+  }
+
+  Future<void> _onUpgrade(Database db, int oldVersion, int newVersion) async {
+    if (oldVersion < 3) {
+      await db.execute('ALTER TABLE categories ADD COLUMN categoryOrder INTEGER NOT NULL DEFAULT 0');
+      await db.execute('ALTER TABLE accounts ADD COLUMN accountOrder INTEGER NOT NULL DEFAULT 0');
+    }
+  }
+
+  Future<void> deleteDatabaseFile() async {
+    String path = join(await getDatabasesPath(), 'passkeeper.db');
+    if (_database != null && _database!.isOpen) {
+      await _database!.close();
+      _database = null;
+    }
+    await deleteDatabase(path);
+    print("Database deleted successfully.");
   }
 
   // --- User Methods ---
@@ -102,7 +122,7 @@ class DatabaseService {
       'categories',
       where: 'userId = ?',
       whereArgs: [userId],
-      orderBy: 'name ASC',
+      orderBy: 'categoryOrder ASC',
     );
     return List.generate(maps.length, (i) => Category.fromMap(maps[i]));
   }
@@ -176,6 +196,7 @@ class DatabaseService {
       'accounts',
       where: 'userId = ?',
       whereArgs: [userId],
+      orderBy: 'accountOrder ASC', // ORDER BY
     );
     return List.generate(maps.length, (i) => Account.fromMap(maps[i]));
   }
@@ -226,5 +247,23 @@ class DatabaseService {
       limit: 1,
     );
     return result.isNotEmpty;
+  }
+
+  Future<void> updateCategoryOrder(List<Category> categories) async {
+    final db = await database;
+    final batch = db.batch();
+    for (var category in categories) {
+      batch.update('categories', {'categoryOrder': category.categoryOrder}, where: 'id = ?', whereArgs: [category.id]);
+    }
+    await batch.commit(noResult: true);
+  }
+
+  Future<void> updateAccountOrder(List<Account> accounts) async {
+    final db = await database;
+    final batch = db.batch();
+    for (var account in accounts) {
+      batch.update('accounts', {'accountOrder': account.accountOrder}, where: 'id = ?', whereArgs: [account.id]);
+    }
+    await batch.commit(noResult: true);
   }
 }

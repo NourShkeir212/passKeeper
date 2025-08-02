@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_svg/svg.dart';
 import '../../core/theme/app_icons.dart';
 import '../../core/widgets/custom_text.dart';
 import '../../core/widgets/custom_text_field.dart';
@@ -25,38 +24,17 @@ class ManageCategoriesScreen extends StatelessWidget {
           }
           if (state is CategoryLoaded) {
             if (state.categories.isEmpty) {
-              return Center(
-                child: Padding(
-                  padding: const EdgeInsets.all(32.0),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      SvgPicture.asset(
-                        'assets/svg/no_data.svg',
-                        height: 150,
-                      ),
-                      const SizedBox(height: 24),
-                      CustomText(
-                        "No categories created yet.",
-                        style: Theme.of(context).textTheme.headlineSmall,
-                      ),
-                      const SizedBox(height: 8),
-                      CustomText(
-                        "Tap the '+' button to add your category",
-                        textAlign: TextAlign.center,
-                        style: Theme.of(context).textTheme.bodyMedium,
-                      ),
-                    ],
-                  ),
-                ),
-              );
+              return const Center(child: Text("No categories created yet."));
             }
-            return ListView.builder(
+            // --- CHANGED to ReorderableListView.builder ---
+            return ReorderableListView.builder(
               itemCount: state.categories.length,
               itemBuilder: (context, index) {
                 final category = state.categories[index];
                 return ListTile(
-                    leading: const Icon(AppIcons.category),
+                  // Each item MUST have a unique key for reordering
+                  key: ValueKey(category.id),
+                  leading: const Icon(AppIcons.category),
                   title: CustomText(category.name),
                   trailing: Row(
                     mainAxisSize: MainAxisSize.min,
@@ -69,9 +47,14 @@ class ManageCategoriesScreen extends StatelessWidget {
                         icon: Icon(AppIcons.delete, color: Theme.of(context).colorScheme.error),
                         onPressed: () => _showDeleteConfirmation(context, category),
                       ),
+                      // The drag handle is implicitly the whole ListTile
                     ],
                   ),
                 );
+              },
+              // The callback that triggers when an item is moved
+              onReorder: (oldIndex, newIndex) {
+                context.read<CategoryCubit>().reorderCategories(oldIndex, newIndex);
               },
             );
           }
@@ -110,7 +93,7 @@ class ManageCategoriesScreen extends StatelessWidget {
               if (formKey.currentState!.validate()) {
                 final cubit = context.read<CategoryCubit>();
                 if (isEditing) {
-                  final updatedCategory = Category(id: category.id, userId: category.userId, name: nameController.text);
+                  final updatedCategory = category.copyWith(name: nameController.text);
                   cubit.updateCategory(updatedCategory);
                 } else {
                   cubit.addCategory(nameController.text);
@@ -137,7 +120,6 @@ class ManageCategoriesScreen extends StatelessWidget {
             child: CustomText('Delete', style: TextStyle(color: Theme.of(context).colorScheme.error)),
             onPressed: () {
               context.read<CategoryCubit>().deleteCategory(category.id!);
-              // We also need to refresh the main account list
               context.read<AccountCubit>().loadAccounts();
               Navigator.of(ctx).pop();
             },
