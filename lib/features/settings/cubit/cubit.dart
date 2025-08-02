@@ -29,13 +29,15 @@ class SettingsCubit extends Cubit<SettingsState> {
     required String oldPassword,
     required String newPassword,
   }) async {
+
+    final currentBiometricSetting = (state is SettingsInitial) ? (state as SettingsInitial).isBiometricEnabled : true;
+
     emit(SettingsLoading());
     try {
       final userId = await SessionManager.getUserId();
       if (userId == null) throw Exception("User not found");
 
-      final isVerified = await _databaseService.verifyPassword(
-          userId, oldPassword);
+      final isVerified = await _databaseService.verifyPassword(userId, oldPassword);
       if (!isVerified) {
         throw Exception("Incorrect current password.");
       }
@@ -44,6 +46,10 @@ class SettingsCubit extends Cubit<SettingsState> {
       emit(ChangePasswordSuccess());
     } catch (e) {
       emit(ChangePasswordFailure(e.toString().replaceFirst("Exception: ", "")));
+    } finally {
+      // **THE FIX:** After success or failure, always revert to a stable state
+      // so the previous screen doesn't show a spinner.
+      emit(SettingsInitial(isBiometricEnabled: currentBiometricSetting));
     }
   }
 
