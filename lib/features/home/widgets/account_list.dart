@@ -9,6 +9,7 @@ import '../../../core/theme/app_icons.dart';
 import '../../../core/widgets/custom_text.dart';
 import '../../../model/account_model.dart';
 import '../../../model/category_model.dart';
+import '../../auth/cubit/auth_cubit/cubit.dart';
 import '../cubit/account_cubit/cubit.dart';
 import '../cubit/account_cubit/states.dart';
 import '../cubit/category_cubit/cubit.dart';
@@ -187,8 +188,8 @@ class AccountList extends StatelessWidget {
   }
 
   void _showAccountDetails(BuildContext context, Account account) {
-    final encryptionService = EncryptionService();
     bool isPasswordVisible = false;
+
     showModalBottomSheet(
       context: context,
       isScrollControlled: true,
@@ -198,27 +199,71 @@ class AccountList extends StatelessWidget {
       builder: (ctx) {
         return StatefulBuilder(
           builder: (BuildContext context, StateSetter setModalState) {
+            void handleDetailsPasswordVisibility() async {
+              final encryptionService = EncryptionService();
+              if (encryptionService.isInitialized) {
+                setModalState(() => isPasswordVisible = !isPasswordVisible);
+                return;
+              }
+
+              final password = await _showMasterPasswordDialog(context);
+              if (password != null && password.isNotEmpty) {
+                final success =
+                await context.read<AuthCubit>().verifyMasterPassword(password);
+                if (success) {
+                  setModalState(() => isPasswordVisible = true);
+                } else if (context.mounted) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(
+                        content: Text("Incorrect password"),
+                        backgroundColor: Colors.red),
+                  );
+                }
+              }
+            }
+
             return Container(
               padding: const EdgeInsets.all(24),
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Center(child: Container(width: 40, height: 5, decoration: BoxDecoration(color: Colors.grey[400], borderRadius: BorderRadius.circular(10)))),
+                  Center(
+                      child: Container(
+                          width: 40,
+                          height: 5,
+                          decoration: BoxDecoration(
+                              color: Colors.grey[400],
+                              borderRadius: BorderRadius.circular(10)))),
                   const SizedBox(height: 24),
-                  CustomText(account.serviceName, style: Theme.of(context).textTheme.headlineSmall),
+                  CustomText(account.serviceName,
+                      style: Theme.of(context).textTheme.headlineSmall),
                   const Divider(height: 32),
-                  _buildDetailRow(context, AppIcons.user, "Username", account.username),
-                  _buildDetailRow(context, AppIcons.lock, "Password", isPasswordVisible ? encryptionService.decryptText(account.password) : '••••••••••',
+                  _buildDetailRow(
+                      context, AppIcons.user, "Username", account.username),
+                  _buildDetailRow(
+                    context,
+                    AppIcons.lock,
+                    "Password",
+                    isPasswordVisible && EncryptionService().isInitialized
+                        ? EncryptionService().decryptText(account.password)
+                        : '••••••••••',
                     trailing: IconButton(
-                      icon: Icon(isPasswordVisible ? AppIcons.eyeSlash : AppIcons.eye),
-                      onPressed: () => setModalState(() => isPasswordVisible = !isPasswordVisible),
+                      icon: Icon(isPasswordVisible
+                          ? AppIcons.eyeSlash
+                          : AppIcons.eye),
+                      onPressed:
+                      handleDetailsPasswordVisibility, // This now calls the correct handler
                     ),
                   ),
-                  if (account.recoveryAccount != null && account.recoveryAccount!.isNotEmpty)
-                    _buildDetailRow(context, AppIcons.email, "Recovery Email", account.recoveryAccount!),
-                  if (account.phoneNumbers != null && account.phoneNumbers!.isNotEmpty)
-                    _buildDetailRow(context, AppIcons.phone, "Phone Numbers", account.phoneNumbers!),
+                  if (account.recoveryAccount != null &&
+                      account.recoveryAccount!.isNotEmpty)
+                    _buildDetailRow(context, AppIcons.email, "Recovery Email",
+                        account.recoveryAccount!),
+                  if (account.phoneNumbers != null &&
+                      account.phoneNumbers!.isNotEmpty)
+                    _buildDetailRow(context, AppIcons.phone, "Phone Numbers",
+                        account.phoneNumbers!),
                   const SizedBox(height: 20),
                 ],
               ),
@@ -229,7 +274,51 @@ class AccountList extends StatelessWidget {
     );
   }
 
-  Widget _buildDetailRow(BuildContext context, IconData icon, String title, String value, {Widget? trailing}) {
+  Future<String?> _showMasterPasswordDialog(BuildContext context) {
+    final passwordController = TextEditingController();
+    final formKey = GlobalKey<FormState>();
+    return showDialog<String>(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Text("Unlock Vault"),
+        content: Form(
+          key: formKey,
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              const Text("Enter your master password to reveal your accounts for this session."),
+              const SizedBox(height: 16),
+              TextFormField(
+                controller: passwordController,
+                obscureText: true,
+                decoration: const InputDecoration(labelText: "Master Password"),
+                validator: (v) => v!.isEmpty ? 'Password cannot be empty' : null,
+              ),
+            ],
+          ),
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.of(context).pop(),
+            child: const Text("Cancel"),
+          ),
+          FilledButton(
+            onPressed: () {
+              if (formKey.currentState!.validate()) {
+                Navigator.of(context).pop(passwordController.text);
+              }
+            },
+            child: const Text("Unlock"),
+          ),
+        ],
+      ),
+    );
+  }
+
+  // Ensure your _buildDetailRow method is also correct
+  Widget _buildDetailRow(
+      BuildContext context, IconData icon, String title, String value,
+      {Widget? trailing}) {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 8.0),
       child: Row(
@@ -243,7 +332,9 @@ class AccountList extends StatelessWidget {
               children: [
                 CustomText(title, style: Theme.of(context).textTheme.bodySmall),
                 const SizedBox(height: 2),
-                CustomText(value, style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w500)),
+                CustomText(value,
+                    style: const TextStyle(
+                        fontSize: 16, fontWeight: FontWeight.w500)),
               ],
             ),
           ),
@@ -252,7 +343,10 @@ class AccountList extends StatelessWidget {
             icon: const Icon(AppIcons.copy, size: 20),
             onPressed: () {
               Clipboard.setData(ClipboardData(text: value));
-              ScaffoldMessenger.of(context)..hideCurrentSnackBar()..showSnackBar(SnackBar(content: Text('$title copied to clipboard')));
+              ScaffoldMessenger.of(context)
+                ..hideCurrentSnackBar()
+                ..showSnackBar(
+                    SnackBar(content: Text('$title copied to clipboard')));
             },
           )
         ],
