@@ -1,4 +1,4 @@
-package com.example.secure_accounts
+package com.appligami.passkeeper
 
 import io.flutter.embedding.android.FlutterFragmentActivity
 

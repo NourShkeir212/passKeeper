@@ -1,8 +1,10 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../core/services/database_services.dart';
-import '../../../core/services/export_service.dart';
+import '../../../core/services/excel_service.dart';
 import '../../../core/services/session_manager.dart';
 import '../../../core/services/settings_service.dart';
+import '../../home/cubit/account_cubit/cubit.dart';
+import '../../home/cubit/category_cubit/cubit.dart';
 import 'states.dart';
 
 
@@ -45,7 +47,7 @@ class SettingsCubit extends Cubit<SettingsState> {
     }
   }
 
-  final ExportService _exportService = ExportService();
+  final ExcelService _exportService = ExcelService();
 
   Future<void> exportData() async {
     emit(SettingsExporting());
@@ -56,6 +58,24 @@ class SettingsCubit extends Cubit<SettingsState> {
       loadSettings();
     } catch (e) {
       emit(SettingsExportFailure(e.toString()));
+    }
+  }
+
+  Future<void> importData({
+    required AccountCubit accountCubit,
+    required CategoryCubit categoryCubit,
+  }) async {
+    emit(SettingsImporting());
+    try {
+      final message = await _exportService.importAccountsFromExcel();
+
+      accountCubit.loadAccounts();
+      categoryCubit.loadCategories();
+
+      emit(SettingsImportSuccess(message));
+      loadSettings();
+    } catch (e) {
+      emit(SettingsImportFailure(e.toString()));
     }
   }
 }

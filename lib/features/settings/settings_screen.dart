@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:secure_accounts/core/theme/app_colors.dart';
 import '../../core/services/database_services.dart';
 import '../../core/services/navigation_service.dart';
 import '../../core/services/settings_service.dart';
@@ -9,6 +10,8 @@ import '../auth/cubit/auth_cubit/cubit.dart';
 import '../auth/cubit/auth_cubit/states.dart';
 import '../auth/screens/sign_in/sign_in_screen.dart';
 import '../change_password/change_password_screen.dart';
+import '../home/cubit/account_cubit/cubit.dart';
+import '../home/cubit/category_cubit/cubit.dart';
 import 'cubit/cubit.dart';
 import 'cubit/states.dart';
 
@@ -35,37 +38,48 @@ class SettingsView extends StatelessWidget {
         BlocListener<AuthCubit, AuthState>(
           listener: (context, state) {
             if (state is AuthLoggedOut) {
-              // Navigate to login screen after logout
               NavigationService.pushAndRemoveUntil(const SignInScreen());
             }
           },
         ),
         BlocListener<SettingsCubit, SettingsState>(
           listener: (context, state) {
-            if (state is SettingsExporting) {
-              // Show a loading dialog during export
+            if (state is SettingsExporting || state is SettingsImporting) {
               showDialog(
                 context: context,
                 barrierDismissible: false,
-                builder: (_) => const PopScope(
+                builder: (_) => PopScope(
                   canPop: false,
                   child: AlertDialog(
                     content: Row(
                       children: [
-                        CircularProgressIndicator(),
-                        SizedBox(width: 20),
-                        Text("Exporting..."),
+                        const CircularProgressIndicator(),
+                        const SizedBox(width: 20),
+                        Text(state is SettingsExporting
+                            ? "Exporting..."
+                            : "Importing..."),
                       ],
                     ),
                   ),
                 ),
               );
-            } else if (state is SettingsExportSuccess) {
+            } else if (state is SettingsExportSuccess ||
+                state is SettingsImportSuccess) {
               Navigator.of(context).pop(); // Close loading dialog
-            } else if (state is SettingsExportFailure) {
+              if (state is SettingsImportSuccess) {
+                ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                  content: Text(state.message),
+                  backgroundColor: Colors.green,
+                ));
+              }
+            } else if (state is SettingsExportFailure ||
+                state is SettingsImportFailure) {
               Navigator.of(context).pop(); // Close loading dialog
+              final error = state is SettingsExportFailure
+                  ? state.error
+                  : (state as SettingsImportFailure).error;
               ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                content: Text("Export failed: ${state.error}"),
+                content: Text("Operation failed: $error"),
                 backgroundColor: Theme.of(context).colorScheme.error,
               ));
             }
@@ -79,7 +93,6 @@ class SettingsView extends StatelessWidget {
             if (settingsState is SettingsInitial) {
               return ListView(
                 children: [
-                  // --- Theme Section ---
                   const _SettingsGroupTitle(title: "Appearance"),
                   Padding(
                     padding: const EdgeInsets.symmetric(
@@ -131,13 +144,11 @@ class SettingsView extends StatelessWidget {
                     ),
                   ),
                   const Divider(),
-
-                  // --- Security Section ---
                   const _SettingsGroupTitle(title: "Security"),
                   SwitchListTile(
                     title: const Text("Enable Biometric Lock"),
-                    subtitle:
-                    const Text("Use fingerprint/Face ID to unlock the app."),
+                    subtitle: const Text(
+                        "Use fingerprint/Face ID to unlock the app."),
                     value: settingsState.isBiometricEnabled,
                     onChanged: (val) =>
                         context.read<SettingsCubit>().toggleBiometrics(val),
@@ -157,21 +168,29 @@ class SettingsView extends StatelessWidget {
                     },
                   ),
                   const Divider(),
-
-                  // --- Data Management Section ---
                   const _SettingsGroupTitle(title: "Data Management"),
                   ListTile(
-                    title: const Text("Export to Excel"),
+                    title: const Text("Import from Excel"),
                     subtitle:
-                    const Text("Save a copy of your accounts to a file."),
+                    const Text("Restore accounts from a backup file."),
+                    leading: const Icon(Icons.download_for_offline_outlined),
+                    onTap: () {
+                      context.read<SettingsCubit>().importData(
+                        accountCubit: context.read<AccountCubit>(),
+                        categoryCubit: context.read<CategoryCubit>(),
+                      );
+                    },
+                  ),
+                  ListTile(
+                    title: const Text("Export to Excel"),
+                    subtitle: const Text(
+                        "Save a copy of your accounts to a file."),
                     leading: const Icon(Icons.upload_file),
                     onTap: () {
                       context.read<SettingsCubit>().exportData();
                     },
                   ),
                   const Divider(),
-
-                  // --- Account Section ---
                   const _SettingsGroupTitle(title: "Account"),
                   ListTile(
                     title: Text("Logout",
@@ -183,6 +202,7 @@ class SettingsView extends StatelessWidget {
                       context.read<AuthCubit>().logout();
                     },
                   ),
+                  CustomText('Developed by Nour and supported by his beloved Baraah',style: TextStyle(fontSize: 10),)
                 ],
               );
             }

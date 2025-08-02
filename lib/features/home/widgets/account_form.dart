@@ -30,9 +30,18 @@ class _AccountFormState extends State<AccountForm> {
   late final TextEditingController _usernameController;
   late final TextEditingController _passwordController;
   late final TextEditingController _recoveryController;
-  static const List<String> _services = ['Gmail', 'Outlook', 'Hotmail', 'Instagram', 'X', 'Facebook'];
-
   late final TextEditingController _phoneController;
+
+
+  static const List<String> _services = [
+    'Gmail',
+    'Outlook',
+    'Hotmail',
+    'Facebook',
+    'Instagram',
+    'X',
+    'Other...'
+  ];
 
   @override
   void initState() {
@@ -45,9 +54,15 @@ class _AccountFormState extends State<AccountForm> {
       _selectedService = _services.contains(widget.accountToEdit!.serviceName)
           ? widget.accountToEdit!.serviceName
           : 'Other...';
+    } else {
+      _selectedService = null;
     }
 
-    _otherServiceController = TextEditingController(text: isEditMode && !_services.contains(widget.accountToEdit!.serviceName) ? widget.accountToEdit!.serviceName : '');
+    _otherServiceController = TextEditingController(
+        text: isEditMode && !_services.contains(widget.accountToEdit!.serviceName)
+            ? widget.accountToEdit!.serviceName
+            : '');
+
     _usernameController = TextEditingController(text: isEditMode ? widget.accountToEdit!.username : '');
     _passwordController = TextEditingController(text: isEditMode ? widget.accountToEdit!.password : '');
     _recoveryController = TextEditingController(text: isEditMode ? widget.accountToEdit!.recoveryAccount : '');
@@ -118,67 +133,71 @@ class _AccountFormState extends State<AccountForm> {
   Widget build(BuildContext context) {
     return BlocBuilder<CategoryCubit, CategoryState>(
       builder: (context, categoryState) {
-        return SafeArea(
-          child: Padding(
-            padding: EdgeInsets.only(top: 20, left: 20, right: 20, bottom: MediaQuery.of(context).viewInsets.bottom + 20),
-            child: Form(
-              key: _formKey,
-              child: SingleChildScrollView(
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Container(width: 40, height: 5, decoration: BoxDecoration(color: Colors.grey[400], borderRadius: BorderRadius.circular(10))),
-                    const SizedBox(height: 20),
-                    CustomText(widget.accountToEdit != null ? "Edit Account" : "Add New Account", style: Theme.of(context).textTheme.headlineSmall),
-                    const SizedBox(height: 20),
-                    if (categoryState is CategoryLoaded)
-                      DropdownButtonFormField<int>(
-                        decoration: const InputDecoration(labelText: "Category", prefixIcon: Icon(Icons.category_outlined)),
-                        value: _selectedCategoryId,
-                        items: [
-                          const DropdownMenuItem(value: -1, child: Text("Create New Category...")),
-                          ...categoryState.categories.map((Category cat) => DropdownMenuItem<int>(value: cat.id, child: Text(cat.name))).toList(),
-                        ],
-                        onChanged: (newValue) {
-                          if (newValue == -1) { _showCreateCategoryDialog(); }
-                          else { setState(() => _selectedCategoryId = newValue); }
-                        },
-                        validator: (value) => value == null || value == -1 ? 'Please select a category' : null,
-                      ),
-                    const SizedBox(height: 10),
-                    DropdownButtonFormField<String>(
-                      decoration: const InputDecoration(labelText: "Service Name", prefixIcon: Icon(Icons.web_asset_outlined)),
-                      value: _selectedService,
-                      items: _services.map((String service) => DropdownMenuItem<String>(value: service, child: CustomText(service))).toList(),
-                      onChanged: (newValue) => setState(() => _selectedService = newValue),
-                      validator: (value) => value == null ? 'Please select a service' : null,
+        return Padding(
+          padding: EdgeInsets.only(
+              top: 20, left: 20, right: 20,
+              bottom: MediaQuery.of(context).viewInsets.bottom + 20),
+          child: Form(
+            key: _formKey,
+            child: SingleChildScrollView(
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Container(width: 40, height: 5, decoration: BoxDecoration(color: Colors.grey[400], borderRadius: BorderRadius.circular(10))),
+                  const SizedBox(height: 20),
+                  CustomText(widget.accountToEdit != null ? "Edit Account" : "Add New Account", style: Theme.of(context).textTheme.headlineSmall),
+                  const SizedBox(height: 20),
+
+                  if (categoryState is CategoryLoaded)
+                    DropdownButtonFormField<int>(
+                      decoration: const InputDecoration(labelText: "Category", prefixIcon: Icon(Icons.category_outlined)),
+                      value: _selectedCategoryId,
+                      items: [
+                        const DropdownMenuItem(value: -1, child: Text("Create New Category...")),
+                        ...categoryState.categories.map((Category cat) => DropdownMenuItem<int>(value: cat.id, child: Text(cat.name))).toList(),
+                      ],
+                      onChanged: (newValue) {
+                        if (newValue == -1) { _showCreateCategoryDialog(); }
+                        else { setState(() => _selectedCategoryId = newValue); }
+                      },
+                      validator: (value) => value == null || value == -1 ? 'Please select a category' : null,
                     ),
-                    if (_selectedService == 'Other...')
-                      Padding(
-                        padding: const EdgeInsets.only(top: 10.0),
-                        child: CustomTextField(controller: _otherServiceController, labelText: "Enter Service Name", prefixIcon: Icons.edit_note_outlined, validator: (value) => value!.isEmpty ? 'Please enter a name' : null),
-                      ),
-                    const SizedBox(height: 10),
-                    CustomTextField(controller: _usernameController, labelText: "Username or Email", prefixIcon: Icons.person_outline),
-                    const SizedBox(height: 10),
-                    CustomTextField(
-                      controller: _passwordController,
-                      labelText: "Password",
-                      prefixIcon: Icons.lock_outline,
-                      isPassword: !_isPasswordVisible,
-                      suffixIcon: IconButton(
-                        icon: Icon(_isPasswordVisible ? Icons.visibility_off : Icons.visibility),
-                        onPressed: () => setState(() => _isPasswordVisible = !_isPasswordVisible),
-                      ),
+
+                  const SizedBox(height: 10),
+                  DropdownButtonFormField<String>(
+                    decoration: const InputDecoration(labelText: "Service Name", prefixIcon: Icon(Icons.web_asset_outlined)),
+                    value: _selectedService,
+                    items: _services.map((String service) => DropdownMenuItem<String>(value: service, child: CustomText(service))).toList(),
+                    onChanged: (newValue) => setState(() => _selectedService = newValue),
+                    validator: (value) => value == null ? 'Please select a service' : null,
+                  ),
+
+                  if (_selectedService == 'Other...')
+                    Padding(
+                      padding: const EdgeInsets.only(top: 10.0),
+                      child: CustomTextField(controller: _otherServiceController, labelText: "Enter Service Name", prefixIcon: Icons.edit_note_outlined, validator: (value) => value!.isEmpty ? 'Please enter a name' : null),
                     ),
-                    const SizedBox(height: 10),
-                    CustomTextField(controller: _recoveryController, labelText: "Recovery Account (Optional)", prefixIcon: Icons.email_outlined),
-                    const SizedBox(height: 10),
-                    CustomTextField(controller: _phoneController, labelText: "Recovery Phone (Optional)", prefixIcon: Icons.phone_outlined),
-                    const SizedBox(height: 20),
-                    CustomElevatedButton(onPressed: _onSave, text: "Save"),
-                  ],
-                ),
+
+                  const SizedBox(height: 10),
+                  CustomTextField(controller: _usernameController, labelText: "Username or Email", prefixIcon: Icons.person_outline),
+                  const SizedBox(height: 10),
+                  CustomTextField(
+                    controller: _passwordController,
+                    labelText: "Password",
+                    prefixIcon: Icons.lock_outline,
+                    isPassword: !_isPasswordVisible,
+                    suffixIcon: IconButton(
+                      icon: Icon(_isPasswordVisible ? Icons.visibility_off : Icons.visibility),
+                      onPressed: () => setState(() => _isPasswordVisible = !_isPasswordVisible),
+                    ),
+                  ),
+                  const SizedBox(height: 10),
+                  CustomTextField(controller: _recoveryController, labelText: "Recovery Account (Optional)", prefixIcon: Icons.email_outlined),
+                  const SizedBox(height: 10),
+                  CustomTextField(controller: _phoneController, labelText: "Phone Numbers (Optional)", prefixIcon: Icons.phone_outlined),
+                  const SizedBox(height: 20),
+                  CustomElevatedButton(onPressed: _onSave, text: "Save"),
+                ],
               ),
             ),
           ),

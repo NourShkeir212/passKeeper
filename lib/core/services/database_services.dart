@@ -164,4 +164,20 @@ class DatabaseService {
       whereArgs: [userId],
     );
   }
+
+  /// Checks if an account already exists for a user.
+  Future<bool> accountExists({
+    required int userId,
+    required String serviceName,
+    required String username,
+  }) async {
+    final db = await database;
+    final List<Map<String, dynamic>> result = await db.query(
+      'accounts',
+      where: 'userId = ? AND serviceName = ? AND username = ?',
+      whereArgs: [userId, serviceName, username],
+      limit: 1,
+    );
+    return result.isNotEmpty;
+  }
 }

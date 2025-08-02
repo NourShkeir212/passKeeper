@@ -6,6 +6,7 @@ import '../../../core/widgets/custom_text.dart';
 import '../../auth/cubit/auth_cubit/cubit.dart';
 import '../../settings/settings_screen.dart';
 import '../cubit/account_cubit/cubit.dart';
+import '../cubit/category_cubit/cubit.dart';
 import '../cubit/home_cubit/cubit.dart';
 import '../cubit/home_cubit/states.dart';
 
@@ -50,7 +51,16 @@ class HomeScreenAppBar extends StatelessWidget implements PreferredSizeWidget {
                 icon: const Icon(Icons.settings_outlined),
                 tooltip: 'Settings',
                 onPressed: () {
-                  NavigationService.push(SettingsScreen());
+                  Navigator.push(context, MaterialPageRoute(
+                    builder: (_) => MultiBlocProvider(
+                      providers: [
+                        // Provide the existing cubits to the settings page
+                        BlocProvider.value(value: context.read<AccountCubit>()),
+                        BlocProvider.value(value: context.read<CategoryCubit>()),
+                      ],
+                      child: const SettingsScreen(),
+                    ),
+                  ));
                 },
               ),
             ],

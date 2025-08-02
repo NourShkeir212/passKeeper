@@ -24,3 +24,13 @@ class SettingsExportFailure extends SettingsState {
   final String error;
   const SettingsExportFailure(this.error);
 }
+
+class SettingsImporting extends SettingsState {}
+class SettingsImportSuccess extends SettingsState {
+  final String message;
+  const SettingsImportSuccess(this.message);
+}
+class SettingsImportFailure extends SettingsState {
+  final String error;
+  const SettingsImportFailure(this.error);
+}
