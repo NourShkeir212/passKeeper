@@ -73,4 +73,28 @@ class AuthCubit extends Cubit<AuthState> {
     _encryptionService.clear();
     emit(AuthLoggedOut());
   }
+
+
+  /// Verifies the master password and initializes the encryption service for the session.
+  Future<bool> verifyMasterPassword(String password) async {
+    try {
+      final userId = await SessionManager.getUserId();
+      if (userId == null) return false;
+
+      // Hash the password the user just entered
+      final hashedPassword = _encryptionService.hashPassword(password);
+
+      // Use the existing verifyPassword method with the hashed password
+      final isCorrect = await _databaseService.verifyPassword(userId, hashedPassword);
+
+      if (isCorrect) {
+        // If correct, initialize the encryption service for the session
+        _encryptionService.init(password);
+        return true;
+      }
+      return false;
+    } catch(e) {
+      return false;
+    }
+  }
 }

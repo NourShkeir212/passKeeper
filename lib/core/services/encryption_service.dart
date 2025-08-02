@@ -10,7 +10,7 @@ class EncryptionService {
   EncryptionService._internal();
 
   encrypt.Encrypter? _encrypter;
-
+  bool get isInitialized => _encrypter != null;
   /// Initializes the encrypter with a key derived from the user's master password.
   void init(String masterPassword) {
     final key = _deriveKey(masterPassword);
