@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
+import 'package:secure_accounts/core/theme/app_icons.dart';
 
 import '../../../../core/services/biometric_service.dart';
 import '../../../../core/services/navigation_service.dart';
@@ -37,7 +38,7 @@ class _LockScreenState extends State<LockScreen> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Icon(
-              Icons.shield,
+              AppIcons.shield,
               size: 100,
               color: Theme.of(context).colorScheme.primary,
             ),
@@ -51,7 +52,7 @@ class _LockScreenState extends State<LockScreen> {
             const SizedBox(height: 48),
             ElevatedButton.icon(
               onPressed: _authenticateUser,
-              icon: const Icon(Icons.fingerprint),
+              icon: const Icon(AppIcons.fingerprint),
               label: const Text('Unlock with Fingerprint'),
               style: ElevatedButton.styleFrom(
                 padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),

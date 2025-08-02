@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../core/services/session_manager.dart';
+import '../../../core/theme/app_icons.dart';
 import '../../../core/widgets/custom_elevated_button.dart';
 import '../../../core/widgets/custom_text.dart';
 import '../../../core/widgets/custom_text_field.dart';
@@ -85,7 +86,7 @@ class _AccountFormState extends State<AccountForm> {
       context: context,
       builder: (dialogContext) => AlertDialog(
         title: const Text('Create New Category'),
-        content: CustomTextField(controller: categoryNameController, labelText: 'Category Name', prefixIcon: Icons.create_new_folder_outlined),
+        content: CustomTextField(controller: categoryNameController, labelText: 'Category Name', prefixIcon: AppIcons.createFolder),
         actions: [
           TextButton(onPressed: () => Navigator.pop(dialogContext), child: const Text('Cancel')),
           TextButton(
@@ -133,71 +134,73 @@ class _AccountFormState extends State<AccountForm> {
   Widget build(BuildContext context) {
     return BlocBuilder<CategoryCubit, CategoryState>(
       builder: (context, categoryState) {
-        return Padding(
-          padding: EdgeInsets.only(
-              top: 20, left: 20, right: 20,
-              bottom: MediaQuery.of(context).viewInsets.bottom + 20),
-          child: Form(
-            key: _formKey,
-            child: SingleChildScrollView(
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Container(width: 40, height: 5, decoration: BoxDecoration(color: Colors.grey[400], borderRadius: BorderRadius.circular(10))),
-                  const SizedBox(height: 20),
-                  CustomText(widget.accountToEdit != null ? "Edit Account" : "Add New Account", style: Theme.of(context).textTheme.headlineSmall),
-                  const SizedBox(height: 20),
+        return SafeArea(
+          child: Padding(
+            padding: EdgeInsets.only(
+                top: 20, left: 20, right: 20,
+                bottom: MediaQuery.of(context).viewInsets.bottom + 20),
+            child: Form(
+              key: _formKey,
+              child: SingleChildScrollView(
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Container(width: 40, height: 5, decoration: BoxDecoration(color: Colors.grey[400], borderRadius: BorderRadius.circular(10))),
+                    const SizedBox(height: 20),
+                    CustomText(widget.accountToEdit != null ? "Edit Account" : "Add New Account", style: Theme.of(context).textTheme.headlineSmall),
+                    const SizedBox(height: 20),
 
-                  if (categoryState is CategoryLoaded)
-                    DropdownButtonFormField<int>(
-                      decoration: const InputDecoration(labelText: "Category", prefixIcon: Icon(Icons.category_outlined)),
-                      value: _selectedCategoryId,
-                      items: [
-                        const DropdownMenuItem(value: -1, child: Text("Create New Category...")),
-                        ...categoryState.categories.map((Category cat) => DropdownMenuItem<int>(value: cat.id, child: Text(cat.name))).toList(),
-                      ],
-                      onChanged: (newValue) {
-                        if (newValue == -1) { _showCreateCategoryDialog(); }
-                        else { setState(() => _selectedCategoryId = newValue); }
-                      },
-                      validator: (value) => value == null || value == -1 ? 'Please select a category' : null,
+                    if (categoryState is CategoryLoaded)
+                      DropdownButtonFormField<int>(
+                        decoration: const InputDecoration(labelText: "Category", prefixIcon: Icon(AppIcons.category)),
+                        value: _selectedCategoryId,
+                        items: [
+                          const DropdownMenuItem(value: -1, child: Text("Create New Category...")),
+                          ...categoryState.categories.map((Category cat) => DropdownMenuItem<int>(value: cat.id, child: Text(cat.name))).toList(),
+                        ],
+                        onChanged: (newValue) {
+                          if (newValue == -1) { _showCreateCategoryDialog(); }
+                          else { setState(() => _selectedCategoryId = newValue); }
+                        },
+                        validator: (value) => value == null || value == -1 ? 'Please select a category' : null,
+                      ),
+          
+                    const SizedBox(height: 10),
+                    DropdownButtonFormField<String>(
+                      decoration: const InputDecoration(labelText: "Service Name", prefixIcon: Icon(AppIcons.service)),
+                      value: _selectedService,
+                      items: _services.map((String service) => DropdownMenuItem<String>(value: service, child: CustomText(service))).toList(),
+                      onChanged: (newValue) => setState(() => _selectedService = newValue),
+                      validator: (value) => value == null ? 'Please select a service' : null,
                     ),
-
-                  const SizedBox(height: 10),
-                  DropdownButtonFormField<String>(
-                    decoration: const InputDecoration(labelText: "Service Name", prefixIcon: Icon(Icons.web_asset_outlined)),
-                    value: _selectedService,
-                    items: _services.map((String service) => DropdownMenuItem<String>(value: service, child: CustomText(service))).toList(),
-                    onChanged: (newValue) => setState(() => _selectedService = newValue),
-                    validator: (value) => value == null ? 'Please select a service' : null,
-                  ),
-
-                  if (_selectedService == 'Other...')
-                    Padding(
-                      padding: const EdgeInsets.only(top: 10.0),
-                      child: CustomTextField(controller: _otherServiceController, labelText: "Enter Service Name", prefixIcon: Icons.edit_note_outlined, validator: (value) => value!.isEmpty ? 'Please enter a name' : null),
+          
+                    if (_selectedService == 'Other...')
+                      Padding(
+                        padding: const EdgeInsets.only(top: 10.0),
+                        child: CustomTextField(controller: _otherServiceController, labelText: "Enter Service Name", prefixIcon: AppIcons.edit, validator: (value) => value!.isEmpty ? 'Please enter a name' : null),
+                      ),
+          
+                    const SizedBox(height: 10),
+                    CustomTextField(controller: _usernameController, labelText: "Username or Email", prefixIcon: AppIcons.user),
+                    const SizedBox(height: 10),
+                    CustomTextField(
+                      controller: _passwordController,
+                      labelText: "Password",
+                      prefixIcon: AppIcons.lock,
+                      isPassword: !_isPasswordVisible,
+                      suffixIcon: IconButton(
+                        icon: Icon(_isPasswordVisible ?  AppIcons.eyeSlash : AppIcons.eye),
+                        onPressed: () => setState(() => _isPasswordVisible = !_isPasswordVisible),
+                      ),
                     ),
-
-                  const SizedBox(height: 10),
-                  CustomTextField(controller: _usernameController, labelText: "Username or Email", prefixIcon: Icons.person_outline),
-                  const SizedBox(height: 10),
-                  CustomTextField(
-                    controller: _passwordController,
-                    labelText: "Password",
-                    prefixIcon: Icons.lock_outline,
-                    isPassword: !_isPasswordVisible,
-                    suffixIcon: IconButton(
-                      icon: Icon(_isPasswordVisible ? Icons.visibility_off : Icons.visibility),
-                      onPressed: () => setState(() => _isPasswordVisible = !_isPasswordVisible),
-                    ),
-                  ),
-                  const SizedBox(height: 10),
-                  CustomTextField(controller: _recoveryController, labelText: "Recovery Account (Optional)", prefixIcon: Icons.email_outlined),
-                  const SizedBox(height: 10),
-                  CustomTextField(controller: _phoneController, labelText: "Phone Numbers (Optional)", prefixIcon: Icons.phone_outlined),
-                  const SizedBox(height: 20),
-                  CustomElevatedButton(onPressed: _onSave, text: "Save"),
-                ],
+                    const SizedBox(height: 10),
+                    CustomTextField(controller: _recoveryController, labelText: "Recovery Account (Optional)", prefixIcon: AppIcons.email),
+                    const SizedBox(height: 10),
+                    CustomTextField(controller: _phoneController, labelText: "Phone Numbers (Optional)", prefixIcon: AppIcons.phone),
+                    const SizedBox(height: 20),
+                    CustomElevatedButton(onPressed: _onSave, text: "Save"),
+                  ],
+                ),
               ),
             ),
           ),

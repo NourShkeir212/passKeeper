@@ -5,6 +5,8 @@ import 'app_colors.dart';
 class AppTextStyles {
   AppTextStyles._();
 
+
+
   static TextTheme getCustomTextTheme(Brightness brightness) {
     final Color textColor =
     brightness == Brightness.dark ? AppColors.textDark : AppColors.textLight;

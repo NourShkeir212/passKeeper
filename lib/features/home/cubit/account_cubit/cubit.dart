@@ -43,7 +43,23 @@ class AccountCubit extends Cubit<AccountState> {
 
   Future<void> deleteAccount(int accountId) async {
     try {
+      // First, find the account to get its category ID
+      final accountToDelete = await _databaseService.getAccountById(accountId);
+      if (accountToDelete == null) return; // Account already deleted
+
+      final categoryId = accountToDelete.categoryId;
+
+      // Delete the account
       await _databaseService.deleteAccount(accountId);
+
+      // Check if any other accounts are left in that category
+      final remainingAccounts = await _databaseService.countAccountsInCategory(categoryId);
+      if (remainingAccounts == 0) {
+        // If none are left, delete the category
+        await _databaseService.deleteCategory(categoryId);
+      }
+
+      // Finally, reload the account list
       loadAccounts();
     } catch (e) {
       emit(AccountFailure(e.toString()));

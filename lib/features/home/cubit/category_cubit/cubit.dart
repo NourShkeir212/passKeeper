@@ -34,4 +34,22 @@ class CategoryCubit extends Cubit<CategoryState> {
       emit(CategoryFailure(e.toString()));
     }
   }
+
+  Future<void> updateCategory(Category category) async {
+    try {
+      await _databaseService.updateCategory(category);
+      loadCategories(); // Reload to show changes
+    } catch (e) {
+      // Handle error
+    }
+  }
+
+  Future<void> deleteCategory(int categoryId) async {
+    try {
+      await _databaseService.deleteCategory(categoryId);
+      loadCategories(); // Reload to show changes
+    } catch (e) {
+      // Handle error
+    }
+  }
 }

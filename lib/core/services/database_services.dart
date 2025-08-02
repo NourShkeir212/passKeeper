@@ -107,6 +107,38 @@ class DatabaseService {
     return List.generate(maps.length, (i) => Category.fromMap(maps[i]));
   }
 
+  Future<int> updateCategory(Category category) async {
+    final db = await database;
+    return await db.update(
+      'categories',
+      category.toMap(),
+      where: 'id = ?',
+      whereArgs: [category.id],
+    );
+  }
+
+  /// Counts how many accounts are left in a specific category.
+  Future<int> countAccountsInCategory(int categoryId) async {
+    final db = await database;
+    final result = await db.rawQuery(
+      'SELECT COUNT(*) FROM accounts WHERE categoryId = ?',
+      [categoryId],
+    );
+    return Sqflite.firstIntValue(result) ?? 0;
+  }
+
+  /// Deletes a category. All accounts within it will be deleted by the database
+  /// because we used "ON DELETE CASCADE".
+  Future<int> deleteCategory(int id) async {
+    final db = await database;
+    return await db.delete(
+      'categories',
+      where: 'id = ?',
+      whereArgs: [id],
+    );
+  }
+
+
   // --- Account Methods ---
   Future<int> insertAccount(Account account) async {
     final db = await database;
@@ -122,6 +154,21 @@ class DatabaseService {
       whereArgs: [account.id],
     );
   }
+
+  /// Gets a single account by its ID. We need this to find its categoryId before deleting.
+  Future<Account?> getAccountById(int id) async {
+    final db = await database;
+    final List<Map<String, dynamic>> maps = await db.query(
+      'accounts',
+      where: 'id = ?',
+      whereArgs: [id],
+    );
+    if (maps.isNotEmpty) {
+      return Account.fromMap(maps.first);
+    }
+    return null;
+  }
+
 
   Future<List<Account>> getAccounts(int userId) async {
     final db = await database;

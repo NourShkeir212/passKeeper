@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import '../../../../core/services/navigation_service.dart';
 import '../../core/services/settings_service.dart';
+import '../../core/theme/app_icons.dart';
 import '../auth/cubit/auth_cubit/cubit.dart';
 import '../auth/cubit/auth_cubit/states.dart';
 import '../auth/screens/lock_screen/lock_screen.dart';
@@ -53,7 +54,7 @@ class _SplashScreenState extends State<SplashScreen> {
             children: [
               // App Icon
               Icon(
-                Icons.shield_rounded,
+                AppIcons.shield,
                 size: 100,
                 color: Theme
                     .of(context)

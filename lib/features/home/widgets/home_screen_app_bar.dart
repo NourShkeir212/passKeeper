@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:secure_accounts/core/services/navigation_service.dart';
-
+import '../../../core/theme/app_icons.dart';
 import '../../../core/widgets/custom_text.dart';
-import '../../auth/cubit/auth_cubit/cubit.dart';
 import '../../settings/settings_screen.dart';
 import '../cubit/account_cubit/cubit.dart';
 import '../cubit/category_cubit/cubit.dart';
@@ -23,7 +21,7 @@ class HomeScreenAppBar extends StatelessWidget implements PreferredSizeWidget {
         if (state.isSearching) {
           return AppBar(
             leading: IconButton(
-              icon: const Icon(Icons.arrow_back),
+              icon: const Icon(AppIcons.back),
               onPressed: () {
                 context.read<HomeScreenCubit>().stopSearching();
                 searchController.clear();
@@ -37,7 +35,7 @@ class HomeScreenAppBar extends StatelessWidget implements PreferredSizeWidget {
               onChanged: (query) => context.read<AccountCubit>().searchAccounts(query),
             ),
             actions: [
-              IconButton(icon: const Icon(Icons.close), onPressed: () => searchController.clear()),
+              IconButton(icon: const Icon(AppIcons.close), onPressed: () => searchController.clear()),
               // NEW: Settings Button
             ],
           );
@@ -46,9 +44,9 @@ class HomeScreenAppBar extends StatelessWidget implements PreferredSizeWidget {
             title: const CustomText('PassKeeper'),
             automaticallyImplyLeading: false,
             actions: [
-              IconButton(icon: const Icon(Icons.search), onPressed: () => context.read<HomeScreenCubit>().toggleSearch()),
+              IconButton(icon: const Icon(AppIcons.search), onPressed: () => context.read<HomeScreenCubit>().toggleSearch()),
               IconButton(
-                icon: const Icon(Icons.settings_outlined),
+                icon: const Icon(AppIcons.settings),
                 tooltip: 'Settings',
                 onPressed: () {
                   Navigator.push(context, MaterialPageRoute(

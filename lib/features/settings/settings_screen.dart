@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:secure_accounts/core/theme/app_colors.dart';
 import '../../core/services/database_services.dart';
 import '../../core/services/navigation_service.dart';
 import '../../core/services/settings_service.dart';
+import '../../core/theme/app_icons.dart';
 import '../../core/theme/theme_cubit.dart';
 import '../../core/widgets/custom_text.dart';
 import '../auth/cubit/auth_cubit/cubit.dart';
@@ -12,6 +12,7 @@ import '../auth/screens/sign_in/sign_in_screen.dart';
 import '../change_password/change_password_screen.dart';
 import '../home/cubit/account_cubit/cubit.dart';
 import '../home/cubit/category_cubit/cubit.dart';
+import '../manage_categories/manage_categories_screen.dart';
 import 'cubit/cubit.dart';
 import 'cubit/states.dart';
 
@@ -103,17 +104,17 @@ class SettingsView extends StatelessWidget {
                           segments: const <ButtonSegment<ThemeMode>>[
                             ButtonSegment<ThemeMode>(
                               value: ThemeMode.light,
-                              icon: Icon(Icons.wb_sunny_outlined),
+                              icon: Icon(AppIcons.sun),
                               label: Text('Light'),
                             ),
                             ButtonSegment<ThemeMode>(
                               value: ThemeMode.dark,
-                              icon: Icon(Icons.nightlight_outlined),
+                              icon: Icon(AppIcons.moon),
                               label: Text('Dark'),
                             ),
                             ButtonSegment<ThemeMode>(
                               value: ThemeMode.system,
-                              icon: Icon(Icons.brightness_auto_outlined),
+                              icon: Icon(AppIcons.auto),
                               label: Text('Auto'),
                             ),
                           ],
@@ -127,9 +128,9 @@ class SettingsView extends StatelessWidget {
                             tapTargetSize: MaterialTapTargetSize.shrinkWrap,
                             visualDensity: VisualDensity.compact,
                             backgroundColor:
-                            MaterialStateProperty.resolveWith<Color?>(
-                                  (Set<MaterialState> states) {
-                                if (states.contains(MaterialState.selected)) {
+                            WidgetStateProperty.resolveWith<Color?>(
+                                  (Set<WidgetState> states) {
+                                if (states.contains(WidgetState.selected)) {
                                   return Theme.of(context)
                                       .colorScheme
                                       .primary
@@ -143,6 +144,30 @@ class SettingsView extends StatelessWidget {
                       },
                     ),
                   ),
+                  const _SettingsGroupTitle(title: "Customization"), // New or existing group
+                  ListTile(
+                    title: const Text("Manage Categories"),
+                    leading: const Icon(AppIcons.category),
+                    onTap: () {
+                      Navigator.push(context, MaterialPageRoute(
+                        builder: (_) => MultiBlocProvider( // <-- USE MultiBlocProvider
+                          providers: [
+                            // Provide the existing CategoryCubit
+                            BlocProvider.value(
+                              value: context.read<CategoryCubit>(),
+                            ),
+                            // ALSO provide the existing AccountCubit
+                            BlocProvider.value(
+                              value: context.read<AccountCubit>(),
+                            ),
+                          ],
+                          child: const ManageCategoriesScreen(),
+                        ),
+                      ));
+                    },
+                  ),
+
+                // ... Security section
                   const Divider(),
                   const _SettingsGroupTitle(title: "Security"),
                   SwitchListTile(
@@ -155,7 +180,7 @@ class SettingsView extends StatelessWidget {
                   ),
                   ListTile(
                     title: const Text("Change Password"),
-                    leading: const Icon(Icons.password),
+                    leading: const Icon(AppIcons.password),
                     onTap: () {
                       Navigator.push(
                           context,
@@ -173,7 +198,7 @@ class SettingsView extends StatelessWidget {
                     title: const Text("Import from Excel"),
                     subtitle:
                     const Text("Restore accounts from a backup file."),
-                    leading: const Icon(Icons.download_for_offline_outlined),
+                    leading: const Icon(AppIcons.import),
                     onTap: () {
                       context.read<SettingsCubit>().importData(
                         accountCubit: context.read<AccountCubit>(),
@@ -185,7 +210,7 @@ class SettingsView extends StatelessWidget {
                     title: const Text("Export to Excel"),
                     subtitle: const Text(
                         "Save a copy of your accounts to a file."),
-                    leading: const Icon(Icons.upload_file),
+                    leading: const Icon(AppIcons.export),
                     onTap: () {
                       context.read<SettingsCubit>().exportData();
                     },
@@ -196,13 +221,12 @@ class SettingsView extends StatelessWidget {
                     title: Text("Logout",
                         style: TextStyle(
                             color: Theme.of(context).colorScheme.error)),
-                    leading: Icon(Icons.logout,
+                    leading: Icon(AppIcons.logout,
                         color: Theme.of(context).colorScheme.error),
                     onTap: () {
                       context.read<AuthCubit>().logout();
                     },
                   ),
-                  CustomText('Developed by Nour and supported by his beloved Baraah',style: TextStyle(fontSize: 10),)
                 ],
               );
             }

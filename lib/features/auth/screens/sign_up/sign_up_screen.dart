@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:animated_text_kit/animated_text_kit.dart';
 import '../../../../core/services/navigation_service.dart';
+import '../../../../core/theme/app_icons.dart';
 import '../../../../core/widgets/custom_elevated_button.dart';
 import '../../../../core/widgets/custom_text_field.dart';
 import '../../cubit/auth_cubit/cubit.dart';
@@ -115,7 +116,7 @@ class SignUpView extends StatelessWidget {
                     CustomTextField(
                       controller: usernameController,
                       labelText: 'Username',
-                      prefixIcon: Icons.person_outline,
+                      prefixIcon: AppIcons.user,
                       validator: (value) =>
                       value!.isEmpty ? 'Please enter a username' : null,
                     ).animate().fadeIn(delay: 500.ms).slideX(begin: -1),
@@ -125,15 +126,13 @@ class SignUpView extends StatelessWidget {
                         return CustomTextField(
                           controller: passwordController,
                           labelText: 'Password',
-                          prefixIcon: Icons.lock_outline,
+                          prefixIcon: AppIcons.lock,
                           isPassword: !state.isPasswordVisible,
                           onChanged: (password) => context
                               .read<SignUpCubit>()
                               .validatePasswordRealtime(password),
                           suffixIcon: IconButton(
-                            icon: Icon(state.isPasswordVisible
-                                ? Icons.visibility_off
-                                : Icons.visibility),
+                            icon: Icon(state.isPasswordVisible ? AppIcons.eyeSlash : AppIcons.eye),
                             onPressed: () => context
                                 .read<SignUpCubit>()
                                 .togglePasswordVisibility(),

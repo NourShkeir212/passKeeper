@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../core/services/database_services.dart';
 import '../../core/services/navigation_service.dart';
+import '../../core/theme/app_icons.dart';
 import '../auth/cubit/auth_cubit/cubit.dart';
 import '../auth/cubit/auth_cubit/states.dart';
 import '../auth/screens/sign_in/sign_in_screen.dart';
@@ -67,7 +68,7 @@ class HomeScreenView extends StatelessWidget {
                     },
                   );
                 },
-                child: const Icon(Icons.add),
+                child: const Icon(AppIcons.add),
               ),
             ),
           );

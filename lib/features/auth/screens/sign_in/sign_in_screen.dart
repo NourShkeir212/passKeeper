@@ -2,9 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:animated_text_kit/animated_text_kit.dart';
-import 'package:secure_accounts/core/services/navigation_service.dart';
-import 'package:secure_accounts/core/widgets/custom_text.dart';
-import 'package:secure_accounts/core/widgets/custom_text_button.dart';
+import '../../../../core/services/navigation_service.dart';
+import '../../../../core/theme/app_icons.dart';
 import '../../../../core/widgets/custom_elevated_button.dart';
 import '../../../../core/widgets/custom_text_field.dart';
 import '../../../home/home_screen.dart';
@@ -109,7 +108,7 @@ class _LoginViewState extends State<LoginView> {
                     CustomTextField(
                       controller: _usernameController,
                       labelText: 'Username',
-                      prefixIcon: Icons.person_outline,
+                      prefixIcon: AppIcons.user,
                       validator: (value) => value!.isEmpty ? 'Please enter a username' : null,
                     ).animate().fadeIn(delay: 500.ms),
                     const SizedBox(height: 16.0),
@@ -118,11 +117,11 @@ class _LoginViewState extends State<LoginView> {
                         return CustomTextField(
                           controller: _passwordController,
                           labelText: 'Password',
-                          prefixIcon: Icons.lock_outline,
+                          prefixIcon: AppIcons.lock,
                           isPassword: !state.isPasswordVisible,
                           validator: (value) => value!.isEmpty ? 'Please enter a password' : null,
                           suffixIcon: IconButton(
-                            icon: Icon(state.isPasswordVisible ? Icons.visibility_off : Icons.visibility),
+                            icon: Icon(state.isPasswordVisible ? AppIcons.eyeSlash : AppIcons.eye),
                             onPressed: () => context.read<LoginCubit>().togglePasswordVisibility(),
                           ),
                         ).animate().fadeIn(delay: 700.ms);

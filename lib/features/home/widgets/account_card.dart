@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../../../core/theme/app_icons.dart';
 import '../../../core/widgets/custom_text.dart';
 import '../../../model/account_model.dart';
 
@@ -36,18 +37,20 @@ class _AccountCardState extends State<AccountCard> {
             children: [
               Row(
                 children: [
-                  const Icon(Icons.label_important_outline, size: 20),
+                  const Icon(AppIcons.service, size: 20),
                   const SizedBox(width: 8),
                   CustomText(
                     widget.account.serviceName,
-                    style: Theme.of(context).textTheme.titleLarge,
+                    style: Theme.of(context).textTheme.titleMedium!.copyWith(
+                      color:Theme.of(context).colorScheme.primary
+                    ),
                   ),
                 ],
               ),
               const Divider(height: 24),
               _buildInfoRow(
                 context,
-                icon: Icons.person_outline,
+                icon: AppIcons.user,
                 text: widget.account.username,
               ),
               const SizedBox(height: 12),
@@ -75,7 +78,7 @@ class _AccountCardState extends State<AccountCard> {
   Widget _buildPasswordRow(BuildContext context) {
     return Row(
       children: [
-        Icon(Icons.lock_outline,
+        Icon(AppIcons.lock,
             size: 20, color: Theme.of(context).textTheme.bodySmall?.color),
         const SizedBox(width: 12),
         Expanded(
@@ -87,9 +90,7 @@ class _AccountCardState extends State<AccountCard> {
         ),
         IconButton(
           icon: Icon(
-            _isPasswordVisible
-                ? Icons.visibility_off_outlined
-                : Icons.visibility_outlined,
+            _isPasswordVisible ? AppIcons.eyeSlash : AppIcons.eye
           ),
           onPressed: () {
             setState(() {
