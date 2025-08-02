@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import '../../../core/services/encryption_service.dart';
 import '../../../core/services/session_manager.dart';
 import '../../../core/theme/app_icons.dart';
 import '../../../core/widgets/custom_elevated_button.dart';
@@ -104,6 +105,10 @@ class _AccountFormState extends State<AccountForm> {
   }
 
   Future<void> _onSave() async {
+
+    final encryptionService = EncryptionService();
+    final plainTextPassword = _passwordController.text;
+    final encryptedPassword = encryptionService.encryptText(plainTextPassword);
     if (!_formKey.currentState!.validate()) return;
 
     final userId = await SessionManager.getUserId();
@@ -114,14 +119,14 @@ class _AccountFormState extends State<AccountForm> {
     if (widget.accountToEdit != null) {
       final updatedAccount = Account(
         id: widget.accountToEdit!.id, userId: userId, categoryId: _selectedCategoryId!,
-        serviceName: finalServiceName, username: _usernameController.text, password: _passwordController.text,
+        serviceName: finalServiceName, username: _usernameController.text, password: encryptedPassword,
         recoveryAccount: _recoveryController.text, phoneNumbers: _phoneController.text,
       );
       context.read<AccountCubit>().updateAccount(updatedAccount);
     } else {
       final newAccount = Account(
         userId: userId, categoryId: _selectedCategoryId!,
-        serviceName: finalServiceName, username: _usernameController.text, password: _passwordController.text,
+        serviceName: finalServiceName, username: _usernameController.text, password: encryptedPassword,
         recoveryAccount: _recoveryController.text, phoneNumbers: _phoneController.text,
       );
       context.read<AccountCubit>().addAccount(newAccount);

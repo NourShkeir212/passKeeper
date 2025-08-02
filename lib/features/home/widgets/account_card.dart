@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../../../core/services/encryption_service.dart';
 import '../../../core/theme/app_icons.dart';
 import '../../../core/widgets/custom_text.dart';
 import '../../../model/account_model.dart';
@@ -76,6 +77,7 @@ class _AccountCardState extends State<AccountCard> {
   }
 
   Widget _buildPasswordRow(BuildContext context) {
+    final encryptionService = EncryptionService();
     return Row(
       children: [
         Icon(AppIcons.lock,
@@ -83,7 +85,7 @@ class _AccountCardState extends State<AccountCard> {
         const SizedBox(width: 12),
         Expanded(
           child: CustomText(
-            _isPasswordVisible ? widget.account.password : '••••••••••',
+            _isPasswordVisible ? encryptionService.decryptText(widget.account.password) : '••••••••••',
             style: const TextStyle(
                 fontFamily: 'monospace', letterSpacing: 1.5, fontSize: 16),
           ),
