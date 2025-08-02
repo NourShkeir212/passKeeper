@@ -4,6 +4,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:flutter_svg/svg.dart';
+import '../../../core/services/encryption_service.dart';
 import '../../../core/theme/app_icons.dart';
 import '../../../core/widgets/custom_text.dart';
 import '../../../model/account_model.dart';
@@ -186,6 +187,7 @@ class AccountList extends StatelessWidget {
   }
 
   void _showAccountDetails(BuildContext context, Account account) {
+    final encryptionService = EncryptionService();
     bool isPasswordVisible = false;
     showModalBottomSheet(
       context: context,
@@ -207,7 +209,7 @@ class AccountList extends StatelessWidget {
                   CustomText(account.serviceName, style: Theme.of(context).textTheme.headlineSmall),
                   const Divider(height: 32),
                   _buildDetailRow(context, AppIcons.user, "Username", account.username),
-                  _buildDetailRow(context, AppIcons.lock, "Password", isPasswordVisible ? account.password : '••••••••••',
+                  _buildDetailRow(context, AppIcons.lock, "Password", isPasswordVisible ? encryptionService.decryptText(account.password) : '••••••••••',
                     trailing: IconButton(
                       icon: Icon(isPasswordVisible ? AppIcons.eyeSlash : AppIcons.eye),
                       onPressed: () => setModalState(() => isPasswordVisible = !isPasswordVisible),

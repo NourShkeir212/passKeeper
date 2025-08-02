@@ -96,12 +96,13 @@ class DatabaseService {
     }
   }
 
-  Future<User?> getUser(String username, String password) async {
+  /// Fetches a user by their username only.
+  Future<User?> getUserByUsername(String username) async {
     final db = await database;
     final List<Map<String, dynamic>> maps = await db.query(
       'users',
-      where: 'username = ? AND password = ?',
-      whereArgs: [username, password],
+      where: 'username = ?',
+      whereArgs: [username],
     );
 
     if (maps.isNotEmpty) {
