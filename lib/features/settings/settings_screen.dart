@@ -182,14 +182,16 @@ class SettingsView extends StatelessWidget {
                     title: const Text("Change Password"),
                     leading: const Icon(AppIcons.password),
                     onTap: () {
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (_) => BlocProvider.value(
-                              value: context.read<SettingsCubit>(),
-                              child: const ChangePasswordScreen(),
-                            ),
-                          ));
+                      Navigator.push(context, MaterialPageRoute(
+                        builder: (_) => MultiBlocProvider(
+                          providers: [
+                            // Provide the existing cubits to the ChangePasswordScreen
+                            BlocProvider.value(value: context.read<SettingsCubit>()),
+                            BlocProvider.value(value: context.read<AccountCubit>()),
+                          ],
+                          child: const ChangePasswordScreen(),
+                        ),
+                      ));
                     },
                   ),
                   const Divider(),

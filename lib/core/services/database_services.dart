@@ -212,6 +212,29 @@ class DatabaseService {
   }
 
 
+  /// Fetches ALL accounts for a user, without any filtering.
+  /// Used for the re-encryption process.
+  Future<List<Account>> getAllAccountsForUser(int userId) async {
+    final db = await database;
+    final List<Map<String, dynamic>> maps = await db.query(
+      'accounts',
+      where: 'userId = ?',
+      whereArgs: [userId],
+    );
+    return List.generate(maps.length, (i) => Account.fromMap(maps[i]));
+  }
+
+  /// Updates a list of accounts in a single database transaction (batch).
+  Future<void> updateAccountsBatch(List<Account> accounts) async {
+    final db = await database;
+    final batch = db.batch();
+    for (var account in accounts) {
+      batch.update('accounts', account.toMap(), where: 'id = ?', whereArgs: [account.id]);
+    }
+    await batch.commit(noResult: true);
+  }
+
+
   /// Verifies if the provided password matches the user's current password.
   Future<bool> verifyPassword(int userId, String password) async {
     final db = await database;

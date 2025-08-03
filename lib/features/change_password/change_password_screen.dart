@@ -4,6 +4,7 @@ import '../../core/theme/app_icons.dart';
 import '../../core/widgets/custom_elevated_button.dart';
 import '../../core/widgets/custom_text.dart';
 import '../../core/widgets/custom_text_field.dart';
+import '../home/cubit/account_cubit/cubit.dart';
 import '../settings/cubit/cubit.dart';
 import '../settings/cubit/states.dart';
 import 'cubit/cubit.dart';
@@ -14,7 +15,7 @@ class ChangePasswordScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // Provide the new UI cubit to the screen
+    // Provide the UI cubit for this screen
     return BlocProvider(
       create: (context) => ChangePasswordCubit(),
       child: const ChangePasswordView(),
@@ -33,8 +34,12 @@ class ChangePasswordView extends StatelessWidget {
     final confirmPasswordController = TextEditingController();
 
     String? validateNewPassword(String? value) {
-      if (value == null || value.isEmpty) return 'Please enter a new password';
-      if (value.length < 8) return 'Password must be at least 8 characters';
+      if (value == null || value.isEmpty) {
+        return 'Please enter a new password';
+      }
+      if (value.length < 8) {
+        return 'Password must be at least 8 characters';
+      }
       if (!RegExp(r'[a-zA-Z]').hasMatch(value) ||
           !RegExp(r'[0-9]').hasMatch(value) ||
           !RegExp(r'[^a-zA-Z0-9]').hasMatch(value)) {
@@ -45,7 +50,7 @@ class ChangePasswordView extends StatelessWidget {
 
     void submitChange() {
       if (formKey.currentState!.validate()) {
-        context.read<SettingsCubit>().changePassword(
+        context.read<SettingsCubit>().changeMasterPassword(
           oldPassword: oldPasswordController.text,
           newPassword: newPasswordController.text,
         );
@@ -57,6 +62,9 @@ class ChangePasswordView extends StatelessWidget {
       body: BlocListener<SettingsCubit, SettingsState>(
         listener: (context, state) {
           if (state is ChangePasswordSuccess) {
+            // Refresh the account list to get newly re-encrypted data
+            context.read<AccountCubit>().loadAccounts();
+
             ScaffoldMessenger.of(context)
               ..hideCurrentSnackBar()
               ..showSnackBar(const SnackBar(
@@ -78,66 +86,57 @@ class ChangePasswordView extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
-                // --- Current Password Field ---
                 BlocBuilder<ChangePasswordCubit, ChangePasswordState>(
                   builder: (context, state) {
                     return CustomTextField(
                       controller: oldPasswordController,
                       labelText: "Current Password",
-                      prefixIcon: AppIcons.lock,
+                      prefixIcon: Icons.lock_open,
                       isPassword: !state.isCurrentPasswordVisible,
                       validator: (v) => v!.isEmpty ? 'Please enter your current password' : null,
                       suffixIcon: IconButton(
-                        icon: Icon(state.isCurrentPasswordVisible ?  AppIcons.eyeSlash : AppIcons.eye),
+                        icon: Icon(state.isCurrentPasswordVisible ? Icons.visibility_off : Icons.visibility),
                         onPressed: () => context.read<ChangePasswordCubit>().toggleCurrentPasswordVisibility(),
                       ),
                     );
                   },
                 ),
                 const SizedBox(height: 16),
-
-                // --- New Password Field ---
                 BlocBuilder<ChangePasswordCubit, ChangePasswordState>(
                   builder: (context, state) {
                     return CustomTextField(
                       controller: newPasswordController,
                       labelText: "New Password",
-                      prefixIcon: AppIcons.lock,
+                      prefixIcon: Icons.lock_outline,
                       isPassword: !state.isNewPasswordVisible,
                       validator: validateNewPassword,
                       onChanged: (password) => context.read<ChangePasswordCubit>().validatePasswordRealtime(password),
                       suffixIcon: IconButton(
-                        icon: Icon(state.isNewPasswordVisible ?  AppIcons.eyeSlash : AppIcons.eye),
+                        icon: Icon(state.isNewPasswordVisible ? Icons.visibility_off : Icons.visibility),
                         onPressed: () => context.read<ChangePasswordCubit>().toggleNewPasswordVisibility(),
                       ),
                     );
                   },
                 ),
                 const SizedBox(height: 12),
-
-                // --- Real-time Validation Rules ---
                 const _PasswordValidationRules(),
-
                 const SizedBox(height: 12),
-
-                // --- Confirm Password Field ---
                 BlocBuilder<ChangePasswordCubit, ChangePasswordState>(
                   builder: (context, state) {
                     return CustomTextField(
                       controller: confirmPasswordController,
                       labelText: "Confirm New Password",
-                      prefixIcon: AppIcons.lock,
+                      prefixIcon: Icons.lock_person,
                       isPassword: !state.isConfirmPasswordVisible,
                       validator: (value) => value != newPasswordController.text ? "Passwords do not match" : null,
                       suffixIcon: IconButton(
-                        icon: Icon(state.isConfirmPasswordVisible ?  AppIcons.eyeSlash : AppIcons.eye),
+                        icon: Icon(state.isConfirmPasswordVisible ? Icons.visibility_off : Icons.visibility),
                         onPressed: () => context.read<ChangePasswordCubit>().toggleConfirmPasswordVisibility(),
                       ),
                     );
                   },
                 ),
                 const SizedBox(height: 32),
-
                 BlocBuilder<SettingsCubit, SettingsState>(
                   builder: (context, state) {
                     return CustomElevatedButton(
@@ -156,7 +155,6 @@ class ChangePasswordView extends StatelessWidget {
   }
 }
 
-// --- Reusable Password Validation Widget ---
 class _PasswordValidationRules extends StatelessWidget {
   const _PasswordValidationRules();
   @override

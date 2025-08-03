@@ -55,6 +55,14 @@ class EncryptionService {
     var digest = sha256.convert(bytes);
     return digest.toString(); // Returns the hex string representation of the hash
   }
+
+  /// Creates a temporary encrypter instance from a given password.
+  /// This is used for the master password change process.
+  encrypt.Encrypter createEncrypter(String password) {
+    final key = _deriveKey(password);
+    return encrypt.Encrypter(encrypt.AES(key));
+  }
+
   /// Clears the encryption key from memory on logout.
   void clear() {
     _encrypter = null;
