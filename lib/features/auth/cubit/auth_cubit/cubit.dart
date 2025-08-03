@@ -23,14 +23,15 @@ class AuthCubit extends Cubit<AuthState> {
     }
   }
 
+
   Future<void> signUp(
       {required String username, required String password}) async {
     emit(AuthLoading());
 
-    // 1. Hash the master password before saving.
+    // 1. HASH the master password for storage (one-way).
     final hashedPassword = _encryptionService.hashPassword(password);
-    final newUser = User(username: username, password: hashedPassword);
 
+    final newUser = User(username: username, password: hashedPassword);
     final result = await _databaseService.insertUser(newUser);
 
     if (result != -1) {
@@ -40,8 +41,8 @@ class AuthCubit extends Cubit<AuthState> {
     }
   }
 
-  // --- UPDATED login METHOD ---
-  Future<void> login({required String username, required String password}) async {
+  Future<void> login(
+      {required String username, required String password}) async {
     emit(AuthLoading());
     try {
       // 1. Fetch user by username only.

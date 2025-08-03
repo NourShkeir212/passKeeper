@@ -8,6 +8,7 @@ import '../../../core/widgets/custom_text.dart';
 import '../../../core/widgets/custom_text_field.dart';
 import '../../../model/account_model.dart';
 import '../../../model/category_model.dart';
+import '../../auth/cubit/auth_cubit/cubit.dart';
 import '../cubit/account_cubit/cubit.dart';
 import '../cubit/category_cubit/cubit.dart';
 import '../cubit/category_cubit/states.dart';
@@ -24,16 +25,18 @@ class AccountForm extends StatefulWidget {
 
 class _AccountFormState extends State<AccountForm> {
   final _formKey = GlobalKey<FormState>();
+
   int? _selectedCategoryId;
   String? _selectedService;
   bool _isPasswordVisible = false;
+
+
 
   late final TextEditingController _otherServiceController;
   late final TextEditingController _usernameController;
   late final TextEditingController _passwordController;
   late final TextEditingController _recoveryController;
   late final TextEditingController _phoneController;
-
 
   static const List<String> _services = [
     'Gmail',
@@ -42,6 +45,8 @@ class _AccountFormState extends State<AccountForm> {
     'Facebook',
     'Instagram',
     'X',
+    'WhatsApp',
+    'Telegram',
     'Other...'
   ];
 
@@ -49,26 +54,26 @@ class _AccountFormState extends State<AccountForm> {
   void initState() {
     super.initState();
     final isEditMode = widget.accountToEdit != null;
+    final account = widget.accountToEdit;
 
-    _selectedCategoryId = isEditMode ? widget.accountToEdit!.categoryId : null;
+    _selectedCategoryId = isEditMode ? account!.categoryId : null;
 
     if (isEditMode) {
-      _selectedService = _services.contains(widget.accountToEdit!.serviceName)
-          ? widget.accountToEdit!.serviceName
+      _selectedService = _services.contains(account!.serviceName)
+          ? account.serviceName
           : 'Other...';
-    } else {
-      _selectedService = null;
     }
 
-    _otherServiceController = TextEditingController(
-        text: isEditMode && !_services.contains(widget.accountToEdit!.serviceName)
-            ? widget.accountToEdit!.serviceName
-            : '');
+    _otherServiceController = TextEditingController(text: isEditMode && !_services.contains(account!.serviceName) ? account.serviceName : '');
+    _usernameController = TextEditingController(text: isEditMode ? account!.username : '');
 
-    _usernameController = TextEditingController(text: isEditMode ? widget.accountToEdit!.username : '');
-    _passwordController = TextEditingController(text: isEditMode ? widget.accountToEdit!.password : '');
-    _recoveryController = TextEditingController(text: isEditMode ? widget.accountToEdit!.recoveryAccount : '');
-    _phoneController = TextEditingController(text: isEditMode ? widget.accountToEdit!.phoneNumbers : '');
+    // --- THE FIX IS HERE ---
+    // Decrypt the password before putting it in the controller for editing.
+    final decryptedPassword = isEditMode ? EncryptionService().decryptText(account!.password) : '';
+    _passwordController = TextEditingController(text: decryptedPassword);
+
+    _recoveryController = TextEditingController(text: isEditMode ? account!.recoveryAccount : '');
+    _phoneController = TextEditingController(text: isEditMode ? account!.phoneNumbers : '');
   }
 
   @override
@@ -81,6 +86,105 @@ class _AccountFormState extends State<AccountForm> {
     super.dispose();
   }
 
+  Future<void> _onSave() async {
+    if (!_formKey.currentState!.validate()) return;
+
+    final encryptionService = EncryptionService();
+    final authCubit = context.read<AuthCubit>();
+    final accountCubit = context.read<AccountCubit>();
+
+    // --- NEW: Check if the vault is unlocked before saving ---
+    if (!encryptionService.isInitialized) {
+      final password = await _showMasterPasswordDialog(context);
+      if (password == null || password.isEmpty) return; // User cancelled
+
+      final success = await authCubit.verifyMasterPassword(password);
+      if (!success) {
+        if (mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(content: Text("Incorrect password"), backgroundColor: Colors.red),
+          );
+        }
+        return; // Stop if password is wrong
+      }
+    }
+
+    // --- The rest of the save logic can now proceed safely ---
+    final userId = await SessionManager.getUserId();
+    if (userId == null) return;
+
+    // Re-encrypt the password before saving
+    final encryptedPassword = encryptionService.encryptText(_passwordController.text);
+    final finalServiceName = _selectedService == 'Other...' ? _otherServiceController.text : _selectedService!;
+
+    if (widget.accountToEdit != null) {
+      final updatedAccount = Account(
+          id: widget.accountToEdit!.id,
+          userId: userId,
+          categoryId: _selectedCategoryId!,
+          serviceName: finalServiceName,
+          username: _usernameController.text,
+          password: encryptedPassword,
+          recoveryAccount: _recoveryController.text,
+          phoneNumbers: _phoneController.text,
+      );
+      accountCubit.updateAccount(updatedAccount);
+    } else {
+      final newAccount = Account(
+        userId: userId,
+        categoryId: _selectedCategoryId!,
+        serviceName: finalServiceName,
+        username: _usernameController.text,
+        password: encryptedPassword,
+        recoveryAccount: _recoveryController.text,
+        phoneNumbers: _phoneController.text,
+      );
+      accountCubit.addAccount(newAccount);
+    }
+
+    if (mounted) Navigator.of(context).pop();
+  }
+
+  Future<String?> _showMasterPasswordDialog(BuildContext context) {
+    final passwordController = TextEditingController();
+    final formKey = GlobalKey<FormState>();
+    return showDialog<String>(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Text("Unlock Vault to Save"),
+        content: Form(
+          key: formKey,
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              const Text("Please enter your master password to save this account."),
+              const SizedBox(height: 16),
+              TextFormField(
+                controller: passwordController,
+                obscureText: true,
+                decoration: const InputDecoration(labelText: "Master Password"),
+                validator: (v) => v!.isEmpty ? 'Password cannot be empty' : null,
+              ),
+            ],
+          ),
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.of(context).pop(),
+            child: const Text("Cancel"),
+          ),
+          FilledButton(
+            onPressed: () {
+              if (formKey.currentState!.validate()) {
+                Navigator.of(context).pop(passwordController.text);
+              }
+            },
+            child: const Text("Unlock"),
+          ),
+        ],
+      ),
+    );
+  }
   void _showCreateCategoryDialog() {
     final categoryNameController = TextEditingController();
     showDialog(
@@ -103,38 +207,6 @@ class _AccountFormState extends State<AccountForm> {
       ),
     );
   }
-
-  Future<void> _onSave() async {
-
-    final encryptionService = EncryptionService();
-    final plainTextPassword = _passwordController.text;
-    final encryptedPassword = encryptionService.encryptText(plainTextPassword);
-    if (!_formKey.currentState!.validate()) return;
-
-    final userId = await SessionManager.getUserId();
-    if (userId == null) return;
-
-    final finalServiceName = _selectedService == 'Other...' ? _otherServiceController.text : _selectedService!;
-
-    if (widget.accountToEdit != null) {
-      final updatedAccount = Account(
-        id: widget.accountToEdit!.id, userId: userId, categoryId: _selectedCategoryId!,
-        serviceName: finalServiceName, username: _usernameController.text, password: encryptedPassword,
-        recoveryAccount: _recoveryController.text, phoneNumbers: _phoneController.text,
-      );
-      context.read<AccountCubit>().updateAccount(updatedAccount);
-    } else {
-      final newAccount = Account(
-        userId: userId, categoryId: _selectedCategoryId!,
-        serviceName: finalServiceName, username: _usernameController.text, password: encryptedPassword,
-        recoveryAccount: _recoveryController.text, phoneNumbers: _phoneController.text,
-      );
-      context.read<AccountCubit>().addAccount(newAccount);
-    }
-
-    if (mounted) Navigator.of(context).pop();
-  }
-
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<CategoryCubit, CategoryState>(
