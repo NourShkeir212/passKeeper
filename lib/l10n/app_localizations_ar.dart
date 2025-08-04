@@ -416,5 +416,12 @@ class AppLocalizationsAr extends AppLocalizations {
       'الرجاء إدخال كلمة المرور الرئيسية لتصدير حساباتك.';
 
   @override
+  String get dialogUnlockToImportTitle => 'فتح الخزنة للإستيراد';
+
+  @override
+  String get dialogUnlockToImportContent =>
+      'الرجاء إدخال كلمة المرور الرئيسية لإستيراد حساباتك.';
+
+  @override
   String get biometricPromptReason => 'يرجى المصادقة للوصول إلى خزنتك';
 }

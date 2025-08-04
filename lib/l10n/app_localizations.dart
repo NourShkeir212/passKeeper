@@ -858,6 +858,18 @@ abstract class AppLocalizations {
   /// **'Please enter your master password to export your accounts.'**
   String get dialogUnlockToExportContent;
 
+  /// No description provided for @dialogUnlockToImportTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Unlock to Import'**
+  String get dialogUnlockToImportTitle;
+
+  /// No description provided for @dialogUnlockToImportContent.
+  ///
+  /// In en, this message translates to:
+  /// **'Please enter your master password to import your accounts.'**
+  String get dialogUnlockToImportContent;
+
   /// No description provided for @biometricPromptReason.
   ///
   /// In en, this message translates to:

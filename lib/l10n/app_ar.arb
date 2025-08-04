@@ -173,5 +173,7 @@
     "excelHeaderPhone": "أرقام الهواتف",
     "dialogUnlockToExportTitle": "فتح الخزنة للتصدير",
     "dialogUnlockToExportContent": "الرجاء إدخال كلمة المرور الرئيسية لتصدير حساباتك.",
+    "dialogUnlockToImportTitle": "فتح الخزنة للإستيراد",
+    "dialogUnlockToImportContent": "الرجاء إدخال كلمة المرور الرئيسية لإستيراد حساباتك.",
     "biometricPromptReason": "يرجى المصادقة للوصول إلى خزنتك"
 }

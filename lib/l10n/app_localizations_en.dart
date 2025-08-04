@@ -418,6 +418,13 @@ class AppLocalizationsEn extends AppLocalizations {
       'Please enter your master password to export your accounts.';
 
   @override
+  String get dialogUnlockToImportTitle => 'Unlock to Import';
+
+  @override
+  String get dialogUnlockToImportContent =>
+      'Please enter your master password to import your accounts.';
+
+  @override
   String get biometricPromptReason =>
       'Please authenticate to access your vault';
 }

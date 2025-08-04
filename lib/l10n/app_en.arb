@@ -172,5 +172,7 @@
     "excelHeaderPhone": "Phone Numbers",
    "dialogUnlockToExportTitle": "Unlock to Export",
    "dialogUnlockToExportContent": "Please enter your master password to export your accounts.",
+    "dialogUnlockToImportTitle": "Unlock to Import",
+    "dialogUnlockToImportContent": "Please enter your master password to import your accounts.",
    "biometricPromptReason": "Please authenticate to access your vault"
 }
