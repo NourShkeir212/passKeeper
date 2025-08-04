@@ -57,8 +57,6 @@ dependencies:
   change_app_package_name: ^1.5.0
   encrypt: ^5.0.3
   crypto: ^3.0.3
-  flutter_secure_storage: ^9.2.2
-
 
 dev_dependencies:
   flutter_test:

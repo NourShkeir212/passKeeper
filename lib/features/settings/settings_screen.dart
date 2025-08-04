@@ -258,8 +258,8 @@ class SettingsView extends StatelessWidget {
                       if (!encryptionService.isInitialized) {
                         final password = await showMasterPasswordDialog(
                           context,
-                          title: "Unlock to Import",
-                          content: "Please enter your master password to import accounts.",
+                          title: AppLocalizations.of(context)!.dialogUnlockToImportTitle,
+                          content: AppLocalizations.of(context)!.dialogUnlockToImportContent,
                         );
                         if (password == null || password.isEmpty) return; // User cancelled
 

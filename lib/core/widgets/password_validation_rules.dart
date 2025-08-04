@@ -65,7 +65,7 @@ class _ValidationRuleItem extends StatelessWidget {
           Icon(isValid ? Icons.check_circle_outline : Icons.remove_circle_outline,
               color: color, size: 18),
           const SizedBox(width: 8),
-          CustomText(text, style: TextStyle(color: color)),
+          Flexible(child: CustomText(text, style: TextStyle(color: color,overflow: TextOverflow.ellipsis),maxLines: 2,)),
         ],
       ),
     );
