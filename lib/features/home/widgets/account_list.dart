@@ -4,9 +4,11 @@ import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:secure_accounts/l10n/app_localizations.dart';
 import '../../../core/services/encryption_service.dart';
 import '../../../core/theme/app_icons.dart';
 import '../../../core/widgets/custom_text.dart';
+import '../../../core/widgets/master_password_dialog.dart';
 import '../../../model/account_model.dart';
 import '../../../model/category_model.dart';
 import '../../auth/cubit/auth_cubit/cubit.dart';
@@ -60,7 +62,7 @@ class AccountList extends StatelessWidget {
                 },
               );
             }
-            return const Center(child: Text("Something went wrong."));
+            return  Center(child: Text(AppLocalizations.of(context)!.errorGeneric));
           },
         );
       },
@@ -79,12 +81,12 @@ class AccountList extends StatelessWidget {
             ),
             const SizedBox(height: 24),
             CustomText(
-              "Your Vault is Empty",
+              AppLocalizations.of(context)!.homeScreenEmptyTitle,
               style: Theme.of(context).textTheme.headlineSmall,
             ),
             const SizedBox(height: 8),
             CustomText(
-              "Tap the '+' button to add your first secure account.",
+              AppLocalizations.of(context)!.homeScreenEmptySubtitle,
               textAlign: TextAlign.center,
               style: Theme.of(context).textTheme.bodyMedium,
             ),
@@ -140,7 +142,7 @@ class AccountList extends StatelessWidget {
                     onPressed: (_) => _showAccountForm(context, account: account),
                     backgroundColor: Colors.blue,
                     icon: AppIcons.edit,
-                    label: 'Edit',
+                    label: AppLocalizations.of(context)!.accountCardEdit,
                   ),
                 ],
               ),
@@ -151,7 +153,7 @@ class AccountList extends StatelessWidget {
                     onPressed: (_) => _showDeleteConfirmation(context, account.id!),
                     backgroundColor: Colors.red,
                     icon: AppIcons.delete,
-                    label: 'Delete',
+                    label: AppLocalizations.of(context)!.accountCardDelete,
                   ),
                 ],
               ),
@@ -206,7 +208,7 @@ class AccountList extends StatelessWidget {
                 return;
               }
 
-              final password = await _showMasterPasswordDialog(context);
+              final password = await showMasterPasswordDialog(context);
               if (password != null && password.isNotEmpty) {
                 final success =
                 await context.read<AuthCubit>().verifyMasterPassword(password);
@@ -214,8 +216,8 @@ class AccountList extends StatelessWidget {
                   setModalState(() => isPasswordVisible = true);
                 } else if (context.mounted) {
                   ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(
-                        content: Text("Incorrect password"),
+                    SnackBar(
+                        content: Text(AppLocalizations.of(context)!.errorIncorrectPassword),
                         backgroundColor: Colors.red),
                   );
                 }
@@ -240,11 +242,11 @@ class AccountList extends StatelessWidget {
                       style: Theme.of(context).textTheme.headlineSmall),
                   const Divider(height: 32),
                   _buildDetailRow(
-                      context, AppIcons.user, "Username", account.username),
+                      context, AppIcons.user, AppLocalizations.of(context)!.accountDetailsUsername, account.username),
                   _buildDetailRow(
                     context,
                     AppIcons.lock,
-                    "Password",
+                    AppLocalizations.of(context)!.accountDetailsPassword,
                     isPasswordVisible && EncryptionService().isInitialized
                         ? EncryptionService().decryptText(account.password)
                         : '••••••••••',
@@ -258,11 +260,11 @@ class AccountList extends StatelessWidget {
                   ),
                   if (account.recoveryAccount != null &&
                       account.recoveryAccount!.isNotEmpty)
-                    _buildDetailRow(context, AppIcons.email, "Recovery Email",
+                    _buildDetailRow(context, AppIcons.email,  AppLocalizations.of(context)!.accountDetailsRecoveryEmail,
                         account.recoveryAccount!),
                   if (account.phoneNumbers != null &&
                       account.phoneNumbers!.isNotEmpty)
-                    _buildDetailRow(context, AppIcons.phone, "Phone Numbers",
+                    _buildDetailRow(context, AppIcons.phone,  AppLocalizations.of(context)!.accountDetailsPhone,
                         account.phoneNumbers!),
                   const SizedBox(height: 20),
                 ],
@@ -274,46 +276,7 @@ class AccountList extends StatelessWidget {
     );
   }
 
-  Future<String?> _showMasterPasswordDialog(BuildContext context) {
-    final passwordController = TextEditingController();
-    final formKey = GlobalKey<FormState>();
-    return showDialog<String>(
-      context: context,
-      builder: (context) => AlertDialog(
-        title: const Text("Unlock Vault"),
-        content: Form(
-          key: formKey,
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              const Text("Enter your master password to reveal your accounts for this session."),
-              const SizedBox(height: 16),
-              TextFormField(
-                controller: passwordController,
-                obscureText: true,
-                decoration: const InputDecoration(labelText: "Master Password"),
-                validator: (v) => v!.isEmpty ? 'Password cannot be empty' : null,
-              ),
-            ],
-          ),
-        ),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.of(context).pop(),
-            child: const Text("Cancel"),
-          ),
-          FilledButton(
-            onPressed: () {
-              if (formKey.currentState!.validate()) {
-                Navigator.of(context).pop(passwordController.text);
-              }
-            },
-            child: const Text("Unlock"),
-          ),
-        ],
-      ),
-    );
-  }
+
 
   // Ensure your _buildDetailRow method is also correct
   Widget _buildDetailRow(
@@ -332,9 +295,7 @@ class AccountList extends StatelessWidget {
               children: [
                 CustomText(title, style: Theme.of(context).textTheme.bodySmall),
                 const SizedBox(height: 2),
-                CustomText(value,
-                    style: const TextStyle(
-                        fontSize: 16, fontWeight: FontWeight.w500)),
+                CustomText(value, style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w500)),
               ],
             ),
           ),
@@ -346,7 +307,7 @@ class AccountList extends StatelessWidget {
               ScaffoldMessenger.of(context)
                 ..hideCurrentSnackBar()
                 ..showSnackBar(
-                    SnackBar(content: Text('$title copied to clipboard')));
+                    SnackBar(content: Text('$title ${AppLocalizations.of(context)!.accountDetailsCopied}')));
             },
           )
         ],
@@ -359,15 +320,15 @@ class AccountList extends StatelessWidget {
       context: context,
       builder: (BuildContext ctx) {
         return AlertDialog(
-          title: const CustomText('Confirm Deletion'),
-          content: const CustomText('Are you sure you want to delete this account? This action cannot be undone.'),
+          title:  CustomText(AppLocalizations.of(context)!.dialogConfirmDeleteTitle),
+          content:  CustomText(AppLocalizations.of(context)!.dialogConfirmDeleteAccount),
           actions: <Widget>[
             TextButton(
-              child: const CustomText('Cancel'),
+              child:  CustomText(AppLocalizations.of(context)!.dialogCancel),
               onPressed: () => Navigator.of(ctx).pop(),
             ),
             TextButton(
-              child: CustomText('Delete', style: TextStyle(color: Theme.of(context).colorScheme.error)),
+              child: CustomText(AppLocalizations.of(context)!.dialogConfirmDeleteTitle, style: TextStyle(color: Theme.of(context).colorScheme.error)),
               onPressed: () {
                 context.read<AccountCubit>().deleteAccount(accountId);
                 context.read<CategoryCubit>().loadCategories();

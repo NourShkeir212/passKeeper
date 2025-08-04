@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../core/theme/app_icons.dart';
 import '../../../core/widgets/custom_text.dart';
+import '../../../l10n/app_localizations.dart';
 import '../../settings/settings_screen.dart';
 import '../cubit/account_cubit/cubit.dart';
 import '../cubit/category_cubit/cubit.dart';
@@ -31,7 +32,7 @@ class HomeScreenAppBar extends StatelessWidget implements PreferredSizeWidget {
             title: TextField(
               controller: searchController,
               autofocus: true,
-              decoration: const InputDecoration(hintText: 'Search...', border: InputBorder.none),
+              decoration:  InputDecoration(hintText: AppLocalizations.of(context)!.homeScreenSearchHint, border: InputBorder.none),
               onChanged: (query) => context.read<AccountCubit>().searchAccounts(query),
             ),
             actions: [
@@ -41,13 +42,13 @@ class HomeScreenAppBar extends StatelessWidget implements PreferredSizeWidget {
           );
         } else {
           return AppBar(
-            title: const CustomText('PassKeeper'),
+            title:  CustomText(AppLocalizations.of(context)!.appTitle),
             automaticallyImplyLeading: false,
             actions: [
               IconButton(icon: const Icon(AppIcons.search), onPressed: () => context.read<HomeScreenCubit>().toggleSearch()),
               IconButton(
                 icon: const Icon(AppIcons.settings),
-                tooltip: 'Settings',
+                tooltip: AppLocalizations.of(context)!.settingsAccount,
                 onPressed: () {
                   Navigator.push(context, MaterialPageRoute(
                     builder: (_) => MultiBlocProvider(

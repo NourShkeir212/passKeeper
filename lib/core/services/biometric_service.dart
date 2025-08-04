@@ -1,12 +1,13 @@
 import 'package:flutter/services.dart';
 import 'package:local_auth/local_auth.dart';
+import 'package:secure_accounts/l10n/app_localizations.dart';
 
 class BiometricService {
   static final LocalAuthentication _auth = LocalAuthentication();
 
   /// Authenticates the user with biometrics.
   /// Returns true if successful, false otherwise.
-  static Future<bool> authenticate() async {
+  static Future<bool> authenticate(context) async {
     try {
       // Check if biometrics are available on the device
       final bool canCheckBiometrics = await _auth.canCheckBiometrics;
@@ -17,7 +18,7 @@ class BiometricService {
 
       // Authenticate
       return await _auth.authenticate(
-        localizedReason: 'Please authenticate to access your vault',
+        localizedReason: AppLocalizations.of(context)!.biometricPromptReason,
         options: const AuthenticationOptions(
           stickyAuth: true, // Keep the dialog open on app switch
           biometricOnly: true, // Only allow biometrics, not device PIN

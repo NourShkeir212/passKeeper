@@ -3,6 +3,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../core/services/encryption_service.dart';
 import '../../../core/theme/app_icons.dart';
 import '../../../core/widgets/custom_text.dart';
+import '../../../core/widgets/master_password_dialog.dart';
+import '../../../l10n/app_localizations.dart';
 import '../../../model/account_model.dart';
 import '../../auth/cubit/auth_cubit/cubit.dart';
 
@@ -33,7 +35,7 @@ class _AccountCardState extends State<AccountCard> {
       return;
     }
 
-    final password = await _showMasterPasswordDialog(context);
+    final password = await showMasterPasswordDialog(context);
     if (password != null && password.isNotEmpty) {
       final success = await authCubit.verifyMasterPassword(password);
       if (success && mounted) {
@@ -42,7 +44,7 @@ class _AccountCardState extends State<AccountCard> {
         });
       } else if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text("Incorrect password"), backgroundColor: Colors.red),
+           SnackBar(content: Text(AppLocalizations.of(context)!.errorIncorrectPassword), backgroundColor: Colors.red),
         );
       }
     }
@@ -128,44 +130,5 @@ class _AccountCardState extends State<AccountCard> {
     );
   }
 
-  Future<String?> _showMasterPasswordDialog(BuildContext context) {
-    final passwordController = TextEditingController();
-    final formKey = GlobalKey<FormState>();
-    return showDialog<String>(
-      context: context,
-      builder: (context) => AlertDialog(
-        title: const Text("Unlock Vault"),
-        content: Form(
-          key: formKey,
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              const Text("Enter your master password to reveal your accounts for this session."),
-              const SizedBox(height: 16),
-              TextFormField(
-                controller: passwordController,
-                obscureText: true,
-                decoration: const InputDecoration(labelText: "Master Password"),
-                validator: (v) => v!.isEmpty ? 'Password cannot be empty' : null,
-              ),
-            ],
-          ),
-        ),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.of(context).pop(),
-            child: const Text("Cancel"),
-          ),
-          FilledButton(
-            onPressed: () {
-              if (formKey.currentState!.validate()) {
-                Navigator.of(context).pop(passwordController.text);
-              }
-            },
-            child: const Text("Unlock"),
-          ),
-        ],
-      ),
-    );
-  }
+
 }

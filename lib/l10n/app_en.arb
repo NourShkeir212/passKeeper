@@ -1,0 +1,176 @@
+{
+    "@@locale": "en",
+    "appTitle": "PassKeeper",
+
+    "initialScreenLoading": "Loading...",
+
+    "lockScreenTitle": "PassKeeper is Locked",
+    "lockScreenSubtitle": "Authenticate to unlock your vault",
+    "unlockButton": "Unlock with Fingerprint",
+
+    "loginScreenWelcome": "Welcome Back",
+    "loginScreenUsernameHint": "Username",
+    "loginScreenPasswordHint": "Password",
+    "loginScreenLoginButton": "Login",
+    "loginScreenNoAccount": "Don't have an account?",
+    "loginScreenSignUpLink": "Sign Up",
+
+    "signUpScreenTitle": "Create Account",
+    "signUpScreenUsernameHint": "Username",
+    "signUpScreenPasswordHint": "Password",
+    "signUpScreenCreateButton": "Create Account",
+    "signUpScreenHaveAccount": "Already have an account?",
+    "signUpScreenLoginLink": "Login",
+    "signUpScreenPasswordRuleLength": "At least 8 characters",
+    "signUpScreenPasswordRuleLetters": "Contains letters (a-z, A-Z)",
+    "signUpScreenPasswordRuleNumbers": "Contains numbers (0-9)",
+    "signUpScreenPasswordRuleSpecial": "Contains a special character (e.g., !@#$)",
+
+    "homeScreenTitle": "My Accounts",
+    "homeScreenSearchHint": "Search...",
+    "homeScreenEmptyTitle": "Your Vault is Empty",
+    "homeScreenEmptySubtitle": "Tap the '+' button to add your first secure account.",
+    "homeScreenNoResults": "No accounts found for '{query}'",
+    "@homeScreenNoResults": {
+        "placeholders": {
+            "query": {
+                "type": "String"
+            }
+        }
+    },
+
+    "accountCardEdit": "Edit",
+    "accountCardDelete": "Delete",
+
+    "accountDetailsUsername": "Username",
+    "accountDetailsPassword": "Password",
+    "accountDetailsRecoveryEmail": "Recovery Email",
+    "accountDetailsPhone": "Phone Numbers",
+    "accountDetailsCopied": "{title} copied to clipboard",
+    "@accountDetailsCopied": {
+        "placeholders": {
+            "title": {
+                "type": "String"
+            }
+        }
+    },
+
+    "accountFormAddTitle": "Add New Account",
+    "accountFormEditTitle": "Edit Account",
+    "accountFormCategoryHint": "Category",
+    "accountFormCreateCategory": "Create New Category...",
+    "accountFormServiceNameHint": "Service Name",
+    "accountFormEnterServiceName": "Enter Service Name",
+    "accountFormUsernameHint": "Username or Email",
+    "accountFormPasswordHint": "Password",
+    "accountFormRecoveryHint": "Recovery Account (Optional)",
+    "accountFormPhoneHint": "Phone Numbers (Optional)",
+    "accountFormSaveButton": "Save",
+
+    "settingsScreenTitle": "Settings",
+    "settingsAppearance": "Appearance",
+    "settingsThemeSystem": "System Default",
+    "settingsThemeLight": "Light",
+    "settingsThemeDark": "Dark",
+    "settingsLanguage": "Language",
+    "settingsLangEnglish": "English",
+    "settingsLangArabic": "Arabic",
+    "settingsLangAuto": "Auto",
+    "settingsSecurity": "Security",
+    "settingsBiometricTitle": "Enable Biometric Lock",
+    "settingsBiometricSubtitle": "Use fingerprint/Face ID to unlock the app.",
+    "settingsChangePassword": "Change Password",
+    "settingsDataManagement": "Data Management",
+    "settingsImportTitle": "Import from Excel",
+    "settingsImportSubtitle": "Restore accounts from a backup file.",
+    "settingsExportTitle": "Export to Excel",
+    "settingsExportSubtitle": "Save a copy of your accounts to a file.",
+    "settingsDeleteAllData": "Delete All Data",
+    "settingsAccount": "Account",
+    "settingsLogout": "Logout",
+
+    "changePasswordTitle": "Change Password",
+    "changePasswordCurrent": "Current Password",
+    "changePasswordNew": "New Password",
+    "changePasswordConfirm": "Confirm New Password",
+    "changePasswordSaveButton": "Save Changes",
+
+    "manageCategoriesTitle": "Manage Categories",
+    "manageCategoriesEmptySubTitle": "Tap the '+' button to add your first category",
+    "manageCategoriesEmptyTitle": "No categories created yet.",
+    "manageCategoriesAddDialogTitle": "Add New Category",
+    "manageCategoriesEditDialogTitle": "Edit Category",
+    "manageCategoriesNameHint": "Category Name",
+
+    "dialogCancel": "Cancel",
+    "dialogCreate": "Create",
+    "dialogSave": "Save",
+    "dialogDelete": "Delete",
+    "dialogUnlock": "Unlock",
+    "dialogConfirmDeleteTitle": "Confirm Deletion",
+    "dialogConfirmDeleteAccount": "Are you sure you want to delete this account? This action cannot be undone.",
+    "dialogConfirmDeleteCategory": "Are you sure you want to delete this category? All accounts within it will also be deleted.",
+    "dialogConfirmDeleteAllDataTitle": "Are you sure?",
+    "dialogConfirmDeleteAllDataContent": "This will permanently delete all your accounts and categories. This action cannot be undone.",
+    "dialogDeleteForever": "Delete Forever",
+    "dialogUnlockVaultTitle": "Unlock Vault",
+    "dialogUnlockVaultSave": "Please enter your master password to save this account.",
+    "dialogUnlockVaultView": "Enter your master password to reveal your accounts for this session.",
+    "dialogUnlockToContinue": "Please enter your master password to continue.",
+
+    "feedbackAccountCreated": "Account created successfully! Please login.",
+    "feedbackAccountSaved": "Account saved",
+    "feedbackPasswordChanged": "Password changed successfully!",
+    "feedbackImportSuccess": "Import complete. Added: {successCount}, Skipped (duplicates): {skippedCount}, Failed: {failCount}.",
+    "@feedbackImportSuccess": {
+        "placeholders": {
+            "successCount": {"type": "int"},
+            "skippedCount": {"type": "int"},
+            "failCount": {"type": "int"}
+        }
+    },
+    "feedbackExporting": "Exporting...",
+    "feedbackImporting": "Importing...",
+
+    "validationEnterUsername": "Please enter a username",
+    "validationEnterPassword": "Please enter a password",
+    "validationPasswordEmpty": "Password cannot be empty",
+    "validationPasswordTooShort": "Password must be at least 8 characters",
+    "validationPasswordRules": "Must contain letters, numbers, and a special character",
+    "validationPasswordsNoMatch": "Passwords do not match",
+    "validationSelectService": "Please select a service",
+    "validationEnterServiceName": "Please enter a name",
+    "validationSelectCategory": "Please select a category",
+    "validationCategoryNameEmpty": "Name cannot be empty",
+
+    "errorIncorrectPassword": "Incorrect password",
+    "errorInvalidCredentials": "Invalid username or password.",
+    "errorUsernameExists": "Username already exists. Please choose another.",
+    "errorImportFailed": "Import failed: {error}",
+    "@errorImportFailed": {
+        "placeholders": {
+            "error": {"type": "String"}
+        }
+    },
+    "errorExportFailed": "Export failed: {error}",
+    "@errorExportFailed": {
+        "placeholders": {
+            "error": {"type": "String"}
+        }
+    },
+    "errorSheetNotFound": "Could not find a sheet named 'Accounts' in the Excel file.",
+    "errorUserNotLoggedIn": "User is not logged in.",
+    "errorGeneric": "Something went wrong.",
+    "categoryUncategorized": "Uncategorized",
+    "importNoFileSelected": "No file selected.",
+    "exportShareText": "My PassKeeper Account Backup",
+    "excelHeaderCategory": "Category",
+    "excelHeaderServiceName": "Service Name",
+    "excelHeaderUsername": "Username/Email",
+    "excelHeaderPassword": "Password",
+    "excelHeaderRecovery": "Recovery Account",
+    "excelHeaderPhone": "Phone Numbers",
+   "dialogUnlockToExportTitle": "Unlock to Export",
+   "dialogUnlockToExportContent": "Please enter your master password to export your accounts.",
+   "biometricPromptReason": "Please authenticate to access your vault"
+}

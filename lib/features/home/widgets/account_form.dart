@@ -6,6 +6,8 @@ import '../../../core/theme/app_icons.dart';
 import '../../../core/widgets/custom_elevated_button.dart';
 import '../../../core/widgets/custom_text.dart';
 import '../../../core/widgets/custom_text_field.dart';
+import '../../../core/widgets/master_password_dialog.dart';
+import '../../../l10n/app_localizations.dart';
 import '../../../model/account_model.dart';
 import '../../../model/category_model.dart';
 import '../../auth/cubit/auth_cubit/cubit.dart';
@@ -71,7 +73,7 @@ class _AccountFormState extends State<AccountForm> {
     // For "Edit" mode, we must ensure the vault is unlocked first.
     final encryptionService = EncryptionService();
     if (!encryptionService.isInitialized) {
-      final password = await _showMasterPasswordDialog(context);
+      final password = await showMasterPasswordDialog(context);
       if (password == null || password.isEmpty) {
         Navigator.of(context).pop(); // User cancelled
         return;
@@ -79,7 +81,7 @@ class _AccountFormState extends State<AccountForm> {
 
       final success = await context.read<AuthCubit>().verifyMasterPassword(password);
       if (!success && mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text("Incorrect password"), backgroundColor: Colors.red));
+        ScaffoldMessenger.of(context).showSnackBar( SnackBar(content: Text(AppLocalizations.of(context)!.errorIncorrectPassword), backgroundColor: Colors.red));
         Navigator.of(context).pop(); // Close on failure
         return;
       }
@@ -123,12 +125,12 @@ class _AccountFormState extends State<AccountForm> {
 
     // The vault unlock check is repeated here just in case the session timed out.
     if (!encryptionService.isInitialized) {
-      final password = await _showMasterPasswordDialog(context);
+      final password = await showMasterPasswordDialog(context);
       if (password == null || password.isEmpty) return;
       final success = await authCubit.verifyMasterPassword(password);
       if (!success) {
         if (mounted) {
-          ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text("Incorrect password"), backgroundColor: Colors.red));
+          ScaffoldMessenger.of(context).showSnackBar( SnackBar(content: Text(AppLocalizations.of(context)!.errorIncorrectPassword), backgroundColor: Colors.red));
         }
         return;
       }
@@ -185,45 +187,45 @@ class _AccountFormState extends State<AccountForm> {
                   children: [
                     Container(width: 40, height: 5, decoration: BoxDecoration(color: Colors.grey[400], borderRadius: BorderRadius.circular(10))),
                     const SizedBox(height: 20),
-                    CustomText(widget.accountToEdit != null ? "Edit Account" : "Add New Account", style: Theme.of(context).textTheme.headlineSmall),
+                    CustomText(widget.accountToEdit != null ? AppLocalizations.of(context)!.accountFormEditTitle : AppLocalizations.of(context)!.accountFormAddTitle, style: Theme.of(context).textTheme.headlineSmall),
                     const SizedBox(height: 20),
           
                     if (categoryState is CategoryLoaded)
                       DropdownButtonFormField<int>(
-                        decoration: const InputDecoration(labelText: "Category", prefixIcon: Icon(AppIcons.category)),
+                        decoration:  InputDecoration(labelText: AppLocalizations.of(context)!.accountFormCategoryHint, prefixIcon: Icon(AppIcons.category)),
                         value: _selectedCategoryId,
                         items: [
-                          const DropdownMenuItem(value: -1, child: Text("Create New Category...")),
+                           DropdownMenuItem(value: -1, child: Text(AppLocalizations.of(context)!.accountFormCreateCategory)),
                           ...categoryState.categories.map((Category cat) => DropdownMenuItem<int>(value: cat.id, child: Text(cat.name))).toList(),
                         ],
                         onChanged: (newValue) {
                           if (newValue == -1) { _showCreateCategoryDialog(); }
                           else { setState(() => _selectedCategoryId = newValue); }
                         },
-                        validator: (value) => value == null || value == -1 ? 'Please select a category' : null,
+                        validator: (value) => value == null || value == -1 ? AppLocalizations.of(context)!.validationCategoryNameEmpty : null,
                       ),
           
                     const SizedBox(height: 10),
                     DropdownButtonFormField<String>(
-                      decoration: const InputDecoration(labelText: "Service Name", prefixIcon: Icon(AppIcons.service)),
+                      decoration:  InputDecoration(labelText: AppLocalizations.of(context)!.accountFormEnterServiceName, prefixIcon: Icon(AppIcons.service)),
                       value: _selectedService,
                       items: _services.map((String service) => DropdownMenuItem<String>(value: service, child: CustomText(service))).toList(),
                       onChanged: (newValue) => setState(() => _selectedService = newValue),
-                      validator: (value) => value == null ? 'Please select a service' : null,
+                      validator: (value) => value == null ? AppLocalizations.of(context)!.validationEnterServiceName : null,
                     ),
           
                     if (_selectedService == 'Other...')
                       Padding(
                         padding: const EdgeInsets.only(top: 10.0),
-                        child: CustomTextField(controller: _otherServiceController, labelText: "Enter Service Name", prefixIcon: AppIcons.edit, validator: (value) => value!.isEmpty ? 'Please enter a name' : null),
+                        child: CustomTextField(controller: _otherServiceController, labelText: AppLocalizations.of(context)!.accountFormServiceNameHint, prefixIcon: AppIcons.edit, validator: (value) => value!.isEmpty ? 'Please enter a name' : null),
                       ),
           
                     const SizedBox(height: 10),
-                    CustomTextField(controller: _usernameController, labelText: "Username or Email", prefixIcon: AppIcons.user),
+                    CustomTextField(controller: _usernameController, labelText: AppLocalizations.of(context)!.accountFormUsernameHint, prefixIcon: AppIcons.user),
                     const SizedBox(height: 10),
                     CustomTextField(
                       controller: _passwordController,
-                      labelText: "Password",
+                      labelText: AppLocalizations.of(context)!.accountDetailsPassword,
                       prefixIcon: AppIcons.lock,
                       isPassword: !_isPasswordVisible,
                       suffixIcon: IconButton(
@@ -232,11 +234,11 @@ class _AccountFormState extends State<AccountForm> {
                       ),
                     ),
                     const SizedBox(height: 10),
-                    CustomTextField(controller: _recoveryController, labelText: "Recovery Account (Optional)", prefixIcon: AppIcons.email),
+                    CustomTextField(controller: _recoveryController, labelText: AppLocalizations.of(context)!.accountDetailsRecoveryEmail, prefixIcon: AppIcons.email),
                     const SizedBox(height: 10),
-                    CustomTextField(controller: _phoneController, labelText: "Phone Numbers (Optional)", prefixIcon: AppIcons.phone),
+                    CustomTextField(controller: _phoneController, labelText: AppLocalizations.of(context)!.accountDetailsPhone, prefixIcon: AppIcons.phone),
                     const SizedBox(height: 20),
-                    CustomElevatedButton(onPressed: _onSave, text: "Save"),
+                    CustomElevatedButton(onPressed: _onSave, text: AppLocalizations.of(context)!.accountFormSaveButton),
                   ],
                 ),
               ),
@@ -254,10 +256,10 @@ class _AccountFormState extends State<AccountForm> {
     showDialog(
       context: context,
       builder: (dialogContext) => AlertDialog(
-        title: const Text('Create New Category'),
-        content: CustomTextField(controller: categoryNameController, labelText: 'Category Name', prefixIcon: AppIcons.createFolder),
+        title:  Text(AppLocalizations.of(context)!.accountFormCreateCategory),
+        content: CustomTextField(controller: categoryNameController, labelText: AppLocalizations.of(context)!.accountFormCategoryHint, prefixIcon: AppIcons.createFolder),
         actions: [
-          TextButton(onPressed: () => Navigator.pop(dialogContext), child: const Text('Cancel')),
+          TextButton(onPressed: () => Navigator.pop(dialogContext), child:  Text(AppLocalizations.of(context)!.dialogCancel)),
           TextButton(
             onPressed: () {
               if (categoryNameController.text.isNotEmpty) {
@@ -265,53 +267,12 @@ class _AccountFormState extends State<AccountForm> {
                 Navigator.pop(dialogContext);
               }
             },
-            child: const Text('Create'),
+            child:  Text(AppLocalizations.of(context)!.dialogCreate),
           ),
         ],
       ),
     );
   }
 
-  Future<String?> _showMasterPasswordDialog(BuildContext context) {
-    final passwordController = TextEditingController();
-    final formKey = GlobalKey<FormState>();
-    return showDialog<String>(
-      context: context,
-      barrierDismissible: false,
-      builder: (context) => AlertDialog(
-        title: const Text("Unlock Vault"),
-        content: Form(
-          key: formKey,
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              const Text("Please enter your master password to continue."),
-              const SizedBox(height: 16),
-              TextFormField(
-                controller: passwordController,
-                obscureText: true,
-                autofocus: true,
-                decoration: const InputDecoration(labelText: "Master Password"),
-                validator: (v) => v!.isEmpty ? 'Password cannot be empty' : null,
-              ),
-            ],
-          ),
-        ),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.of(context).pop(),
-            child: const Text("Cancel"),
-          ),
-          FilledButton(
-            onPressed: () {
-              if (formKey.currentState!.validate()) {
-                Navigator.of(context).pop(passwordController.text);
-              }
-            },
-            child: const Text("Unlock"),
-          ),
-        ],
-      ),
-    );
-  }
+
 }

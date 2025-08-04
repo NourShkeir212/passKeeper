@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:animated_text_kit/animated_text_kit.dart';
+import 'package:secure_accounts/l10n/app_localizations.dart';
 import '../../../../core/services/navigation_service.dart';
 import '../../../../core/theme/app_icons.dart';
 import '../../../../core/widgets/custom_elevated_button.dart';
@@ -42,6 +43,7 @@ class _LoginViewState extends State<LoginView> {
     FocusScope.of(context).unfocus();
     if (_formKey.currentState!.validate()) {
       context.read<AuthCubit>().login(
+        context: context,
         username: _usernameController.text.trim(),
         password: _passwordController.text,
       );
@@ -86,7 +88,7 @@ class _LoginViewState extends State<LoginView> {
                   children: [
                     // --- UI remains the same here ---
                     Text(
-                      'PassKeeper',
+                      AppLocalizations.of(context)!.appTitle,
                       textAlign: TextAlign.center,
                       style: Theme.of(context).textTheme.headlineSmall?.copyWith(
                         color: Theme.of(context).colorScheme.primary,
@@ -98,7 +100,7 @@ class _LoginViewState extends State<LoginView> {
                       totalRepeatCount: 1,
                       animatedTexts: [
                         TypewriterAnimatedText(
-                          'Welcome Back',
+                          AppLocalizations.of(context)!.loginScreenWelcome,
                           textStyle: Theme.of(context).textTheme.headlineLarge,
                           speed: const Duration(milliseconds: 100),
                         ),
@@ -107,19 +109,19 @@ class _LoginViewState extends State<LoginView> {
                     const SizedBox(height: 48.0),
                     CustomTextField(
                       controller: _usernameController,
-                      labelText: 'Username',
+                      labelText: AppLocalizations.of(context)!.loginScreenUsernameHint,
                       prefixIcon: AppIcons.user,
-                      validator: (value) => value!.isEmpty ? 'Please enter a username' : null,
+                      validator: (value) => value!.isEmpty ? AppLocalizations.of(context)!.validationEnterUsername : null,
                     ).animate().fadeIn(delay: 500.ms),
                     const SizedBox(height: 16.0),
                     BlocBuilder<LoginCubit, LoginState>(
                       builder: (context, state) {
                         return CustomTextField(
                           controller: _passwordController,
-                          labelText: 'Password',
+                          labelText: AppLocalizations.of(context)!.loginScreenPasswordHint,
                           prefixIcon: AppIcons.lock,
                           isPassword: !state.isPasswordVisible,
-                          validator: (value) => value!.isEmpty ? 'Please enter a password' : null,
+                          validator: (value) => value!.isEmpty ? AppLocalizations.of(context)!.validationEnterPassword : null,
                           suffixIcon: IconButton(
                             icon: Icon(state.isPasswordVisible ? AppIcons.eyeSlash : AppIcons.eye),
                             onPressed: () => context.read<LoginCubit>().togglePasswordVisibility(),
@@ -135,7 +137,7 @@ class _LoginViewState extends State<LoginView> {
                       builder: (context, state) {
                         return CustomElevatedButton(
                           onPressed: _login,
-                          text: 'Login',
+                          text: AppLocalizations.of(context)!.loginScreenLoginButton,
                           isLoading: state is AuthLoading,
                         ).animate().fadeIn(delay: 900.ms);
                       },
@@ -143,8 +145,8 @@ class _LoginViewState extends State<LoginView> {
 
                     const SizedBox(height: 16.0),
                     AuthLinkText(
-                      leadingText: "Don't have an account?",
-                      linkText: "Signup",
+                      leadingText:AppLocalizations.of(context)!.loginScreenNoAccount,
+                      linkText: AppLocalizations.of(context)!.loginScreenSignUpLink,
                       onPressed: () {
                       NavigationService.push(SignUpScreen());
                       },

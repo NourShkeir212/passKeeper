@@ -4,6 +4,7 @@ import 'package:flutter_animate/flutter_animate.dart';
 import '../../../../core/services/navigation_service.dart';
 import '../../core/services/settings_service.dart';
 import '../../core/theme/app_icons.dart';
+import '../../l10n/app_localizations.dart';
 import '../auth/cubit/auth_cubit/cubit.dart';
 import '../auth/cubit/auth_cubit/states.dart';
 import '../auth/screens/lock_screen/lock_screen.dart';
@@ -65,7 +66,7 @@ class _SplashScreenState extends State<SplashScreen> {
 
               // App Name
               Text(
-                'PassKeeper',
+                AppLocalizations.of(context)!.appTitle,
                 style: Theme
                     .of(context)
                     .textTheme

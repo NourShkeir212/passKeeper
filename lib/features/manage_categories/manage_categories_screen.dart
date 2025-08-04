@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_svg/svg.dart';
+import 'package:secure_accounts/l10n/app_localizations.dart';
 import '../../core/theme/app_icons.dart';
 import '../../core/widgets/custom_text.dart';
 import '../../core/widgets/custom_text_field.dart';
@@ -15,7 +17,7 @@ class ManageCategoriesScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Manage Categories"),
+        title:  Text(AppLocalizations.of(context)!.manageCategoriesTitle),
       ),
       body: BlocBuilder<CategoryCubit, CategoryState>(
         builder: (context, state) {
@@ -24,9 +26,8 @@ class ManageCategoriesScreen extends StatelessWidget {
           }
           if (state is CategoryLoaded) {
             if (state.categories.isEmpty) {
-              return const Center(child: Text("No categories created yet."));
+              return  _buildEmptyState(context);
             }
-            // --- CHANGED to ReorderableListView.builder ---
             return ReorderableListView.builder(
               itemCount: state.categories.length,
               itemBuilder: (context, index) {
@@ -58,7 +59,7 @@ class ManageCategoriesScreen extends StatelessWidget {
               },
             );
           }
-          return const Center(child: Text("Could not load categories."));
+          return  Center(child: Text("Could not load categories."));
         },
       ),
       floatingActionButton: FloatingActionButton(
@@ -76,18 +77,18 @@ class ManageCategoriesScreen extends StatelessWidget {
     showDialog(
       context: context,
       builder: (dialogContext) => AlertDialog(
-        title: Text(isEditing ? "Edit Category" : "Add New Category"),
+        title: Text(isEditing ? AppLocalizations.of(context)!.manageCategoriesEditDialogTitle : AppLocalizations.of(context)!.manageCategoriesAddDialogTitle),
         content: Form(
           key: formKey,
           child: CustomTextField(
             controller: nameController,
-            labelText: "Category Name",
+            labelText: AppLocalizations.of(context)!.manageCategoriesNameHint,
             prefixIcon: AppIcons.createFolder,
-            validator: (v) => v!.isEmpty ? "Name cannot be empty" : null,
+            validator: (v) => v!.isEmpty ? AppLocalizations.of(context)!.validationCategoryNameEmpty : null,
           ),
         ),
         actions: [
-          TextButton(onPressed: () => Navigator.pop(dialogContext), child: const Text("Cancel")),
+          TextButton(onPressed: () => Navigator.pop(dialogContext), child:  Text(AppLocalizations.of(context)!.dialogCancel)),
           TextButton(
             onPressed: () {
               if (formKey.currentState!.validate()) {
@@ -101,7 +102,7 @@ class ManageCategoriesScreen extends StatelessWidget {
                 Navigator.pop(dialogContext);
               }
             },
-            child: Text(isEditing ? "Save" : "Create"),
+            child: Text(isEditing ? AppLocalizations.of(context)!.dialogSave : AppLocalizations.of(context)!.dialogCreate),
           ),
         ],
       ),
@@ -112,12 +113,12 @@ class ManageCategoriesScreen extends StatelessWidget {
     showDialog(
       context: context,
       builder: (ctx) => AlertDialog(
-        title: const CustomText('Confirm Deletion'),
-        content: const CustomText('Are you sure you want to delete this category? All accounts within it will also be deleted.'),
+        title:  CustomText(AppLocalizations.of(context)!.dialogConfirmDeleteTitle),
+        content:  CustomText(AppLocalizations.of(context)!.dialogConfirmDeleteCategory),
         actions: [
-          TextButton(child: const CustomText('Cancel'), onPressed: () => Navigator.of(ctx).pop()),
+          TextButton(child:  CustomText(AppLocalizations.of(context)!.dialogCancel), onPressed: () => Navigator.of(ctx).pop()),
           TextButton(
-            child: CustomText('Delete', style: TextStyle(color: Theme.of(context).colorScheme.error)),
+            child: CustomText(AppLocalizations.of(context)!.dialogDelete, style: TextStyle(color: Theme.of(context).colorScheme.error)),
             onPressed: () {
               context.read<CategoryCubit>().deleteCategory(category.id!);
               context.read<AccountCubit>().loadAccounts();
@@ -125,6 +126,34 @@ class ManageCategoriesScreen extends StatelessWidget {
             },
           ),
         ],
+      ),
+    );
+  }
+
+  Widget _buildEmptyState(BuildContext context) {
+    return Center(
+      child: Padding(
+        padding: const EdgeInsets.all(32.0),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            SvgPicture.asset(
+              'assets/svg/no_data.svg', // Ensure you have this file
+              height: 150,
+            ),
+            const SizedBox(height: 24),
+            CustomText(
+              AppLocalizations.of(context)!.manageCategoriesEmptyTitle,
+              style: Theme.of(context).textTheme.headlineSmall,
+            ),
+            const SizedBox(height: 8),
+            CustomText(
+              AppLocalizations.of(context)!.manageCategoriesEmptySubTitle,
+              textAlign: TextAlign.center,
+              style: Theme.of(context).textTheme.bodyMedium,
+            ),
+          ],
+        ),
       ),
     );
   }

@@ -1,5 +1,7 @@
 import 'package:encrypt/encrypt.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:path/path.dart';
 import '../../../core/services/database_services.dart';
 import '../../../core/services/encryption_service.dart';
 import '../../../core/services/excel_service.dart';
@@ -109,10 +111,11 @@ class SettingsCubit extends Cubit<SettingsState> {
   Future<void> importData({
     required AccountCubit accountCubit,
     required CategoryCubit categoryCubit,
+    required BuildContext context,
   }) async {
     emit(SettingsImporting());
     try {
-      final message = await _exportService.importAccountsFromExcel();
+      final message = await _exportService.importAccountsFromExcel(context);
 
       accountCubit.loadAccounts();
       categoryCubit.loadCategories();

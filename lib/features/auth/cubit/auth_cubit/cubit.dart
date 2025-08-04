@@ -1,5 +1,7 @@
-import 'package:equatable/equatable.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:path/path.dart';
+import 'package:secure_accounts/l10n/app_localizations.dart';
 
 import '../../../../core/services/database_services.dart';
 import '../../../../core/services/encryption_service.dart';
@@ -25,7 +27,7 @@ class AuthCubit extends Cubit<AuthState> {
 
 
   Future<void> signUp(
-      {required String username, required String password}) async {
+      {required String username, required String password,required BuildContext context}) async {
     emit(AuthLoading());
 
     // 1. HASH the master password for storage (one-way).
@@ -37,24 +39,24 @@ class AuthCubit extends Cubit<AuthState> {
     if (result != -1) {
       emit(AuthSuccessSignUp());
     } else {
-      emit(const AuthFailure('Username already exists. Please choose another.'));
+      emit( AuthFailure(AppLocalizations.of(context)!.errorUsernameExists));
     }
   }
 
   Future<void> login(
-      {required String username, required String password}) async {
+      {required String username, required String password,required BuildContext context}) async {
     emit(AuthLoading());
     try {
       // 1. Fetch user by username only.
       final user = await _databaseService.getUserByUsername(username);
       if (user == null) {
-        throw Exception('Invalid username or password.');
+        throw Exception(AppLocalizations.of(context)!.errorInvalidCredentials);
       }
 
       // 2. Hash the entered password and compare it with the stored hash.
       final hashedPassword = _encryptionService.hashPassword(password);
       if (hashedPassword != user.password) {
-        throw Exception('Invalid username or password.');
+        throw Exception(AppLocalizations.of(context)!.errorInvalidCredentials);
       }
 
       // 3. If hashes match, login is successful. Initialize the encryption service.

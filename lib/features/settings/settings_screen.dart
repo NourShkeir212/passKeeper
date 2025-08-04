@@ -1,11 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:secure_accounts/l10n/app_localizations.dart';
+import '../../core/localization/locale_cubit.dart';
 import '../../core/services/database_services.dart';
+import '../../core/services/encryption_service.dart';
 import '../../core/services/navigation_service.dart';
 import '../../core/services/settings_service.dart';
 import '../../core/theme/app_icons.dart';
 import '../../core/theme/theme_cubit.dart';
 import '../../core/widgets/custom_text.dart';
+import '../../core/widgets/master_password_dialog.dart';
 import '../auth/cubit/auth_cubit/cubit.dart';
 import '../auth/cubit/auth_cubit/states.dart';
 import '../auth/screens/sign_in/sign_in_screen.dart';
@@ -57,8 +61,8 @@ class SettingsView extends StatelessWidget {
                         const CircularProgressIndicator(),
                         const SizedBox(width: 20),
                         Text(state is SettingsExporting
-                            ? "Exporting..."
-                            : "Importing..."),
+                            ? AppLocalizations.of(context)!.feedbackExporting
+                            : AppLocalizations.of(context)!.feedbackImporting),
                       ],
                     ),
                   ),
@@ -80,7 +84,7 @@ class SettingsView extends StatelessWidget {
                   ? state.error
                   : (state as SettingsImportFailure).error;
               ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                content: Text("Operation failed: $error"),
+                content: Text(AppLocalizations.of(context)!.errorExportFailed(error.toString())),
                 backgroundColor: Theme.of(context).colorScheme.error,
               ));
             }
@@ -88,34 +92,34 @@ class SettingsView extends StatelessWidget {
         ),
       ],
       child: Scaffold(
-        appBar: AppBar(title: const Text("Settings")),
+        appBar: AppBar(title:  Text(AppLocalizations.of(context)!.settingsScreenTitle)),
         body: BlocBuilder<SettingsCubit, SettingsState>(
           builder: (context, settingsState) {
             if (settingsState is SettingsInitial) {
               return ListView(
                 children: [
-                  const _SettingsGroupTitle(title: "Appearance"),
+                   _SettingsGroupTitle(title:AppLocalizations.of(context)!.settingsAppearance),
                   Padding(
                     padding: const EdgeInsets.symmetric(
                         horizontal: 16.0, vertical: 8.0),
                     child: BlocBuilder<ThemeCubit, ThemeState>(
                       builder: (context, themeState) {
                         return SegmentedButton<ThemeMode>(
-                          segments: const <ButtonSegment<ThemeMode>>[
+                          segments:  <ButtonSegment<ThemeMode>>[
                             ButtonSegment<ThemeMode>(
                               value: ThemeMode.light,
                               icon: Icon(AppIcons.sun),
-                              label: Text('Light'),
+                              label: Text(AppLocalizations.of(context)!.settingsThemeLight),
                             ),
                             ButtonSegment<ThemeMode>(
                               value: ThemeMode.dark,
                               icon: Icon(AppIcons.moon),
-                              label: Text('Dark'),
+                              label: Text(AppLocalizations.of(context)!.settingsThemeDark),
                             ),
                             ButtonSegment<ThemeMode>(
                               value: ThemeMode.system,
                               icon: Icon(AppIcons.auto),
-                              label: Text('Auto'),
+                              label: Text(AppLocalizations.of(context)!.settingsThemeSystem),
                             ),
                           ],
                           selected: <ThemeMode>{themeState.themeMode},
@@ -144,13 +148,58 @@ class SettingsView extends StatelessWidget {
                       },
                     ),
                   ),
-                  const _SettingsGroupTitle(title: "Customization"), // New or existing group
+                  // --- NEW: Language Section ---
+                   _SettingsGroupTitle(title: AppLocalizations.of(context)!.settingsLanguage),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+                    child: BlocBuilder<LocaleCubit, LocaleState>(
+                      builder: (context, localeState) {
+                        return SegmentedButton<String>(
+                          segments:  <ButtonSegment<String>>[
+                            ButtonSegment<String>(value: 'en', label: Text(AppLocalizations.of(context)!.settingsLangEnglish)),
+                            ButtonSegment<String>(value: 'ar', label: Text(AppLocalizations.of(context)!.settingsLangArabic)),
+                            ButtonSegment<String>(value: 'system', label: Text(AppLocalizations.of(context)!.settingsLangAuto), icon: Icon(AppIcons.auto)),
+                          ],
+                          // Determine the selected segment
+                          selected: <String>{
+                            localeState.locale?.languageCode ?? 'system'
+                          },
+                          style: ButtonStyle(
+                            visualDensity: VisualDensity.compact,
+                            backgroundColor:
+                            WidgetStateProperty.resolveWith<Color?>(
+                                  (Set<WidgetState> states) {
+                                if (states.contains(WidgetState.selected)) {
+                                  return Theme.of(context)
+                                      .colorScheme
+                                      .primary
+                                      .withOpacity(0.2);
+                                }
+                                return null;
+                              },
+                            ),
+                          ),
+                          onSelectionChanged: (Set<String> newSelection) {
+                            final selection = newSelection.first;
+                            if (selection == 'system') {
+                              context.read<LocaleCubit>().clearLocale();
+                            } else {
+                              context.read<LocaleCubit>().setLocale(Locale(selection));
+                            }
+                          },
+                          // ... styling from theme switcher ...
+                        );
+                      },
+                    ),
+                  ),
+                  const Divider(),
+                   _SettingsGroupTitle(title: AppLocalizations.of(context)!.manageCategoriesTitle), // New or existing group
                   ListTile(
-                    title: const Text("Manage Categories"),
+                    title:  Text(AppLocalizations.of(context)!.accountFormCategoryHint),
                     leading: const Icon(AppIcons.category),
                     onTap: () {
                       Navigator.push(context, MaterialPageRoute(
-                        builder: (_) => MultiBlocProvider( // <-- USE MultiBlocProvider
+                        builder: (_) => MultiBlocProvider(
                           providers: [
                             // Provide the existing CategoryCubit
                             BlocProvider.value(
@@ -169,17 +218,17 @@ class SettingsView extends StatelessWidget {
 
                 // ... Security section
                   const Divider(),
-                  const _SettingsGroupTitle(title: "Security"),
+                   _SettingsGroupTitle(title: AppLocalizations.of(context)!.settingsSecurity),
                   SwitchListTile(
-                    title: const Text("Enable Biometric Lock"),
-                    subtitle: const Text(
-                        "Use fingerprint/Face ID to unlock the app."),
+                    title:  Text(AppLocalizations.of(context)!.settingsBiometricTitle),
+                    subtitle:  Text(
+                        AppLocalizations.of(context)!.settingsBiometricSubtitle),
                     value: settingsState.isBiometricEnabled,
                     onChanged: (val) =>
                         context.read<SettingsCubit>().toggleBiometrics(val),
                   ),
                   ListTile(
-                    title: const Text("Change Password"),
+                    title:  Text(AppLocalizations.of(context)!.settingsChangePassword),
                     leading: const Icon(AppIcons.password),
                     onTap: () {
                       Navigator.push(context, MaterialPageRoute(
@@ -195,32 +244,55 @@ class SettingsView extends StatelessWidget {
                     },
                   ),
                   const Divider(),
-                  const _SettingsGroupTitle(title: "Data Management"),
+                   _SettingsGroupTitle(title: AppLocalizations.of(context)!.settingsDataManagement),
                   ListTile(
-                    title: const Text("Import from Excel"),
-                    subtitle:
-                    const Text("Restore accounts from a backup file."),
+                    title:  Text(AppLocalizations.of(context)!.settingsImportTitle),
+                    subtitle:  Text(AppLocalizations.of(context)!.settingsImportSubtitle),
                     leading: const Icon(AppIcons.import),
-                    onTap: () {
-                      context.read<SettingsCubit>().importData(
+                    onTap: () async { // Make the onTap async
+                      final authCubit = context.read<AuthCubit>();
+                      final settingsCubit = context.read<SettingsCubit>();
+                      final encryptionService = EncryptionService();
+
+                      // Check if the vault is unlocked
+                      if (!encryptionService.isInitialized) {
+                        final password = await showMasterPasswordDialog(
+                          context,
+                          title: "Unlock to Import",
+                          content: "Please enter your master password to import accounts.",
+                        );
+                        if (password == null || password.isEmpty) return; // User cancelled
+
+                        final success = await authCubit.verifyMasterPassword(password);
+                        if (!success && context.mounted) {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(content: Text("Incorrect password"), backgroundColor: Colors.red),
+                          );
+                          return; // Stop on failure
+                        }
+                      }
+
+                      // Now that the vault is unlocked, proceed with the import
+                      settingsCubit.importData(
                         accountCubit: context.read<AccountCubit>(),
                         categoryCubit: context.read<CategoryCubit>(),
+                        context: context,
                       );
                     },
                   ),
                   ListTile(
-                    title: const Text("Export to Excel"),
-                    subtitle: const Text(
-                        "Save a copy of your accounts to a file."),
+                    title:  Text(AppLocalizations.of(context)!.settingsExportTitle),
+                    subtitle:  Text(
+                        AppLocalizations.of(context)!.settingsExportSubtitle),
                     leading: const Icon(AppIcons.export),
                     onTap: () {
                       context.read<SettingsCubit>().exportData();
                     },
                   ),
                   const Divider(),
-                  const _SettingsGroupTitle(title: "Account"),
+                   _SettingsGroupTitle(title: AppLocalizations.of(context)!.settingsAccount),
                   ListTile(
-                    title: Text("Logout",
+                    title: Text(AppLocalizations.of(context)!.settingsLogout,
                         style: TextStyle(
                             color: Theme.of(context).colorScheme.error)),
                     leading: Icon(AppIcons.logout,

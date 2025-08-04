@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import '../../core/theme/app_icons.dart';
+import 'package:secure_accounts/l10n/app_localizations.dart';
 import '../../core/widgets/custom_elevated_button.dart';
-import '../../core/widgets/custom_text.dart';
 import '../../core/widgets/custom_text_field.dart';
+import '../../core/widgets/password_validation_rules.dart';
 import '../home/cubit/account_cubit/cubit.dart';
 import '../settings/cubit/cubit.dart';
 import '../settings/cubit/states.dart';
@@ -35,15 +35,15 @@ class ChangePasswordView extends StatelessWidget {
 
     String? validateNewPassword(String? value) {
       if (value == null || value.isEmpty) {
-        return 'Please enter a new password';
+        return AppLocalizations.of(context)!.validationEnterPassword;
       }
       if (value.length < 8) {
-        return 'Password must be at least 8 characters';
+        return AppLocalizations.of(context)!.signUpScreenPasswordRuleLength;
       }
       if (!RegExp(r'[a-zA-Z]').hasMatch(value) ||
           !RegExp(r'[0-9]').hasMatch(value) ||
           !RegExp(r'[^a-zA-Z0-9]').hasMatch(value)) {
-        return 'Must contain letters, numbers, and symbols';
+        return AppLocalizations.of(context)!.signUpScreenPasswordRuleLetters;
       }
       return null;
     }
@@ -58,7 +58,7 @@ class ChangePasswordView extends StatelessWidget {
     }
 
     return Scaffold(
-      appBar: AppBar(title: const Text("Change Password")),
+      appBar: AppBar(title:  Text(AppLocalizations.of(context)!.changePasswordTitle)),
       body: BlocListener<SettingsCubit, SettingsState>(
         listener: (context, state) {
           if (state is ChangePasswordSuccess) {
@@ -67,8 +67,8 @@ class ChangePasswordView extends StatelessWidget {
 
             ScaffoldMessenger.of(context)
               ..hideCurrentSnackBar()
-              ..showSnackBar(const SnackBar(
-                  content: Text("Password changed successfully!"),
+              ..showSnackBar( SnackBar(
+                  content: Text(AppLocalizations.of(context)!.feedbackPasswordChanged),
                   backgroundColor: Colors.green));
             Navigator.of(context).pop();
           } else if (state is ChangePasswordFailure) {
@@ -90,10 +90,10 @@ class ChangePasswordView extends StatelessWidget {
                   builder: (context, state) {
                     return CustomTextField(
                       controller: oldPasswordController,
-                      labelText: "Current Password",
+                      labelText:AppLocalizations.of(context)!.changePasswordCurrent,
                       prefixIcon: Icons.lock_open,
                       isPassword: !state.isCurrentPasswordVisible,
-                      validator: (v) => v!.isEmpty ? 'Please enter your current password' : null,
+                      validator: (v) => v!.isEmpty ?AppLocalizations.of(context)!.changePasswordCurrent : null,
                       suffixIcon: IconButton(
                         icon: Icon(state.isCurrentPasswordVisible ? Icons.visibility_off : Icons.visibility),
                         onPressed: () => context.read<ChangePasswordCubit>().toggleCurrentPasswordVisibility(),
@@ -106,7 +106,7 @@ class ChangePasswordView extends StatelessWidget {
                   builder: (context, state) {
                     return CustomTextField(
                       controller: newPasswordController,
-                      labelText: "New Password",
+                      labelText: AppLocalizations.of(context)!.changePasswordNew,
                       prefixIcon: Icons.lock_outline,
                       isPassword: !state.isNewPasswordVisible,
                       validator: validateNewPassword,
@@ -119,16 +119,32 @@ class ChangePasswordView extends StatelessWidget {
                   },
                 ),
                 const SizedBox(height: 12),
-                const _PasswordValidationRules(),
+                BlocBuilder<ChangePasswordCubit, ChangePasswordState>(
+                  // We only rebuild when the validation rules change
+                  buildWhen: (p, c) =>
+                  p.hasMinLength != c.hasMinLength ||
+                      p.hasLetter != c.hasLetter ||
+                      p.hasDigit != c.hasDigit ||
+                      p.hasSpecialChar != c.hasSpecialChar,
+                  builder: (context, state) {
+                    // Pass the state down to the reusable widget
+                    return PasswordValidationRules(
+                      hasMinLength: state.hasMinLength,
+                      hasLetter: state.hasLetter,
+                      hasDigit: state.hasDigit,
+                      hasSpecialChar: state.hasSpecialChar,
+                    );
+                  },
+                ),
                 const SizedBox(height: 12),
                 BlocBuilder<ChangePasswordCubit, ChangePasswordState>(
                   builder: (context, state) {
                     return CustomTextField(
                       controller: confirmPasswordController,
-                      labelText: "Confirm New Password",
+                      labelText: AppLocalizations.of(context)!.changePasswordConfirm,
                       prefixIcon: Icons.lock_person,
                       isPassword: !state.isConfirmPasswordVisible,
-                      validator: (value) => value != newPasswordController.text ? "Passwords do not match" : null,
+                      validator: (value) => value != newPasswordController.text ? AppLocalizations.of(context)!.validationPasswordsNoMatch : null,
                       suffixIcon: IconButton(
                         icon: Icon(state.isConfirmPasswordVisible ? Icons.visibility_off : Icons.visibility),
                         onPressed: () => context.read<ChangePasswordCubit>().toggleConfirmPasswordVisibility(),
@@ -141,7 +157,7 @@ class ChangePasswordView extends StatelessWidget {
                   builder: (context, state) {
                     return CustomElevatedButton(
                       onPressed: submitChange,
-                      text: "Save Changes",
+                      text: AppLocalizations.of(context)!.changePasswordSaveButton,
                       isLoading: state is SettingsLoading,
                     );
                   },
@@ -150,46 +166,6 @@ class ChangePasswordView extends StatelessWidget {
             ),
           ),
         ),
-      ),
-    );
-  }
-}
-
-class _PasswordValidationRules extends StatelessWidget {
-  const _PasswordValidationRules();
-  @override
-  Widget build(BuildContext context) {
-    return BlocBuilder<ChangePasswordCubit, ChangePasswordState>(
-      builder: (context, state) {
-        return Column(
-          children: [
-            _ValidationRuleItem(text: 'At least 8 characters', isValid: state.hasMinLength),
-            _ValidationRuleItem(text: 'Contains letters', isValid: state.hasLetter),
-            _ValidationRuleItem(text: 'Contains numbers', isValid: state.hasDigit),
-            _ValidationRuleItem(text: 'Contains a special character', isValid: state.hasSpecialChar),
-          ],
-        );
-      },
-    );
-  }
-}
-
-class _ValidationRuleItem extends StatelessWidget {
-  final String text;
-  final bool isValid;
-  const _ValidationRuleItem({required this.text, required this.isValid});
-
-  @override
-  Widget build(BuildContext context) {
-    final color = isValid ? Colors.green : Theme.of(context).textTheme.bodyLarge?.color?.withOpacity(0.6);
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 2.0),
-      child: Row(
-        children: [
-          Icon(isValid ? Icons.check_circle_outline : Icons.remove_circle_outline, color: color, size: 18),
-          const SizedBox(width: 8),
-          CustomText(text, style: TextStyle(color: color)),
-        ],
       ),
     );
   }

@@ -6,6 +6,8 @@ import '../../../../core/services/navigation_service.dart';
 import '../../../../core/theme/app_icons.dart';
 import '../../../../core/widgets/custom_elevated_button.dart';
 import '../../../../core/widgets/custom_text_field.dart';
+import '../../../../core/widgets/password_validation_rules.dart';
+import '../../../../l10n/app_localizations.dart';
 import '../../cubit/auth_cubit/cubit.dart';
 import '../../cubit/auth_cubit/states.dart';
 import '../../widgets/auth_link_text.dart';
@@ -36,16 +38,16 @@ class SignUpView extends StatelessWidget {
     // Helper functions can be defined locally.
     String? validatePassword(String? value) {
       if (value == null || value.isEmpty) {
-        return 'Please enter a password';
+        return AppLocalizations.of(context)!.validationEnterPassword;
       }
       if (value.length < 8) {
-        return 'Password must be at least 8 characters';
+        return AppLocalizations.of(context)!.signUpScreenPasswordRuleLength;
       }
       final hasLetter = RegExp(r'[a-zA-Z]').hasMatch(value);
       final hasDigit = RegExp(r'[0-9]').hasMatch(value);
       final hasSpecialChar = RegExp(r'[^a-zA-Z0-9]').hasMatch(value);
       if (!hasLetter || !hasDigit || !hasSpecialChar) {
-        return 'Password must contain letters, numbers, and a special character.';
+        return AppLocalizations.of(context)!.validationPasswordRules;
       }
       return null;
     }
@@ -54,6 +56,7 @@ class SignUpView extends StatelessWidget {
       FocusScope.of(context).unfocus();
       if (formKey.currentState!.validate()) {
         context.read<AuthCubit>().signUp(
+          context: context,
           username: usernameController.text.trim(),
           password: passwordController.text,
         );
@@ -66,8 +69,8 @@ class SignUpView extends StatelessWidget {
           ScaffoldMessenger.of(context)
             ..hideCurrentSnackBar()
             ..showSnackBar(
-              const SnackBar(
-                content: Text('Account created successfully! Please Sign in.'),
+               SnackBar(
+                content: Text(AppLocalizations.of(context)!.feedbackAccountCreated),
                 backgroundColor: Colors.green,
               ),
             );
@@ -96,7 +99,7 @@ class SignUpView extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
                     Text(
-                      'PassKeeper',
+                      AppLocalizations.of(context)!.appTitle,
                       textAlign: TextAlign.center,
                       style: Theme.of(context).textTheme.headlineSmall?.copyWith(
                         color: Theme.of(context).colorScheme.primary,
@@ -107,7 +110,7 @@ class SignUpView extends StatelessWidget {
                     AnimatedTextKit(
                       totalRepeatCount: 1,
                       animatedTexts: [
-                        TypewriterAnimatedText('Create Account',
+                        TypewriterAnimatedText(AppLocalizations.of(context)!.signUpScreenTitle,
                             textStyle: Theme.of(context).textTheme.headlineLarge,
                             speed: const Duration(milliseconds: 100)),
                       ],
@@ -115,17 +118,17 @@ class SignUpView extends StatelessWidget {
                     const SizedBox(height: 48.0),
                     CustomTextField(
                       controller: usernameController,
-                      labelText: 'Username',
+                      labelText: AppLocalizations.of(context)!.signUpScreenUsernameHint,
                       prefixIcon: AppIcons.user,
                       validator: (value) =>
-                      value!.isEmpty ? 'Please enter a username' : null,
+                      value!.isEmpty ? AppLocalizations.of(context)!.validationEnterUsername : null,
                     ).animate().fadeIn(delay: 500.ms).slideX(begin: -1),
                     const SizedBox(height: 16.0),
                     BlocBuilder<SignUpCubit, SignUpState>(
                       builder: (context, state) {
                         return CustomTextField(
                           controller: passwordController,
-                          labelText: 'Password',
+                          labelText: AppLocalizations.of(context)!.signUpScreenPasswordHint,
                           prefixIcon: AppIcons.lock,
                           isPassword: !state.isPasswordVisible,
                           onChanged: (password) => context
@@ -142,21 +145,37 @@ class SignUpView extends StatelessWidget {
                       },
                     ),
                     const SizedBox(height: 12.0),
-                    const _PasswordValidationRules(),
+                    BlocBuilder<SignUpCubit, SignUpState>(
+                      // We only rebuild when the validation rules change
+                      buildWhen: (p, c) =>
+                      p.hasMinLength != c.hasMinLength ||
+                          p.hasLetter != c.hasLetter ||
+                          p.hasDigit != c.hasDigit ||
+                          p.hasSpecialChar != c.hasSpecialChar,
+                      builder: (context, state) {
+                        // Pass the state down to the reusable widget
+                        return PasswordValidationRules(
+                          hasMinLength: state.hasMinLength,
+                          hasLetter: state.hasLetter,
+                          hasDigit: state.hasDigit,
+                          hasSpecialChar: state.hasSpecialChar,
+                        );
+                      },
+                    ),
                     const SizedBox(height: 24.0),
                     BlocBuilder<AuthCubit, AuthState>(
                       builder: (context, state) {
                         return CustomElevatedButton(
                           onPressed: createAccount,
-                          text: 'Create Account',
+                          text: AppLocalizations.of(context)!.signUpScreenCreateButton,
                           isLoading: state is AuthLoading,
                         ).animate().fadeIn(delay: 900.ms).shake(hz: 4, );
                       },
                     ),
                     const SizedBox(height: 16.0),
                     AuthLinkText(
-                      leadingText: "Already have an account?",
-                      linkText: "Sign in",
+                      leadingText:  AppLocalizations.of(context)!.signUpScreenHaveAccount,
+                      linkText:  AppLocalizations.of(context)!.signUpScreenLoginLink,
                       onPressed: () {
                         NavigationService.push(SignInScreen());
                       },
@@ -167,56 +186,6 @@ class SignUpView extends StatelessWidget {
             ),
           ),
         ),
-      ),
-    );
-  }
-}
-
-class _PasswordValidationRules extends StatelessWidget {
-  const _PasswordValidationRules();
-
-  @override
-  Widget build(BuildContext context) {
-    return BlocBuilder<SignUpCubit, SignUpState>(
-      buildWhen: (p, c) =>
-      p.hasMinLength != c.hasMinLength ||
-          p.hasLetter != c.hasLetter ||
-          p.hasDigit != c.hasDigit ||
-          p.hasSpecialChar != c.hasSpecialChar,
-      builder: (context, state) {
-        if (state.hasMinLength || state.hasLetter || state.hasDigit || state.hasSpecialChar) {
-          return Column(
-            children: [
-              _ValidationRuleItem(text: 'At least 8 characters', isValid: state.hasMinLength),
-              _ValidationRuleItem(text: 'Contains letters (a-z, A-Z)', isValid: state.hasLetter),
-              _ValidationRuleItem(text: 'Contains numbers (0-9)', isValid: state.hasDigit),
-              _ValidationRuleItem(text: 'Contains a special character (e.g., !@#\$)', isValid: state.hasSpecialChar),
-            ],
-          ).animate().fadeIn(duration: 400.ms);
-        }
-        return const SizedBox.shrink();
-      },
-    );
-  }
-}
-
-class _ValidationRuleItem extends StatelessWidget {
-  final String text;
-  final bool isValid;
-  const _ValidationRuleItem({required this.text, required this.isValid});
-
-  @override
-  Widget build(BuildContext context) {
-    final color = isValid ? Colors.green : Theme.of(context).textTheme.bodyLarge?.color?.withOpacity(0.6);
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 4.0),
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Icon(isValid ? Icons.check_circle_outline : Icons.remove_circle_outline, color: color, size: 18),
-          const SizedBox(width: 8),
-          Flexible(child: Text(text, style: Theme.of(context).textTheme.bodyMedium?.copyWith(color: color))),
-        ],
       ),
     );
   }

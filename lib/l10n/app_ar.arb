@@ -1,0 +1,177 @@
+{
+    "@@locale": "ar",
+    "appTitle": "PassKeeper",
+
+    "initialScreenLoading": "جار التحميل...",
+
+    "lockScreenTitle": "PassKeeper مغلق",
+    "lockScreenSubtitle": "استخدم بصمتك لفتح خزنتك",
+    "unlockButton": "فتح باستخدام البصمة",
+
+    "loginScreenWelcome": "أهلاً بعودتك",
+    "loginScreenUsernameHint": "اسم المستخدم",
+    "loginScreenPasswordHint": "كلمة المرور",
+    "loginScreenLoginButton": "تسجيل الدخول",
+    "loginScreenNoAccount": "ليس لديك حساب؟",
+    "loginScreenSignUpLink": "أنشئ حساباً",
+
+    "signUpScreenTitle": "إنشاء حساب",
+    "signUpScreenUsernameHint": "اسم المستخدم",
+    "signUpScreenPasswordHint": "كلمة المرور",
+    "signUpScreenCreateButton": "إنشاء الحساب",
+    "signUpScreenHaveAccount": "لديك حساب بالفعل؟",
+    "signUpScreenLoginLink": "تسجيل الدخول",
+    "signUpScreenPasswordRuleLength": "8 أحرف على الأقل",
+    "signUpScreenPasswordRuleLetters": "تحتوي على أحرف (a-z, A-Z)",
+    "signUpScreenPasswordRuleNumbers": "تحتوي على أرقام (0-9)",
+    "signUpScreenPasswordRuleSpecial": "تحتوي على رمز خاص (مثل !@#$)",
+
+    "homeScreenTitle": "حساباتي",
+    "homeScreenSearchHint": "بحث...",
+    "homeScreenEmptyTitle": "خزنتك فارغة",
+    "homeScreenEmptySubtitle": "اضغط على زر '+' لإضافة أول حساب آمن لك.",
+    "homeScreenFavoritesCategory": "المفضلة",
+    "homeScreenNoResults": "لم يتم العثور على حسابات لـ '{query}'",
+    "@homeScreenNoResults": {
+        "placeholders": {
+            "query": {
+                "type": "String"
+            }
+        }
+    },
+
+    "accountCardEdit": "تعديل",
+    "accountCardDelete": "حذف",
+
+    "accountDetailsUsername": "اسم المستخدم",
+    "accountDetailsPassword": "كلمة المرور",
+    "accountDetailsRecoveryEmail": "البريد الإلكتروني للاسترداد",
+    "accountDetailsPhone": "أرقام الهواتف",
+    "accountDetailsCopied": "تم نسخ {title} إلى الحافظة",
+    "@accountDetailsCopied": {
+        "placeholders": {
+            "title": {
+                "type": "String"
+            }
+        }
+    },
+
+    "accountFormAddTitle": "إضافة حساب جديد",
+    "accountFormEditTitle": "تعديل الحساب",
+    "accountFormCategoryHint": "الفئة",
+    "accountFormCreateCategory": "إنشاء فئة جديدة...",
+    "accountFormServiceNameHint": "اسم الخدمة",
+    "accountFormEnterServiceName": "أدخل اسم الخدمة",
+    "accountFormUsernameHint": "اسم المستخدم أو البريد الإلكتروني",
+    "accountFormPasswordHint": "كلمة المرور",
+    "accountFormRecoveryHint": "حساب الاسترداد (اختياري)",
+    "accountFormPhoneHint": "أرقام الهواتف (اختياري)",
+    "accountFormSaveButton": "حفظ",
+
+    "settingsScreenTitle": "الإعدادات",
+    "settingsAppearance": "المظهر",
+    "settingsThemeSystem": "افتراضي النظام",
+    "settingsThemeLight": "فاتح",
+    "settingsThemeDark": "داكن",
+    "settingsLanguage": "اللغة",
+    "settingsLangEnglish": "English",
+    "settingsLangArabic": "العربية",
+    "settingsLangAuto": "تلقائي",
+    "settingsSecurity": "الأمان",
+    "settingsBiometricTitle": "تفعيل القفل بالبصمة",
+    "settingsBiometricSubtitle": "استخدم بصمة الإصبع/الوجه لفتح التطبيق.",
+    "settingsChangePassword": "تغيير كلمة المرور",
+    "settingsDataManagement": "إدارة البيانات",
+    "settingsImportTitle": "استيراد من Excel",
+    "settingsImportSubtitle": "استعادة الحسابات من ملف نسخة احتياطية.",
+    "settingsExportTitle": "تصدير إلى Excel",
+    "settingsExportSubtitle": "حفظ نسخة من حساباتك في ملف.",
+    "settingsDeleteAllData": "حذف كل البيانات",
+    "settingsAccount": "الحساب",
+    "settingsLogout": "تسجيل الخروج",
+
+    "changePasswordTitle": "تغيير كلمة المرور",
+    "changePasswordCurrent": "كلمة المرور الحالية",
+    "changePasswordNew": "كلمة المرور الجديدة",
+    "changePasswordConfirm": "تأكيد كلمة المرور الجديدة",
+    "changePasswordSaveButton": "حفظ التغييرات",
+
+    "manageCategoriesTitle": "إدارة الفئات",
+    "manageCategoriesEmptyTitle": "لم يتم إنشاء فئات بعد.",
+    "manageCategoriesEmptySubTitle": "اضغط على زر '+' لإضافة أول فئة لك.",
+    "manageCategoriesAddDialogTitle": "إضافة فئة جديدة",
+    "manageCategoriesEditDialogTitle": "تعديل الفئة",
+    "manageCategoriesNameHint": "اسم الفئة",
+
+    "dialogCancel": "إلغاء",
+    "dialogCreate": "إنشاء",
+    "dialogSave": "حفظ",
+    "dialogDelete": "حذف",
+    "dialogUnlock": "فتح",
+    "dialogConfirmDeleteTitle": "تأكيد الحذف",
+    "dialogConfirmDeleteAccount": "هل أنت متأكد من رغبتك في حذف هذا الحساب؟ لا يمكن التراجع عن هذا الإجراء.",
+    "dialogConfirmDeleteCategory": "هل أنت متأكد من رغبتك في حذف هذه الفئة؟ سيتم حذف جميع الحسابات الموجودة بداخلها أيضًا.",
+    "dialogConfirmDeleteAllDataTitle": "هل أنت متأكد؟",
+    "dialogConfirmDeleteAllDataContent": "سيؤدي هذا إلى حذف جميع حساباتك وفئاتك بشكل دائم. لا يمكن التراجع عن هذا الإجراء.",
+    "dialogDeleteForever": "حذف نهائي",
+    "dialogUnlockVaultTitle": "فتح الخزنة",
+    "dialogUnlockVaultSave": "الرجاء إدخال كلمة المرور الرئيسية لحفظ هذا الحساب.",
+    "dialogUnlockVaultView": "أدخل كلمة المرور الرئيسية الخاصة بك للكشف عن حساباتك المحفوظة لهذه الجلسة.",
+    "dialogUnlockToContinue": "الرجاء إدخال كلمة المرور الرئيسية للمتابعة.",
+
+    "feedbackAccountCreated": "تم إنشاء الحساب بنجاح! الرجاء تسجيل الدخول.",
+    "feedbackAccountSaved": "تم حفظ الحساب",
+    "feedbackPasswordChanged": "تم تغيير كلمة المرور بنجاح!",
+    "feedbackImportSuccess": "اكتمل الاستيراد. تمت الإضافة: {successCount}, تم التخطي (مكرر): {skippedCount}, فشل: {failCount}.",
+    "@feedbackImportSuccess": {
+        "placeholders": {
+            "successCount": {"type": "int"},
+            "skippedCount": {"type": "int"},
+            "failCount": {"type": "int"}
+        }
+    },
+    "feedbackExporting": "جار التصدير...",
+    "feedbackImporting": "جار الاستيراد...",
+
+    "validationEnterUsername": "الرجاء إدخال اسم مستخدم",
+    "validationEnterPassword": "الرجاء إدخال كلمة مرور",
+    "validationPasswordEmpty": "لا يمكن أن تكون كلمة المرور فارغة",
+    "validationPasswordTooShort": "يجب أن تكون كلمة المرور 8 أحرف على الأقل",
+    "validationPasswordRules": "يجب أن تحتوي على أحرف وأرقام ورمز خاص",
+    "validationPasswordsNoMatch": "كلمتا المرور غير متطابقتين",
+    "validationSelectService": "الرجاء اختيار خدمة",
+    "validationEnterServiceName": "الرجاء إدخال اسم",
+    "validationSelectCategory": "الرجاء اختيار فئة",
+    "validationCategoryNameEmpty": "لا يمكن أن يكون الاسم فارغًا",
+
+    "errorIncorrectPassword": "كلمة المرور الحالية غير صحيحة",
+    "errorInvalidCredentials": "اسم المستخدم أو كلمة المرور غير صالحة.",
+    "errorUsernameExists": "اسم المستخدم موجود بالفعل. الرجاء اختيار اسم آخر.",
+    "errorImportFailed": "فشل الاستيراد: {error}",
+    "@errorImportFailed": {
+        "placeholders": {
+            "error": {"type": "String"}
+        }
+    },
+    "errorExportFailed": "فشل التصدير: {error}",
+    "@errorExportFailed": {
+        "placeholders": {
+            "error": {"type": "String"}
+        }
+    },
+    "errorSheetNotFound": "لا يمكن العثور على صفحة باسم 'Accounts' في ملف Excel.",
+    "errorUserNotLoggedIn": "المستخدم لم يسجل دخوله.",
+    "errorGeneric": "حدث خطأ ما.",
+    "categoryUncategorized": "غير مصنف",
+    "importNoFileSelected": "لم يتم اختيار ملف.",
+    "exportShareText": "نسخة احتياطية لحسابات PassKeeper",
+    "excelHeaderCategory": "الفئة",
+    "excelHeaderServiceName": "اسم الخدمة",
+    "excelHeaderUsername": "اسم المستخدم/البريد الإلكتروني",
+    "excelHeaderPassword": "كلمة المرور",
+    "excelHeaderRecovery": "حساب الاسترداد",
+    "excelHeaderPhone": "أرقام الهواتف",
+    "dialogUnlockToExportTitle": "فتح الخزنة للتصدير",
+    "dialogUnlockToExportContent": "الرجاء إدخال كلمة المرور الرئيسية لتصدير حساباتك.",
+    "biometricPromptReason": "يرجى المصادقة للوصول إلى خزنتك"
+}

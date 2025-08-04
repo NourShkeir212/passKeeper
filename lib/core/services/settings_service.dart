@@ -28,4 +28,22 @@ class SettingsService {
     // Default to true for security
     return prefs.getBool(_biometricKey) ?? true;
   }
+
+
+// --- Language ---
+  static const _localeKey = 'languageCode';
+
+  Future<void> saveLocale(String languageCode) async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setString(_localeKey, languageCode);
+  }
+
+  Future<Locale?> loadLocale() async {
+    final prefs = await SharedPreferences.getInstance();
+    final languageCode = prefs.getString(_localeKey);
+    if (languageCode != null && languageCode.isNotEmpty) {
+      return Locale(languageCode);
+    }
+    return null; // Return null to use system default
+  }
 }
