@@ -454,4 +454,29 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get onboardingDoneButton => 'Done';
+
+  @override
+  String get aboutScreenTitle => 'About PassKeeper';
+
+  @override
+  String get aboutTitle => 'About us';
+
+  @override
+  String get aboutScreenVersion => 'Version 1.0.0';
+
+  @override
+  String get aboutScreenDescription =>
+      'A secure, offline-first password manager built with Flutter to keep your digital life safe and organized.';
+
+  @override
+  String get aboutScreenContactTitle => 'Contact & Connect';
+
+  @override
+  String get aboutScreenContactEmail => 'Email';
+
+  @override
+  String get aboutScreenContactFacebook => 'Facebook';
+
+  @override
+  String get aboutScreenContactWhatsApp => 'WhatsApp';
 }

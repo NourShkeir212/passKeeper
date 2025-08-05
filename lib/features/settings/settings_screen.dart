@@ -10,6 +10,7 @@ import '../../core/theme/app_icons.dart';
 import '../../core/theme/theme_cubit.dart';
 import '../../core/widgets/custom_text.dart';
 import '../../core/widgets/master_password_dialog.dart';
+import '../about_screen/about_screen.dart';
 import '../auth/cubit/auth_cubit/cubit.dart';
 import '../auth/cubit/auth_cubit/states.dart';
 import '../auth/screens/sign_in/sign_in_screen.dart';
@@ -288,6 +289,16 @@ class SettingsView extends StatelessWidget {
                       context.read<SettingsCubit>().exportData();
                     },
                   ),
+                  const Divider(),
+                   _SettingsGroupTitle(title: AppLocalizations.of(context)!.aboutTitle),
+                  ListTile(
+                    title:  Text(AppLocalizations.of(context)!.aboutScreenTitle),
+                    leading: const Icon(AppIcons.shield), // Or Icons.info_outline
+                    onTap: () {
+                      Navigator.push(context, MaterialPageRoute(builder: (_) => const AboutScreen()));
+                    },
+                  ),
+
                   const Divider(),
                    _SettingsGroupTitle(title: AppLocalizations.of(context)!.settingsAccount),
                   ListTile(

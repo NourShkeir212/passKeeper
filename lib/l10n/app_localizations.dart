@@ -923,6 +923,54 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Done'**
   String get onboardingDoneButton;
+
+  /// No description provided for @aboutScreenTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'About PassKeeper'**
+  String get aboutScreenTitle;
+
+  /// No description provided for @aboutTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'About us'**
+  String get aboutTitle;
+
+  /// No description provided for @aboutScreenVersion.
+  ///
+  /// In en, this message translates to:
+  /// **'Version 1.0.0'**
+  String get aboutScreenVersion;
+
+  /// No description provided for @aboutScreenDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'A secure, offline-first password manager built with Flutter to keep your digital life safe and organized.'**
+  String get aboutScreenDescription;
+
+  /// No description provided for @aboutScreenContactTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Contact & Connect'**
+  String get aboutScreenContactTitle;
+
+  /// No description provided for @aboutScreenContactEmail.
+  ///
+  /// In en, this message translates to:
+  /// **'Email'**
+  String get aboutScreenContactEmail;
+
+  /// No description provided for @aboutScreenContactFacebook.
+  ///
+  /// In en, this message translates to:
+  /// **'Facebook'**
+  String get aboutScreenContactFacebook;
+
+  /// No description provided for @aboutScreenContactWhatsApp.
+  ///
+  /// In en, this message translates to:
+  /// **'WhatsApp'**
+  String get aboutScreenContactWhatsApp;
 }
 
 class _AppLocalizationsDelegate

@@ -451,4 +451,29 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get onboardingDoneButton => 'تم';
+
+  @override
+  String get aboutScreenTitle => 'حول تطبيق PassKeeper';
+
+  @override
+  String get aboutTitle => 'حول عنا';
+
+  @override
+  String get aboutScreenVersion => 'الإصدار 1.0.0';
+
+  @override
+  String get aboutScreenDescription =>
+      'مدير كلمات مرور آمن يعمل بدون انترنت، تم إنشاؤه باستخدام فلاتر للحفاظ على حياتك الرقمية آمنة ومنظمة.';
+
+  @override
+  String get aboutScreenContactTitle => 'تواصل معنا';
+
+  @override
+  String get aboutScreenContactEmail => 'البريد الإلكتروني';
+
+  @override
+  String get aboutScreenContactFacebook => 'فيسبوك';
+
+  @override
+  String get aboutScreenContactWhatsApp => 'واتساب';
 }
