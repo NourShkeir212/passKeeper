@@ -2,6 +2,12 @@
 class Assets {
   Assets._();
 
+  static const String onBoardingCloudDark = 'assets/svg/on_boarding/onboarding_access_dark.svg';
+  static const String onBoardingCloudLight = 'assets/svg/on_boarding/onboarding_access_light.svg';
+  static const String onBoardingFolderDark = 'assets/svg/on_boarding/onboarding_organize_dark.svg';
+  static const String onBoardingFolderLight = 'assets/svg/on_boarding/onboarding_organize_light.svg';
+  static const String onBoardingVaultDark = 'assets/svg/on_boarding/onboarding_secure_dark.svg';
+  static const String onBoardingVaultLight = 'assets/svg/on_boarding/onboarding_secure_light.svg';
   static const String svgNoDataDarkMode = 'assets/svg/no_data_dark_mode.svg';
   static const String svgNoDataLightMode = 'assets/svg/no_data_light_mode.svg';
 

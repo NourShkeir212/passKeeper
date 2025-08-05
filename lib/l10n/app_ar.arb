@@ -175,5 +175,13 @@
     "dialogUnlockToExportContent": "الرجاء إدخال كلمة المرور الرئيسية لتصدير حساباتك.",
     "dialogUnlockToImportTitle": "فتح الخزنة للإستيراد",
     "dialogUnlockToImportContent": "الرجاء إدخال كلمة المرور الرئيسية لإستيراد حساباتك.",
-    "biometricPromptReason": "يرجى المصادقة للوصول إلى خزنتك"
+    "biometricPromptReason": "يرجى المصادقة للوصول إلى خزنتك",
+    "onboardingPage1Title": "آمن وبدون انترنت",
+    "onboardingPage1Body": "بياناتك مشفرة ومخزنة على جهازك فقط. أنت المتحكم الوحيد.",
+    "onboardingPage2Title": "نظّم كل شيء",
+    "onboardingPage2Body": "قسّم حساباتك إلى فئات مخصصة تقوم بإنشائها وإدارتها بنفسك.",
+    "onboardingPage3Title": "النسخ الاحتياطي والاستعادة",
+    "onboardingPage3Body": "قم بتصدير خزنتك بسهولة إلى ملف Excel واستوردها على أي جهاز. بياناتك تذهب معك أينما ذهبت.",
+    "onboardingSkipButton": "تخطي",
+    "onboardingDoneButton": "تم"
 }

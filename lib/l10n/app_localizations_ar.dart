@@ -424,4 +424,31 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get biometricPromptReason => 'يرجى المصادقة للوصول إلى خزنتك';
+
+  @override
+  String get onboardingPage1Title => 'آمن وبدون انترنت';
+
+  @override
+  String get onboardingPage1Body =>
+      'بياناتك مشفرة ومخزنة على جهازك فقط. أنت المتحكم الوحيد.';
+
+  @override
+  String get onboardingPage2Title => 'نظّم كل شيء';
+
+  @override
+  String get onboardingPage2Body =>
+      'قسّم حساباتك إلى فئات مخصصة تقوم بإنشائها وإدارتها بنفسك.';
+
+  @override
+  String get onboardingPage3Title => 'النسخ الاحتياطي والاستعادة';
+
+  @override
+  String get onboardingPage3Body =>
+      'قم بتصدير خزنتك بسهولة إلى ملف Excel واستوردها على أي جهاز. بياناتك تذهب معك أينما ذهبت.';
+
+  @override
+  String get onboardingSkipButton => 'تخطي';
+
+  @override
+  String get onboardingDoneButton => 'تم';
 }

@@ -427,4 +427,31 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get biometricPromptReason =>
       'Please authenticate to access your vault';
+
+  @override
+  String get onboardingPage1Title => 'Secure & Offline';
+
+  @override
+  String get onboardingPage1Body =>
+      'Your data is encrypted and stored only on your device. You are in complete control.';
+
+  @override
+  String get onboardingPage2Title => 'Organize Everything';
+
+  @override
+  String get onboardingPage2Body =>
+      'Group your accounts into custom categories that you create and manage.';
+
+  @override
+  String get onboardingPage3Title => 'Backup & Restore';
+
+  @override
+  String get onboardingPage3Body =>
+      'Easily export your vault to an Excel file and import it on any device. Your data goes where you go.';
+
+  @override
+  String get onboardingSkipButton => 'Skip';
+
+  @override
+  String get onboardingDoneButton => 'Done';
 }
