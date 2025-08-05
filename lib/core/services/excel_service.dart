@@ -54,8 +54,8 @@ class ExcelService {
 
     // Check if vault is unlocked before exporting
     if (!_encryptionService.isInitialized) {
-      // This part is crucial. If the user hasn't unlocked the vault, we can't decrypt.
-      // We should prompt them for the password.
+      /// If the user hasn't unlocked the vault, we can't decrypt.
+      /// We should prompt them for the password.
       final context = NavigationService.navigatorKey.currentContext!;
       final password = await showMasterPasswordDialog(
         context,
@@ -91,7 +91,6 @@ class ExcelService {
     sheet.appendRow(headers.map((e) => TextCellValue(e)).toList());
 
     for (final account in accounts) {
-      // --- THE FIX IS HERE ---
       // Decrypt passwords before writing them to the Excel file.
       final decryptedPassword = _encryptionService.decryptText(account.password);
 
@@ -105,8 +104,6 @@ class ExcelService {
       ];
       sheet.appendRow(rowData.map((e) => TextCellValue(e)).toList());
     }
-
-    // The rest of the saving and sharing logic is unchanged
     final fileBytes = excel.encode();
     if (fileBytes != null) {
       final directory = await getTemporaryDirectory();

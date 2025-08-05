@@ -5,6 +5,7 @@ import 'package:secure_accounts/l10n/app_localizations.dart';
 import '../../core/theme/app_icons.dart';
 import '../../core/widgets/custom_text.dart';
 import '../../core/widgets/custom_text_field.dart';
+import '../../generated/assets.dart';
 import '../../model/category_model.dart';
 import '../home/cubit/account_cubit/cubit.dart';
 import '../home/cubit/category_cubit/cubit.dart';
@@ -48,7 +49,6 @@ class ManageCategoriesScreen extends StatelessWidget {
                         icon: Icon(AppIcons.delete, color: Theme.of(context).colorScheme.error),
                         onPressed: () => _showDeleteConfirmation(context, category),
                       ),
-                      // The drag handle is implicitly the whole ListTile
                     ],
                   ),
                 );
@@ -131,6 +131,7 @@ class ManageCategoriesScreen extends StatelessWidget {
   }
 
   Widget _buildEmptyState(BuildContext context) {
+    final isDarkMode = Theme.of(context).brightness == Brightness.dark;
     return Center(
       child: Padding(
         padding: const EdgeInsets.all(32.0),
@@ -138,7 +139,7 @@ class ManageCategoriesScreen extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             SvgPicture.asset(
-              'assets/svg/no_data.svg', // Ensure you have this file
+              isDarkMode ?  Assets.svgNoDataDarkMode : Assets.svgNoDataLightMode,
               height: 150,
             ),
             const SizedBox(height: 24),
