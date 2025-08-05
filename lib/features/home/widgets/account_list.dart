@@ -304,10 +304,6 @@ class AccountList extends StatelessWidget {
             icon: const Icon(AppIcons.copy, size: 20),
             onPressed: () {
               Clipboard.setData(ClipboardData(text: value));
-              ScaffoldMessenger.of(context)
-                ..hideCurrentSnackBar()
-                ..showSnackBar(
-                    SnackBar(content: Text('$title ${AppLocalizations.of(context)!.accountDetailsCopied}')));
             },
           )
         ],
