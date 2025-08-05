@@ -211,15 +211,12 @@ class AccountList extends StatelessWidget {
                       child: Container(
                           width: 40,
                           height: 5,
-                          decoration: BoxDecoration(
-                              color: Colors.grey[400],
-                              borderRadius: BorderRadius.circular(10)))),
+                          decoration: BoxDecoration(color: Colors.grey[400], borderRadius: BorderRadius.circular(10)))),
                   const SizedBox(height: 24),
-                  CustomText(account.serviceName,
-                      style: Theme.of(context).textTheme.headlineSmall),
+                  CustomText(account.serviceName, style: Theme.of(context).textTheme.headlineSmall),
                   const Divider(height: 32),
                   _buildDetailRow(
-                      context, AppIcons.user, AppLocalizations.of(context)!.accountDetailsUsername, account.username),
+                      context, AppIcons.user, AppLocalizations.of(context)!.accountDetailsUsernameOrEmail, account.username),
                   _buildDetailRow(
                     context,
                     AppIcons.lock,
@@ -270,7 +267,7 @@ class AccountList extends StatelessWidget {
               children: [
                 CustomText(title, style: Theme.of(context).textTheme.bodySmall),
                 const SizedBox(height: 2),
-                CustomText(value, style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w500)),
+                CustomText(value, style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w500,),maxLines: 2,),
               ],
             ),
           ),

@@ -96,7 +96,7 @@ class AppLocalizationsAr extends AppLocalizations {
   String get accountCardDelete => 'حذف';
 
   @override
-  String get accountDetailsUsername => 'اسم المستخدم';
+  String get accountDetailsUsernameOrEmail => 'اسم المستخدم / البريد';
 
   @override
   String get accountDetailsPassword => 'كلمة المرور';

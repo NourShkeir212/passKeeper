@@ -42,7 +42,7 @@
     "accountCardEdit": "Edit",
     "accountCardDelete": "Delete",
 
-    "accountDetailsUsername": "Username",
+    "accountDetailsUsernameOrEmail": "Email / Username",
     "accountDetailsPassword": "Password",
     "accountDetailsRecoveryEmail": "Recovery Email",
     "accountDetailsPhone": "Phone Numbers",

@@ -266,11 +266,11 @@ abstract class AppLocalizations {
   /// **'Delete'**
   String get accountCardDelete;
 
-  /// No description provided for @accountDetailsUsername.
+  /// No description provided for @accountDetailsUsernameOrEmail.
   ///
   /// In en, this message translates to:
-  /// **'Username'**
-  String get accountDetailsUsername;
+  /// **'Email / Username'**
+  String get accountDetailsUsernameOrEmail;
 
   /// No description provided for @accountDetailsPassword.
   ///

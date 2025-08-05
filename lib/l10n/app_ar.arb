@@ -43,7 +43,7 @@
     "accountCardEdit": "تعديل",
     "accountCardDelete": "حذف",
 
-    "accountDetailsUsername": "اسم المستخدم",
+    "accountDetailsUsernameOrEmail": "اسم المستخدم / البريد",
     "accountDetailsPassword": "كلمة المرور",
     "accountDetailsRecoveryEmail": "البريد الإلكتروني للاسترداد",
     "accountDetailsPhone": "أرقام الهواتف",

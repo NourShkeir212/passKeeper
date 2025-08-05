@@ -97,7 +97,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get accountCardDelete => 'Delete';
 
   @override
-  String get accountDetailsUsername => 'Username';
+  String get accountDetailsUsernameOrEmail => 'Email / Username';
 
   @override
   String get accountDetailsPassword => 'Password';
