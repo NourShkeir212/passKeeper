@@ -875,6 +875,54 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Please authenticate to access your vault'**
   String get biometricPromptReason;
+
+  /// No description provided for @onboardingPage1Title.
+  ///
+  /// In en, this message translates to:
+  /// **'Secure & Offline'**
+  String get onboardingPage1Title;
+
+  /// No description provided for @onboardingPage1Body.
+  ///
+  /// In en, this message translates to:
+  /// **'Your data is encrypted and stored only on your device. You are in complete control.'**
+  String get onboardingPage1Body;
+
+  /// No description provided for @onboardingPage2Title.
+  ///
+  /// In en, this message translates to:
+  /// **'Organize Everything'**
+  String get onboardingPage2Title;
+
+  /// No description provided for @onboardingPage2Body.
+  ///
+  /// In en, this message translates to:
+  /// **'Group your accounts into custom categories that you create and manage.'**
+  String get onboardingPage2Body;
+
+  /// No description provided for @onboardingPage3Title.
+  ///
+  /// In en, this message translates to:
+  /// **'Backup & Restore'**
+  String get onboardingPage3Title;
+
+  /// No description provided for @onboardingPage3Body.
+  ///
+  /// In en, this message translates to:
+  /// **'Easily export your vault to an Excel file and import it on any device. Your data goes where you go.'**
+  String get onboardingPage3Body;
+
+  /// No description provided for @onboardingSkipButton.
+  ///
+  /// In en, this message translates to:
+  /// **'Skip'**
+  String get onboardingSkipButton;
+
+  /// No description provided for @onboardingDoneButton.
+  ///
+  /// In en, this message translates to:
+  /// **'Done'**
+  String get onboardingDoneButton;
 }
 
 class _AppLocalizationsDelegate

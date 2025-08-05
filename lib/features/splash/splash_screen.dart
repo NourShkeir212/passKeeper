@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_animate/flutter_animate.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import '../../../../core/services/navigation_service.dart';
 import '../../core/services/settings_service.dart';
 import '../../core/theme/app_icons.dart';
@@ -8,6 +9,7 @@ import '../../l10n/app_localizations.dart';
 import '../auth/cubit/auth_cubit/cubit.dart';
 import '../auth/cubit/auth_cubit/states.dart';
 import '../auth/screens/lock_screen/lock_screen.dart';
+import '../auth/screens/on_boarding_screen/on_boarding_screen.dart';
 import '../auth/screens/sign_in/sign_in_screen.dart';
 import '../home/home_screen.dart';
 
@@ -22,13 +24,29 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   void initState() {
     super.initState();
-    // Check for an active session after a short delay to allow animation to be seen
-    Future.delayed(const Duration(seconds: 2), () {
+    _initializeApp();
+  }
+
+  Future<void> _initializeApp() async {
+    // 1. Check if onboarding is completed
+    final prefs = await SharedPreferences.getInstance();
+    final bool onboardingCompleted = prefs.getBool('onboarding_completed') ?? false;
+
+    // Remove the native splash screen
+
+    if (!onboardingCompleted) {
+      // If not completed, go to OnboardingScreen
+      NavigationService.pushReplacement(const OnboardingScreen());
+    } else {
+      // If completed, proceed with the normal session check
       if (mounted) {
         context.read<AuthCubit>().checkSession();
       }
-    });
+    }
   }
+
+
+
 
   @override
   Widget build(BuildContext context) {

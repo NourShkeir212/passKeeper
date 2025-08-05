@@ -170,9 +170,18 @@
     "excelHeaderPassword": "Password",
     "excelHeaderRecovery": "Recovery Account",
     "excelHeaderPhone": "Phone Numbers",
-   "dialogUnlockToExportTitle": "Unlock to Export",
-   "dialogUnlockToExportContent": "Please enter your master password to export your accounts.",
+    "dialogUnlockToExportTitle": "Unlock to Export",
+    "dialogUnlockToExportContent": "Please enter your master password to export your accounts.",
     "dialogUnlockToImportTitle": "Unlock to Import",
     "dialogUnlockToImportContent": "Please enter your master password to import your accounts.",
-   "biometricPromptReason": "Please authenticate to access your vault"
+    "biometricPromptReason": "Please authenticate to access your vault",
+
+     "onboardingPage1Title": "Secure & Offline",
+     "onboardingPage1Body": "Your data is encrypted and stored only on your device. You are in complete control.",
+     "onboardingPage2Title": "Organize Everything",
+     "onboardingPage2Body": "Group your accounts into custom categories that you create and manage.",
+     "onboardingPage3Title": "Backup & Restore",
+     "onboardingPage3Body": "Easily export your vault to an Excel file and import it on any device. Your data goes where you go.",
+     "onboardingSkipButton": "Skip",
+     "onboardingDoneButton": "Done"
 }
