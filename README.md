@@ -4,36 +4,33 @@
 ![License](https://img.shields.io/badge/license-MIT-blue)
 ![Flutter Version](https://img.shields.io/badge/Flutter-3.x-02569B?logo=flutter)
 
-A secure, offline-first password manager built with Flutter. PassKeeper allows you to store and organize all your account credentials locally on your device, protected by biometric authentication.
+A secure, offline-first password manager built with Flutter. PassKeeper allows you to store and organize all your account credentials locally on your device, protected by strong encryption and your master password.
 
 ---
 
 ## ✨ Key Features
 
-* **100% Offline:** All data is stored locally on your device using a SQLite database.
-* **Secure Authentication:**
-    * Local user sign-up and login.
-    * Persistent sessions with a secure biometric (Fingerprint/Face ID) lock screen for returning users.
-* **Account Management:**
-    * Create, view, edit, and delete account credentials.
-    * Store service names, usernames, passwords, recovery accounts, and phone numbers.
-    * Copy credentials to the clipboard with a single tap.
-* **Organization:**
-    * Create and manage your own custom categories.
-    * Accounts are automatically grouped by category on the home screen.
-* **Modern UI & UX:**
-    * Beautiful, modern design with both Light and Dark themes.
-    * Smooth animations and transitions.
-    * Intuitive swipe actions (slide-to-edit, slide-to-delete).
-    * Real-time password validation during sign-up.
-* **Data Portability:**
-    * Export your entire vault to an organized Excel (`.xlsx`) file.
-    * Import your vault from an Excel file to easily restore your data.
-* **Powerful Settings:**
-    * Manually switch between Light, Dark, and System themes.
-    * Manually switch between English, Arabic, and System Language.
-    * Enable or disable the biometric lock.
-    * Change your master password.
+### 🔐 Security & Encryption
+* **100% Offline:** All data is stored locally on your device in a secure SQLite database. Your data never leaves your phone.
+* **End-to-End Encryption:** All sensitive account information (especially passwords) is encrypted using the powerful **AES-256** algorithm.
+* **Zero Knowledge Model:** Your master password is **hashed** for verification and is **never stored**. It's the key to unlock your vault and exists only in your memory.
+* **Session-Based Security:** The encryption key is derived from your master password only when you need it and is cleared from memory when the app is closed.
+* **Biometric App Lock:** Use your device's fingerprint or Face ID for quick and convenient access to the app.
+
+### 🗂️ Organization & Management
+* **Custom Categories:** Create, edit, delete, and reorder your own custom categories.
+* **Drag & Drop Reordering:** Easily reorder accounts *within* their category.
+* **Full Account CRUD:** Create, view, edit, and delete account credentials with an intuitive UI.
+* **Real-time Search:** Instantly find any account by searching for its service name or username.
+* **Slidable Actions:** Quickly edit or delete accounts with modern swipe gestures.
+
+### 🎨 Personalization & Accessibility
+* **Adaptive Theming:** The entire app is beautifully themed. Users can manually switch between **Light**, **Dark**, and **System default** themes from the settings screen for a personalized visual experience.
+* **Full Localization (i18n):** Complete support for both **English** and **Arabic**, including Right-to-Left (RTL) layouts. The app automatically detects the device language but allows the user to manually override it.
+
+### 🔄 Data Portability
+* **Export to Excel:** Securely back up your vault by exporting it to an organized Excel (`.xlsx`) file. Passwords are **decrypted** for this export to ensure the backup is readable.
+* **Import from Excel:** Easily restore your data from a backup file. Passwords from the file are **re-encrypted** on import with your current master password.
 
 ---
 
@@ -42,17 +39,16 @@ A secure, offline-first password manager built with Flutter. PassKeeper allows y
 * **Framework:** Flutter
 * **State Management:** BLoC / Cubit (`flutter_bloc`)
 * **Database:** SQLite (`sqflite`)
-* **Local Storage:** `shared_preferences` for session and settings management.
-* **Architecture:**
-    * Feature-first directory structure.
-    * Clean separation of UI (Widgets), State Management (Cubits), and Business Logic (Services).
-    * Reusable and theme-aware UI components.
+* **Local Storage:** `shared_preferences` for session and settings.
+* **Cryptography:** `encrypt` & `crypto` for AES encryption and SHA-256 hashing.
 * **Key Packages:**
-    * `local_auth` for biometric authentication.
-    * `flutter_slidable` for swipe actions.
-    * `excel`, `file_picker`, `share_plus` for data import/export.
-    * `flutter_animate` for beautiful animations.
-    * `google_fonts` for modern typography.
+  * `local_auth` for biometric authentication.
+  * `flutter_slidable` for swipe actions.
+  * `excel`, `file_picker`, `share_plus` for data import/export.
+  * `flutter_animate` & `animated_text_kit` for animations.
+  * `google_fonts` for typography.
+  * `flutter_svg` for scalable illustrations.
+  * `collection` for advanced data manipulation.
 
 ---
 
@@ -83,26 +79,25 @@ To get a local copy up and running, follow these simple steps.
 
 ---
 
-## 🗺️ Roadmap
+## 🗺️ Future Roadmap
 
 Here are some planned features to make PassKeeper even better:
 
--   [ ] **Database Encryption:** Encrypt all sensitive data at rest.
--   [ ] **Password Generator:** A tool to create strong, random passwords.
--   [ ] **App Icon & Native Splash Screen:** Full branding for a professional feel.
--   [ ] **Enhanced Category Management:** Ability to edit and delete categories.
--   [ ] **Favorites System:** Mark important accounts for quick access.
+-   [ ] **Password Generator:** A tool to create strong, random passwords from within the app.
+-   [ ] **Password Strength Meter:** Real-time feedback on the strength of manually entered passwords.
+-   [ ] **Comprehensive Testing:** Add Unit, Widget, and Integration tests.
+-   [ ] **Tablet/Desktop Layouts:** Create a responsive UI for larger screens.
 
 ---
 
 ## 📄 License
 
-Distributed under the MIT License. See `LICENSE` for more information.
+Distributed under the MIT License.
 
 ---
 
 ## 👤 Contact
 
-Your Name - [@Mohammed Nour Shkeir](https://twitter.com/shkeir_nou55392) - mohammednourshkeir@gmail.com
+Mohammed Nour Shkeir - [@shkeir_nou55392](https://twitter.com/shkeir_nou55392) - mohammednourshkeir@gmail.com
 
 Project Link: [https://github.com/NourShkeir212/passkeeper](https://github.com/NourShkeir212/passkeeper)

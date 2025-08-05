@@ -4,6 +4,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:secure_accounts/generated/assets.dart';
 import '../../../core/services/encryption_service.dart';
 import '../../../core/theme/app_icons.dart';
 import '../../../core/widgets/custom_text.dart';
@@ -69,6 +70,7 @@ class AccountList extends StatelessWidget {
     );
   }
   Widget _buildEmptyState(BuildContext context) {
+    final isDarkMode = Theme.of(context).brightness == Brightness.dark;
     return Center(
       child: Padding(
         padding: const EdgeInsets.all(32.0),
@@ -76,8 +78,8 @@ class AccountList extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             SvgPicture.asset(
-              'assets/svg/no_data.svg', // Ensure you have this file
-              height: 150,
+              height: 150, // Ensure you have this file
+              isDarkMode ?  Assets.svgNoDataDarkMode : Assets.svgNoDataLightMode,
             ),
             const SizedBox(height: 24),
             CustomText(
