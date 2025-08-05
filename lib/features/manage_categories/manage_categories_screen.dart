@@ -48,7 +48,6 @@ class ManageCategoriesScreen extends StatelessWidget {
                         icon: Icon(AppIcons.delete, color: Theme.of(context).colorScheme.error),
                         onPressed: () => _showDeleteConfirmation(context, category),
                       ),
-                      // The drag handle is implicitly the whole ListTile
                     ],
                   ),
                 );

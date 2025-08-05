@@ -272,7 +272,6 @@ class SettingsView extends StatelessWidget {
                         }
                       }
 
-                      // Now that the vault is unlocked, proceed with the import
                       settingsCubit.importData(
                         accountCubit: context.read<AccountCubit>(),
                         categoryCubit: context.read<CategoryCubit>(),

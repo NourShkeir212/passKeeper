@@ -15,7 +15,6 @@ class ChangePasswordScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // Provide the UI cubit for this screen
     return BlocProvider(
       create: (context) => ChangePasswordCubit(),
       child: const ChangePasswordView(),
@@ -64,10 +63,7 @@ class ChangePasswordView extends StatelessWidget {
           if (state is ChangePasswordSuccess) {
             // Refresh the account list to get newly re-encrypted data
             context.read<AccountCubit>().loadAccounts();
-
-            ScaffoldMessenger.of(context)
-              ..hideCurrentSnackBar()
-              ..showSnackBar( SnackBar(
+            ScaffoldMessenger.of(context)..hideCurrentSnackBar()..showSnackBar( SnackBar(
                   content: Text(AppLocalizations.of(context)!.feedbackPasswordChanged),
                   backgroundColor: Colors.green));
             Navigator.of(context).pop();
@@ -127,7 +123,6 @@ class ChangePasswordView extends StatelessWidget {
                       p.hasDigit != c.hasDigit ||
                       p.hasSpecialChar != c.hasSpecialChar,
                   builder: (context, state) {
-                    // Pass the state down to the reusable widget
                     return PasswordValidationRules(
                       hasMinLength: state.hasMinLength,
                       hasLetter: state.hasLetter,

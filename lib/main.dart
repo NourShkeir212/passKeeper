@@ -14,9 +14,6 @@ void main() async{
   WidgetsFlutterBinding.ensureInitialized();
   runApp(const MyApp());
 
-  DatabaseService db = DatabaseService();
-
-  //await db.deleteDatabaseFile();
 }
 
 class MyApp extends StatelessWidget {
@@ -27,30 +24,34 @@ class MyApp extends StatelessWidget {
     return MultiBlocProvider(
       providers: [
         BlocProvider(create: (context) => AuthCubit(DatabaseService())),
-        BlocProvider(create: (context) => ThemeCubit(SettingsService())..loadTheme()),
-        BlocProvider(create: (_) => LocaleCubit(SettingsService())..loadLocale()),
+        BlocProvider(create: (context) =>
+        ThemeCubit(SettingsService())
+          ..loadTheme()),
+        BlocProvider(create: (_) =>
+        LocaleCubit(SettingsService())
+          ..loadLocale()),
       ],
       child: BlocBuilder<ThemeCubit, ThemeState>(
         builder: (context, themeState) {
-          return BlocBuilder<LocaleCubit,LocaleState>(
-            builder: (context,localeState) {
-              return MaterialApp(
-                localizationsDelegates: AppLocalizations.localizationsDelegates,
-                supportedLocales: AppLocalizations.supportedLocales,
-                locale: localeState.locale,
-                onGenerateTitle: (context) {
-                  // Use the translated app title
-                  return AppLocalizations.of(context)!.appTitle;
-                },
-                navigatorKey: NavigationService.navigatorKey,
-                title: 'PassKeeper',
-                debugShowCheckedModeBanner: false,
-                theme: AppTheme.lightTheme,
-                darkTheme: AppTheme.darkTheme,
-                themeMode: themeState.themeMode, // Controlled by the ThemeCubit
-                home: const SplashScreen(),
-              );
-            }
+          return BlocBuilder<LocaleCubit, LocaleState>(
+              builder: (context, localeState) {
+                return MaterialApp(
+                  localizationsDelegates: AppLocalizations
+                      .localizationsDelegates,
+                  supportedLocales: AppLocalizations.supportedLocales,
+                  locale: localeState.locale,
+                  onGenerateTitle: (context) {
+                    return AppLocalizations.of(context)!.appTitle;
+                  },
+                  navigatorKey: NavigationService.navigatorKey,
+                  title: 'PassKeeper',
+                  debugShowCheckedModeBanner: false,
+                  theme: AppTheme.lightTheme,
+                  darkTheme: AppTheme.darkTheme,
+                  themeMode: themeState.themeMode,
+                  home: const SplashScreen(),
+                );
+              }
           );
         },
       ),

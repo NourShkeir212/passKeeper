@@ -4,11 +4,11 @@ import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:secure_accounts/l10n/app_localizations.dart';
 import '../../../core/services/encryption_service.dart';
 import '../../../core/theme/app_icons.dart';
 import '../../../core/widgets/custom_text.dart';
 import '../../../core/widgets/master_password_dialog.dart';
+import '../../../l10n/app_localizations.dart';
 import '../../../model/account_model.dart';
 import '../../../model/category_model.dart';
 import '../../auth/cubit/auth_cubit/cubit.dart';
@@ -255,7 +255,7 @@ class AccountList extends StatelessWidget {
                           ? AppIcons.eyeSlash
                           : AppIcons.eye),
                       onPressed:
-                      handleDetailsPasswordVisibility, // This now calls the correct handler
+                      handleDetailsPasswordVisibility,
                     ),
                   ),
                   if (account.recoveryAccount != null &&
@@ -277,8 +277,6 @@ class AccountList extends StatelessWidget {
   }
 
 
-
-  // Ensure your _buildDetailRow method is also correct
   Widget _buildDetailRow(
       BuildContext context, IconData icon, String title, String value,
       {Widget? trailing}) {

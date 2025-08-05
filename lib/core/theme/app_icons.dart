@@ -3,7 +3,7 @@ import 'package:iconsax_flutter/iconsax_flutter.dart';
 
 
 class AppIcons {
-  AppIcons._(); // Prevents this class from being instantiated.
+  AppIcons._();
 
   // --- GENERAL ---
   static const IconData user = Iconsax.user_octagon;

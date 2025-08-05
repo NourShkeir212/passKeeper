@@ -39,7 +39,7 @@ class DatabaseService {
         username TEXT NOT NULL UNIQUE,
         password TEXT NOT NULL
       )
-    '''); // FIX: Removed trailing comma
+    ''');
 
     await db.execute('''
       CREATE TABLE categories(
