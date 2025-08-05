@@ -25,7 +25,9 @@ class AboutScreen extends StatelessWidget {
         title:  Text(AppLocalizations.of(context)!.aboutScreenTitle),
       ),
       body: SingleChildScrollView(
-        padding: const EdgeInsets.all(20.0),
+        padding: EdgeInsets.symmetric(
+            horizontal: MediaQuery.of(context).size.width * 0.08
+        ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [

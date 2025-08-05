@@ -79,7 +79,9 @@ class _LoginViewState extends State<LoginView> {
         body: SafeArea(
           child: Center(
             child: SingleChildScrollView(
-              padding: const EdgeInsets.symmetric(horizontal: 24.0),
+              padding: EdgeInsets.symmetric(
+                  horizontal: MediaQuery.of(context).size.width * 0.08
+              ),
               child: Form(
                 key: _formKey,
                 child: Column(

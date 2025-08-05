@@ -5,13 +5,13 @@ class CustomText extends StatelessWidget {
   final TextStyle? style;
   final int? maxLines;
   final TextAlign? textAlign;
-
+  final TextOverflow? overflow;
   const CustomText(
       this.text, {
         super.key,
         this.style,
         this.textAlign,
-        this.maxLines=1,
+        this.maxLines=1, this.overflow,
       });
 
   @override
@@ -21,6 +21,7 @@ class CustomText extends StatelessWidget {
 
     return Text(
       text,
+      overflow: overflow,
       style: finalStyle,
       textAlign: textAlign,
       maxLines: maxLines,

@@ -3,11 +3,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
-import 'package:flutter_svg/svg.dart';
-import 'package:secure_accounts/generated/assets.dart';
 import '../../../core/services/encryption_service.dart';
 import '../../../core/theme/app_icons.dart';
 import '../../../core/widgets/custom_text.dart';
+import '../../../core/widgets/empty_screen.dart';
 import '../../../core/widgets/master_password_dialog.dart';
 import '../../../l10n/app_localizations.dart';
 import '../../../model/account_model.dart';
@@ -36,7 +35,10 @@ class AccountList extends StatelessWidget {
             if (accountState is AccountLoaded && categoryState is CategoryLoaded) {
               final accountsToDisplay = accountState.filteredAccounts ?? accountState.accounts;
               if (accountsToDisplay.isEmpty) {
-                return _buildEmptyState(context);
+                return BuildEmptyWidget(
+                  title: AppLocalizations.of(context)!.homeScreenEmptyTitle,
+                  subTitle: AppLocalizations.of(context)!.homeScreenEmptySubtitle
+                );
               }
 
               final groupedAccounts = groupBy(accountsToDisplay, (Account acc) => acc.categoryId);
@@ -69,34 +71,7 @@ class AccountList extends StatelessWidget {
       },
     );
   }
-  Widget _buildEmptyState(BuildContext context) {
-    final isDarkMode = Theme.of(context).brightness == Brightness.dark;
-    return Center(
-      child: Padding(
-        padding: const EdgeInsets.all(32.0),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            SvgPicture.asset(
-              height: 150, // Ensure you have this file
-              isDarkMode ?  Assets.svgNoDataDarkMode : Assets.svgNoDataLightMode,
-            ),
-            const SizedBox(height: 24),
-            CustomText(
-              AppLocalizations.of(context)!.homeScreenEmptyTitle,
-              style: Theme.of(context).textTheme.headlineSmall,
-            ),
-            const SizedBox(height: 8),
-            CustomText(
-              AppLocalizations.of(context)!.homeScreenEmptySubtitle,
-              textAlign: TextAlign.center,
-              style: Theme.of(context).textTheme.bodyMedium,
-            ),
-          ],
-        ),
-      ),
-    );
-  }
+
 
   Widget _buildCategorySection({
     required BuildContext context,

@@ -314,7 +314,7 @@ class SettingsView extends StatelessWidget {
                 ],
               );
             }
-            return const Center(child: CircularProgressIndicator());
+            return SizedBox.shrink();
           },
         ),
       ),

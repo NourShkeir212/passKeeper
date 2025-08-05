@@ -68,10 +68,11 @@ class _AccountCardState extends State<AccountCard> {
                 children: [
                   const Icon(AppIcons.service, size: 20),
                   const SizedBox(width: 8),
-                  CustomText(
-                    widget.account.serviceName,
-                    style: Theme.of(context).textTheme.titleMedium!.copyWith(
-                      color:Theme.of(context).colorScheme.primary
+                  Expanded(
+                    child: CustomText(
+                      widget.account.serviceName,
+                      style: Theme.of(context).textTheme.titleLarge,
+                      overflow: TextOverflow.ellipsis,
                     ),
                   ),
                 ],

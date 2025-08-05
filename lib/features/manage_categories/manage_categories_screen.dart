@@ -5,6 +5,7 @@ import 'package:secure_accounts/l10n/app_localizations.dart';
 import '../../core/theme/app_icons.dart';
 import '../../core/widgets/custom_text.dart';
 import '../../core/widgets/custom_text_field.dart';
+import '../../core/widgets/empty_screen.dart';
 import '../../generated/assets.dart';
 import '../../model/category_model.dart';
 import '../home/cubit/account_cubit/cubit.dart';
@@ -27,7 +28,7 @@ class ManageCategoriesScreen extends StatelessWidget {
           }
           if (state is CategoryLoaded) {
             if (state.categories.isEmpty) {
-              return  _buildEmptyState(context);
+              return  BuildEmptyWidget(title:AppLocalizations.of(context)!.manageCategoriesEmptyTitle ,subTitle:AppLocalizations.of(context)!.manageCategoriesEmptySubTitle,);
             }
             return ReorderableListView.builder(
               itemCount: state.categories.length,
@@ -126,35 +127,6 @@ class ManageCategoriesScreen extends StatelessWidget {
             },
           ),
         ],
-      ),
-    );
-  }
-
-  Widget _buildEmptyState(BuildContext context) {
-    final isDarkMode = Theme.of(context).brightness == Brightness.dark;
-    return Center(
-      child: Padding(
-        padding: const EdgeInsets.all(32.0),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            SvgPicture.asset(
-              isDarkMode ?  Assets.svgNoDataDarkMode : Assets.svgNoDataLightMode,
-              height: 150,
-            ),
-            const SizedBox(height: 24),
-            CustomText(
-              AppLocalizations.of(context)!.manageCategoriesEmptyTitle,
-              style: Theme.of(context).textTheme.headlineSmall,
-            ),
-            const SizedBox(height: 8),
-            CustomText(
-              AppLocalizations.of(context)!.manageCategoriesEmptySubTitle,
-              textAlign: TextAlign.center,
-              style: Theme.of(context).textTheme.bodyMedium,
-            ),
-          ],
-        ),
       ),
     );
   }
