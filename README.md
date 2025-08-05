@@ -31,6 +31,7 @@ A secure, offline-first password manager built with Flutter. PassKeeper allows y
     * Import your vault from an Excel file to easily restore your data.
 * **Powerful Settings:**
     * Manually switch between Light, Dark, and System themes.
+    * Manually switch between English, Arabic, and System Language.
     * Enable or disable the biometric lock.
     * Change your master password.
 
