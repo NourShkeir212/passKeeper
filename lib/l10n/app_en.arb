@@ -183,5 +183,15 @@
      "onboardingPage3Title": "Backup & Restore",
      "onboardingPage3Body": "Easily export your vault to an Excel file and import it on any device. Your data goes where you go.",
      "onboardingSkipButton": "Skip",
-     "onboardingDoneButton": "Done"
+     "onboardingDoneButton": "Done",
+
+     "aboutScreenTitle": "About PassKeeper",
+     "aboutTitle": "About us",
+     "aboutScreenVersion": "Version 1.0.0",
+     "aboutScreenDescription": "A secure, offline-first password manager built with Flutter to keep your digital life safe and organized.",
+     "aboutScreenContactTitle": "Contact & Connect",
+     "aboutScreenContactEmail": "Email",
+     "aboutScreenContactFacebook": "Facebook",
+     "aboutScreenContactWhatsApp": "WhatsApp"
+
 }

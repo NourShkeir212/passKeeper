@@ -183,5 +183,14 @@
     "onboardingPage3Title": "النسخ الاحتياطي والاستعادة",
     "onboardingPage3Body": "قم بتصدير خزنتك بسهولة إلى ملف Excel واستوردها على أي جهاز. بياناتك تذهب معك أينما ذهبت.",
     "onboardingSkipButton": "تخطي",
-    "onboardingDoneButton": "تم"
+    "onboardingDoneButton": "تم",
+
+    "aboutScreenTitle": "حول تطبيق PassKeeper",
+    "aboutTitle": "حول عنا",
+    "aboutScreenVersion": "الإصدار 1.0.0",
+    "aboutScreenDescription": "مدير كلمات مرور آمن يعمل بدون انترنت، تم إنشاؤه باستخدام فلاتر للحفاظ على حياتك الرقمية آمنة ومنظمة.",
+    "aboutScreenContactTitle": "تواصل معنا",
+    "aboutScreenContactEmail": "البريد الإلكتروني",
+    "aboutScreenContactFacebook": "فيسبوك",
+    "aboutScreenContactWhatsApp": "واتساب"
 }
