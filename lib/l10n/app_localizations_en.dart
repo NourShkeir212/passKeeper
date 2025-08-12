@@ -479,4 +479,16 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get aboutScreenContactWhatsApp => 'WhatsApp';
+
+  @override
+  String get passwordStrengthWeak => 'Weak';
+
+  @override
+  String get passwordStrengthGood => 'Good';
+
+  @override
+  String get passwordStrengthStrong => 'Strong';
+
+  @override
+  String get passwordStrengthVeryStrong => 'Very Strong';
 }

@@ -192,5 +192,9 @@
     "aboutScreenContactTitle": "تواصل معنا",
     "aboutScreenContactEmail": "البريد الإلكتروني",
     "aboutScreenContactFacebook": "فيسبوك",
-    "aboutScreenContactWhatsApp": "واتساب"
+    "aboutScreenContactWhatsApp": "واتساب",
+    "passwordStrengthWeak": "ضعيفة",
+    "passwordStrengthGood": "جيدة",
+    "passwordStrengthStrong": "قوية",
+    "passwordStrengthVeryStrong" : "قوية جدا"
 }

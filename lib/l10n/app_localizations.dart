@@ -971,6 +971,30 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'WhatsApp'**
   String get aboutScreenContactWhatsApp;
+
+  /// No description provided for @passwordStrengthWeak.
+  ///
+  /// In en, this message translates to:
+  /// **'Weak'**
+  String get passwordStrengthWeak;
+
+  /// No description provided for @passwordStrengthGood.
+  ///
+  /// In en, this message translates to:
+  /// **'Good'**
+  String get passwordStrengthGood;
+
+  /// No description provided for @passwordStrengthStrong.
+  ///
+  /// In en, this message translates to:
+  /// **'Strong'**
+  String get passwordStrengthStrong;
+
+  /// No description provided for @passwordStrengthVeryStrong.
+  ///
+  /// In en, this message translates to:
+  /// **'Very Strong'**
+  String get passwordStrengthVeryStrong;
 }
 
 class _AppLocalizationsDelegate

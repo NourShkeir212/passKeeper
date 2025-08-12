@@ -476,4 +476,16 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get aboutScreenContactWhatsApp => 'واتساب';
+
+  @override
+  String get passwordStrengthWeak => 'ضعيفة';
+
+  @override
+  String get passwordStrengthGood => 'جيدة';
+
+  @override
+  String get passwordStrengthStrong => 'قوية';
+
+  @override
+  String get passwordStrengthVeryStrong => 'قوية جدا';
 }

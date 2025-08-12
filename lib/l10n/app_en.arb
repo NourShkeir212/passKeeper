@@ -1,20 +1,16 @@
 {
     "@@locale": "en",
     "appTitle": "PassKeeper",
-
     "initialScreenLoading": "Loading...",
-
     "lockScreenTitle": "PassKeeper is Locked",
     "lockScreenSubtitle": "Authenticate to unlock your vault",
     "unlockButton": "Unlock with Fingerprint",
-
     "loginScreenWelcome": "Welcome Back",
     "loginScreenUsernameHint": "Username",
     "loginScreenPasswordHint": "Password",
     "loginScreenLoginButton": "Login",
     "loginScreenNoAccount": "Don't have an account?",
     "loginScreenSignUpLink": "Sign Up",
-
     "signUpScreenTitle": "Create Account",
     "signUpScreenUsernameHint": "Username",
     "signUpScreenPasswordHint": "Password",
@@ -25,7 +21,6 @@
     "signUpScreenPasswordRuleLetters": "Contains letters (a-z, A-Z)",
     "signUpScreenPasswordRuleNumbers": "Contains numbers (0-9)",
     "signUpScreenPasswordRuleSpecial": "Contains a special character (e.g., !@#$)",
-
     "homeScreenTitle": "My Accounts",
     "homeScreenSearchHint": "Search...",
     "homeScreenEmptyTitle": "Your Vault is Empty",
@@ -38,10 +33,8 @@
             }
         }
     },
-
     "accountCardEdit": "Edit",
     "accountCardDelete": "Delete",
-
     "accountDetailsUsernameOrEmail": "Email / Username",
     "accountDetailsPassword": "Password",
     "accountDetailsRecoveryEmail": "Recovery Email",
@@ -54,7 +47,6 @@
             }
         }
     },
-
     "accountFormAddTitle": "Add New Account",
     "accountFormEditTitle": "Edit Account",
     "accountFormCategoryHint": "Category",
@@ -66,7 +58,6 @@
     "accountFormRecoveryHint": "Recovery Account (Optional)",
     "accountFormPhoneHint": "Phone Numbers (Optional)",
     "accountFormSaveButton": "Save",
-
     "settingsScreenTitle": "Settings",
     "settingsAppearance": "Appearance",
     "settingsThemeSystem": "System Default",
@@ -88,20 +79,17 @@
     "settingsDeleteAllData": "Delete All Data",
     "settingsAccount": "Account",
     "settingsLogout": "Logout",
-
     "changePasswordTitle": "Change Password",
     "changePasswordCurrent": "Current Password",
     "changePasswordNew": "New Password",
     "changePasswordConfirm": "Confirm New Password",
     "changePasswordSaveButton": "Save Changes",
-
     "manageCategoriesTitle": "Manage Categories",
     "manageCategoriesEmptySubTitle": "Tap the '+' button to add your first category",
     "manageCategoriesEmptyTitle": "No categories created yet.",
     "manageCategoriesAddDialogTitle": "Add New Category",
     "manageCategoriesEditDialogTitle": "Edit Category",
     "manageCategoriesNameHint": "Category Name",
-
     "dialogCancel": "Cancel",
     "dialogCreate": "Create",
     "dialogSave": "Save",
@@ -117,21 +105,25 @@
     "dialogUnlockVaultSave": "Please enter your master password to save this account.",
     "dialogUnlockVaultView": "Enter your master password to reveal your accounts for this session.",
     "dialogUnlockToContinue": "Please enter your master password to continue.",
-
     "feedbackAccountCreated": "Account created successfully! Please login.",
     "feedbackAccountSaved": "Account saved",
     "feedbackPasswordChanged": "Password changed successfully!",
     "feedbackImportSuccess": "Import complete. Added: {successCount}, Skipped (duplicates): {skippedCount}, Failed: {failCount}.",
     "@feedbackImportSuccess": {
         "placeholders": {
-            "successCount": {"type": "int"},
-            "skippedCount": {"type": "int"},
-            "failCount": {"type": "int"}
+            "successCount": {
+                "type": "int"
+            },
+            "skippedCount": {
+                "type": "int"
+            },
+            "failCount": {
+                "type": "int"
+            }
         }
     },
     "feedbackExporting": "Exporting...",
     "feedbackImporting": "Importing...",
-
     "validationEnterUsername": "Please enter a username",
     "validationEnterPassword": "Please enter a password",
     "validationPasswordEmpty": "Password cannot be empty",
@@ -142,20 +134,23 @@
     "validationEnterServiceName": "Please enter a name",
     "validationSelectCategory": "Please select a category",
     "validationCategoryNameEmpty": "Name cannot be empty",
-
     "errorIncorrectPassword": "Incorrect password",
     "errorInvalidCredentials": "Invalid username or password.",
     "errorUsernameExists": "Username already exists. Please choose another.",
     "errorImportFailed": "Import failed: {error}",
     "@errorImportFailed": {
         "placeholders": {
-            "error": {"type": "String"}
+            "error": {
+                "type": "String"
+            }
         }
     },
     "errorExportFailed": "Export failed: {error}",
     "@errorExportFailed": {
         "placeholders": {
-            "error": {"type": "String"}
+            "error": {
+                "type": "String"
+            }
         }
     },
     "errorSheetNotFound": "Could not find a sheet named 'Accounts' in the Excel file.",
@@ -175,23 +170,24 @@
     "dialogUnlockToImportTitle": "Unlock to Import",
     "dialogUnlockToImportContent": "Please enter your master password to import your accounts.",
     "biometricPromptReason": "Please authenticate to access your vault",
-
-     "onboardingPage1Title": "Secure & Offline",
-     "onboardingPage1Body": "Your data is encrypted and stored only on your device. You are in complete control.",
-     "onboardingPage2Title": "Organize Everything",
-     "onboardingPage2Body": "Group your accounts into custom categories that you create and manage.",
-     "onboardingPage3Title": "Backup & Restore",
-     "onboardingPage3Body": "Easily export your vault to an Excel file and import it on any device. Your data goes where you go.",
-     "onboardingSkipButton": "Skip",
-     "onboardingDoneButton": "Done",
-
-     "aboutScreenTitle": "About PassKeeper",
-     "aboutTitle": "About us",
-     "aboutScreenVersion": "Version 1.0.0",
-     "aboutScreenDescription": "A secure, offline-first password manager built with Flutter to keep your digital life safe and organized.",
-     "aboutScreenContactTitle": "Contact & Connect",
-     "aboutScreenContactEmail": "Email",
-     "aboutScreenContactFacebook": "Facebook",
-     "aboutScreenContactWhatsApp": "WhatsApp"
-
+    "onboardingPage1Title": "Secure & Offline",
+    "onboardingPage1Body": "Your data is encrypted and stored only on your device. You are in complete control.",
+    "onboardingPage2Title": "Organize Everything",
+    "onboardingPage2Body": "Group your accounts into custom categories that you create and manage.",
+    "onboardingPage3Title": "Backup & Restore",
+    "onboardingPage3Body": "Easily export your vault to an Excel file and import it on any device. Your data goes where you go.",
+    "onboardingSkipButton": "Skip",
+    "onboardingDoneButton": "Done",
+    "aboutScreenTitle": "About PassKeeper",
+    "aboutTitle": "About us",
+    "aboutScreenVersion": "Version 1.0.0",
+    "aboutScreenDescription": "A secure, offline-first password manager built with Flutter to keep your digital life safe and organized.",
+    "aboutScreenContactTitle": "Contact & Connect",
+    "aboutScreenContactEmail": "Email",
+    "aboutScreenContactFacebook": "Facebook",
+    "aboutScreenContactWhatsApp": "WhatsApp",
+    "passwordStrengthWeak": "Weak",
+    "passwordStrengthGood": "Good",
+    "passwordStrengthStrong": "Strong",
+    "passwordStrengthVeryStrong": "Very Strong"
 }
