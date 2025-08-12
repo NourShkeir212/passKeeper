@@ -42,7 +42,7 @@ class HomeScreenAppBar extends StatelessWidget implements PreferredSizeWidget {
           );
         } else {
           return AppBar(
-            title:  CustomText(AppLocalizations.of(context)!.appTitle),
+            title:  CustomText(AppLocalizations.of(context)!.appTitle,style: TextStyle(fontWeight: FontWeight.bold),),
             automaticallyImplyLeading: false,
             actions: [
               IconButton(icon: const Icon(AppIcons.search), onPressed: () => context.read<HomeScreenCubit>().toggleSearch()),

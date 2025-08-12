@@ -24,6 +24,8 @@ A secure, offline-first password manager built with Flutter. PassKeeper allows y
 * **Full Account CRUD:** Create, view, edit, and delete account credentials with an intuitive UI.
 * **Real-time Search:** Instantly find any account by searching for its service name or username.
 * **Slidable Actions:** Quickly edit or delete accounts with modern swipe gestures.
+* **Password Generator:** Create strong, unique, and customizable passwords directly within the app.
+* **Password Strength Meter:** Get real-time feedback on the strength of your passwords as you type.
 
 ### 🎨 Personalization & Accessibility
 * **Adaptive Theming:** The entire app is beautifully themed. Users can manually switch between **Light**, **Dark**, and **System default** themes from the settings screen for a personalized visual experience.
@@ -84,10 +86,9 @@ To get a local copy up and running, follow these simple steps.
 
 Here are some planned features to make PassKeeper even better:
 
--   [ ] **Password Generator:** A tool to create strong, random passwords from within the app.
--   [ ] **Password Strength Meter:** Real-time feedback on the strength of manually entered passwords.
 -   [ ] **Comprehensive Testing:** Add Unit, Widget, and Integration tests.
 -   [ ] **Tablet/Desktop Layouts:** Create a responsive UI for larger screens.
+-   [ ] **Favorites System:** Mark important accounts for quick access.
 
 ---
 

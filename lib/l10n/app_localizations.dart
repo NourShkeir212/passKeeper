@@ -945,7 +945,7 @@ abstract class AppLocalizations {
   /// No description provided for @aboutScreenDescription.
   ///
   /// In en, this message translates to:
-  /// **'A secure, offline-first password manager built with Flutter to keep your digital life safe and organized.'**
+  /// **'Take control of your digital identity. PassKeeper is a simple and secure password manager that works completely offline, providing a private vault on your device. Your data stays with you, and only you'**
   String get aboutScreenDescription;
 
   /// No description provided for @aboutScreenContactTitle.

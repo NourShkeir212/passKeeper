@@ -463,7 +463,7 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get aboutScreenDescription =>
-      'مدير كلمات مرور آمن يعمل بدون انترنت، تم إنشاؤه باستخدام فلاتر للحفاظ على حياتك الرقمية آمنة ومنظمة.';
+      'تحكّم بهويتك الرقمية. PassKeeper هو مدير كلمات مرور بسيط وآمن يعمل بالكامل بدون انترنت، ويوفر لك خزنة خاصة على جهازك. بياناتك تبقى معك، ولك وحدك.';
 
   @override
   String get aboutScreenContactTitle => 'تواصل معنا';

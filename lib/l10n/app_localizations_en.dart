@@ -466,7 +466,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get aboutScreenDescription =>
-      'A secure, offline-first password manager built with Flutter to keep your digital life safe and organized.';
+      'Take control of your digital identity. PassKeeper is a simple and secure password manager that works completely offline, providing a private vault on your device. Your data stays with you, and only you';
 
   @override
   String get aboutScreenContactTitle => 'Contact & Connect';
