@@ -46,6 +46,7 @@ class AccountList extends StatelessWidget {
 
               // This outer list is now a standard, non-reorderable ListView.
               return ListView.builder(
+                physics: BouncingScrollPhysics(),
                 padding: const EdgeInsets.only(top: 8, bottom: 80),
                 itemCount: categories.length,
                 itemBuilder: (context, index) {

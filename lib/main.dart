@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-
 import 'core/localization/locale_cubit.dart';
 import 'core/services/database_services.dart';
 import 'core/services/navigation_service.dart';
@@ -18,7 +17,7 @@ void main() {
   runApp(const PassKeeperApp());
 }
 
-// Renamed to PassKeeperApp for clarity
+
 class PassKeeperApp extends StatelessWidget {
   const PassKeeperApp({super.key});
 

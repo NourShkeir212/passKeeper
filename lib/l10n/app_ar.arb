@@ -196,5 +196,18 @@
     "passwordStrengthWeak": "ضعيفة",
     "passwordStrengthGood": "جيدة",
     "passwordStrengthStrong": "قوية",
-    "passwordStrengthVeryStrong" : "قوية جدا"
+    "passwordStrengthVeryStrong" : "قوية جدا",
+    "passwordGeneratorTitle": "مولّد كلمات المرور",
+    "passwordGeneratorLength": "الطول:",
+    "passwordGeneratorUppercase": "أحرف كبيرة (A-Z)",
+    "passwordGeneratorNumbers": "أرقام (0-9)",
+    "passwordGeneratorSymbols": "رموز (!@#$)",
+    "passwordGeneratorUseButton": "استخدام كلمة المرور",
+    "passwordGeneratorWeak": "ضعيفة",
+    "passwordGeneratorMedium": "متوسطة",
+    "passwordGeneratorStrong": "قوية",
+    "passwordGeneratorVeryStrong": "قوية جداً",
+    "passwordGeneratorTooltip": "إنشاء كلمة مرور",
+    "expandedTextShowLess" : "إظهار أقل",
+    "expandedTextShowMore" : "إظهار اكثر"
 }

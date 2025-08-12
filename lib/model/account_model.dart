@@ -23,7 +23,6 @@ class Account extends Equatable {
     this.accountOrder = 0,
   });
 
-  // ADD THIS METHOD
   Account copyWith({
     int? id,
     int? userId,

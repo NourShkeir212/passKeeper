@@ -186,8 +186,17 @@
     "aboutScreenContactEmail": "Email",
     "aboutScreenContactFacebook": "Facebook",
     "aboutScreenContactWhatsApp": "WhatsApp",
-    "passwordStrengthWeak": "Weak",
-    "passwordStrengthGood": "Good",
-    "passwordStrengthStrong": "Strong",
-    "passwordStrengthVeryStrong": "Very Strong"
+    "passwordGeneratorTitle": "Password Generator",
+    "passwordGeneratorLength": "Length:",
+    "passwordGeneratorUppercase": "Uppercase (A-Z)",
+    "passwordGeneratorNumbers": "Numbers (0-9)",
+    "passwordGeneratorSymbols": "Symbols (!@#$)",
+    "passwordGeneratorUseButton": "Use Password",
+    "passwordGeneratorWeak": "Weak",
+    "passwordGeneratorMedium": "Medium",
+    "passwordGeneratorStrong": "Strong",
+    "passwordGeneratorVeryStrong": "Very Strong",
+    "passwordGeneratorTooltip": "Generate Password",
+    "expandedTextShowLess" : "Show Less",
+    "expandedTextShowMore" : "Show More"
 }

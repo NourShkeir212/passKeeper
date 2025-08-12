@@ -478,14 +478,41 @@ class AppLocalizationsAr extends AppLocalizations {
   String get aboutScreenContactWhatsApp => 'واتساب';
 
   @override
-  String get passwordStrengthWeak => 'ضعيفة';
+  String get passwordGeneratorTitle => 'مولّد كلمات المرور';
 
   @override
-  String get passwordStrengthGood => 'جيدة';
+  String get passwordGeneratorLength => 'الطول:';
 
   @override
-  String get passwordStrengthStrong => 'قوية';
+  String get passwordGeneratorUppercase => 'أحرف كبيرة (A-Z)';
 
   @override
-  String get passwordStrengthVeryStrong => 'قوية جدا';
+  String get passwordGeneratorNumbers => 'أرقام (0-9)';
+
+  @override
+  String get passwordGeneratorSymbols => 'رموز (!@#\$)';
+
+  @override
+  String get passwordGeneratorUseButton => 'استخدام كلمة المرور';
+
+  @override
+  String get passwordGeneratorWeak => 'ضعيفة';
+
+  @override
+  String get passwordGeneratorMedium => 'متوسطة';
+
+  @override
+  String get passwordGeneratorStrong => 'قوية';
+
+  @override
+  String get passwordGeneratorVeryStrong => 'قوية جداً';
+
+  @override
+  String get passwordGeneratorTooltip => 'إنشاء كلمة مرور';
+
+  @override
+  String get expandedTextShowLess => 'إظهار أقل';
+
+  @override
+  String get expandedTextShowMore => 'إظهار اكثر';
 }

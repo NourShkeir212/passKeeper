@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:iconsax_flutter/iconsax_flutter.dart';
 import '../../../core/services/encryption_service.dart';
 import '../../../core/services/session_manager.dart';
 import '../../../core/theme/app_icons.dart';
@@ -12,34 +13,46 @@ import '../../../model/account_model.dart';
 import '../../../model/category_model.dart';
 import '../../auth/cubit/auth_cubit/cubit.dart';
 import '../cubit/account_cubit/cubit.dart';
+import '../cubit/account_form/account_form_cubit.dart';
+import '../cubit/account_form/account_form_state.dart';
 import '../cubit/category_cubit/cubit.dart';
 import '../cubit/category_cubit/states.dart';
+import 'password_generator_dialog.dart';
 
 
-class AccountForm extends StatefulWidget {
+
+
+
+class AccountForm extends StatelessWidget {
   final Account? accountToEdit;
   const AccountForm({super.key, this.accountToEdit});
 
   @override
-  State<AccountForm> createState() => _AccountFormState();
+  Widget build(BuildContext context) {
+    return BlocProvider(
+      create: (context) => AccountFormCubit(),
+      child: _AccountFormView(accountToEdit: accountToEdit),
+    );
+  }
 }
 
-class _AccountFormState extends State<AccountForm> {
+class _AccountFormView extends StatefulWidget {
+  final Account? accountToEdit;
+  const _AccountFormView({this.accountToEdit});
+
+  @override
+  State<_AccountFormView> createState() => __AccountFormViewState();
+}
+
+class __AccountFormViewState extends State<_AccountFormView> {
   final _formKey = GlobalKey<FormState>();
-
-  int? _selectedCategoryId;
-  String? _selectedService;
-  bool _isPasswordVisible = false;
-
-  final _otherServiceController = TextEditingController();
-  final _usernameController = TextEditingController();
-  final _passwordController = TextEditingController();
-  final _recoveryController = TextEditingController();
-  final _phoneController = TextEditingController();
+  late final TextEditingController _otherServiceController;
+  late final TextEditingController _usernameController;
+  late final TextEditingController _passwordController;
+  late final TextEditingController _recoveryController;
+  late final TextEditingController _phoneController;
 
   bool _isLoading = true;
-  double _passwordStrength = 0.0;
-  String _passwordStrengthText = '';
 
   static const List<String> _services = [
     'Gmail', 'Outlook', 'Hotmail', 'Facebook',
@@ -49,17 +62,19 @@ class _AccountFormState extends State<AccountForm> {
   @override
   void initState() {
     super.initState();
-    _passwordController.addListener(_updatePasswordStrength);
+    _passwordController = TextEditingController();
+    _otherServiceController = TextEditingController();
+    _usernameController = TextEditingController();
+    _recoveryController = TextEditingController();
+    _phoneController = TextEditingController();
+
+    _passwordController.addListener(() {
+      context.read<AccountFormCubit>().updatePasswordStrength(
+          _passwordController.text);
+    });
+
     WidgetsBinding.instance.addPostFrameCallback((_) {
       _initializeForm();
-    });
-  }
-
-  void _updatePasswordStrength() {
-    if (!mounted) return;
-    setState(() {
-      _passwordStrength = _checkPasswordStrength(_passwordController.text);
-      _passwordStrengthText = _getStrengthText(context, _passwordStrength);
     });
   }
 
@@ -77,9 +92,12 @@ class _AccountFormState extends State<AccountForm> {
         if (mounted) Navigator.of(context).pop();
         return;
       }
-      final success = await context.read<AuthCubit>().verifyMasterPassword(password);
+      final success = await context.read<AuthCubit>().verifyMasterPassword(
+          password);
       if (!success && mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(AppLocalizations.of(context)!.errorIncorrectPassword), backgroundColor: Colors.red));
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+            content: Text(AppLocalizations.of(context)!.errorIncorrectPassword),
+            backgroundColor: Colors.red));
         Navigator.of(context).pop();
         return;
       }
@@ -89,11 +107,17 @@ class _AccountFormState extends State<AccountForm> {
 
   void _populateFieldsForEdit() {
     final account = widget.accountToEdit!;
-    _selectedCategoryId = account.categoryId;
-    _selectedService = _services.contains(account.serviceName) ? account.serviceName : 'Other...';
-    _otherServiceController.text = !_services.contains(account.serviceName) ? account.serviceName : '';
+    context.read<AccountFormCubit>().selectCategory(account.categoryId);
+
+    final service = _services.contains(account.serviceName) ? account
+        .serviceName : 'Other...';
+    context.read<AccountFormCubit>().selectService(service);
+
+    _otherServiceController.text =
+    !_services.contains(account.serviceName) ? account.serviceName : '';
     _usernameController.text = account.username;
-    _passwordController.text = EncryptionService().decryptText(account.password);
+    _passwordController.text =
+        EncryptionService().decryptText(account.password);
     _recoveryController.text = account.recoveryAccount ?? '';
     _phoneController.text = account.phoneNumbers ?? '';
 
@@ -102,7 +126,6 @@ class _AccountFormState extends State<AccountForm> {
 
   @override
   void dispose() {
-    _passwordController.removeListener(_updatePasswordStrength);
     _otherServiceController.dispose();
     _usernameController.dispose();
     _passwordController.dispose();
@@ -111,7 +134,7 @@ class _AccountFormState extends State<AccountForm> {
     super.dispose();
   }
 
-  Future<void> _onSave() async {
+  Future<void> _onSave(int? selectedCategoryId, String? selectedService) async {
     if (!_formKey.currentState!.validate()) return;
 
     final encryptionService = EncryptionService();
@@ -123,7 +146,9 @@ class _AccountFormState extends State<AccountForm> {
       final success = await authCubit.verifyMasterPassword(password);
       if (!success) {
         if (mounted) {
-          ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(AppLocalizations.of(context)!.errorIncorrectPassword), backgroundColor: Colors.red));
+          ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(
+              AppLocalizations.of(context)!.errorIncorrectPassword),
+              backgroundColor: Colors.red));
         }
         return;
       }
@@ -132,12 +157,15 @@ class _AccountFormState extends State<AccountForm> {
     final userId = await SessionManager.getUserId();
     if (userId == null) return;
 
-    final encryptedPassword = encryptionService.encryptText(_passwordController.text);
-    final finalServiceName = _selectedService == 'Other...' ? _otherServiceController.text : _selectedService!;
+    final encryptedPassword = encryptionService.encryptText(
+        _passwordController.text);
+    final finalServiceName = selectedService == 'Other...'
+        ? _otherServiceController.text
+        : selectedService!;
 
     if (widget.accountToEdit != null) {
       final updatedAccount = widget.accountToEdit!.copyWith(
-        categoryId: _selectedCategoryId!,
+        categoryId: selectedCategoryId,
         serviceName: finalServiceName,
         username: _usernameController.text,
         password: encryptedPassword,
@@ -148,7 +176,7 @@ class _AccountFormState extends State<AccountForm> {
     } else {
       final newAccount = Account(
         userId: userId,
-        categoryId: _selectedCategoryId!,
+        categoryId: selectedCategoryId!,
         serviceName: finalServiceName,
         username: _usernameController.text,
         password: encryptedPassword,
@@ -168,124 +196,167 @@ class _AccountFormState extends State<AccountForm> {
       return const Center(child: CircularProgressIndicator());
     }
 
-    return BlocBuilder<CategoryCubit, CategoryState>(
-      builder: (context, categoryState) {
-        return Padding(
-          padding: EdgeInsets.only(
-              top: 20,
-              left: 20,
-              right: 20,
-              bottom: MediaQuery.of(context).viewInsets.bottom + 20),
-          child: Form(
-            key: _formKey,
-            child: SingleChildScrollView(
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Container(
-                      width: 40,
-                      height: 5,
-                      decoration: BoxDecoration(
-                          color: Colors.grey[400],
-                          borderRadius: BorderRadius.circular(10))),
-                  const SizedBox(height: 20),
-                  CustomText(
-                      widget.accountToEdit != null
-                          ? l10n.accountFormEditTitle
-                          : l10n.accountFormAddTitle,
-                      style: Theme.of(context).textTheme.headlineSmall),
-                  const SizedBox(height: 20),
-                  if (categoryState is CategoryLoaded)
-                    DropdownButtonFormField<int>(
-                      decoration: InputDecoration(
-                          labelText: l10n.accountFormCategoryHint,
-                          prefixIcon: const Icon(AppIcons.category)),
-                      value: _selectedCategoryId,
-                      items: [
-                        DropdownMenuItem(
-                            value: -1,
-                            child: Text(l10n.accountFormCreateCategory)),
-                        ...categoryState.categories.map((Category cat) =>
-                            DropdownMenuItem<int>(
-                                value: cat.id, child: Text(cat.name))),
-                      ],
-                      onChanged: (newValue) {
-                        if (newValue == -1) {
-                          _showCreateCategoryDialog();
-                        } else {
-                          setState(() => _selectedCategoryId = newValue);
-                        }
-                      },
-                      validator: (value) => value == null || value == -1
-                          ? l10n.validationSelectCategory
-                          : null,
-                    ),
-                  const SizedBox(height: 10),
-                  DropdownButtonFormField<String>(
-                    decoration: InputDecoration(
-                        labelText: l10n.accountFormServiceNameHint,
-                        prefixIcon: const Icon(AppIcons.service)),
-                    value: _selectedService,
-                    items: _services
-                        .map((String service) => DropdownMenuItem<String>(
-                        value: service, child: CustomText(service)))
-                        .toList(),
-                    onChanged: (newValue) =>
-                        setState(() => _selectedService = newValue),
-                    validator: (value) =>
-                    value == null ? l10n.validationSelectService : null,
-                  ),
-                  if (_selectedService == 'Other...')
-                    Padding(
-                      padding: const EdgeInsets.only(top: 10.0),
-                      child: CustomTextField(
-                          controller: _otherServiceController,
-                          labelText: l10n.accountFormEnterServiceName,
-                          prefixIcon: AppIcons.edit,
+    return BlocBuilder<AccountFormCubit, AccountFormState>(
+      builder: (context, formState) {
+        return BlocBuilder<CategoryCubit, CategoryState>(
+          builder: (context, categoryState) {
+            return Padding(
+              padding: EdgeInsets.only(
+                  top: 20,
+                  left: 20,
+                  right: 20,
+                  bottom: MediaQuery
+                      .of(context)
+                      .viewInsets
+                      .bottom + 20),
+              child: Form(
+                key: _formKey,
+                child: SingleChildScrollView(
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Container(
+                          width: 40,
+                          height: 5,
+                          decoration: BoxDecoration(
+                              color: Colors.grey[400],
+                              borderRadius: BorderRadius.circular(10))),
+                      const SizedBox(height: 20),
+                      CustomText(
+                          widget.accountToEdit != null
+                              ? l10n.accountFormEditTitle
+                              : l10n.accountFormAddTitle,
+                          style: Theme
+                              .of(context)
+                              .textTheme
+                              .headlineSmall),
+                      const SizedBox(height: 20),
+                      if (categoryState is CategoryLoaded)
+                        DropdownButtonFormField<int>(
+                          decoration: InputDecoration(
+                              labelText: l10n.accountFormCategoryHint,
+                              prefixIcon: const Icon(AppIcons.category)),
+                          value: formState.selectedCategoryId,
+                          items: [
+                            DropdownMenuItem(
+                                value: -1,
+                                child: Text(l10n.accountFormCreateCategory)),
+                            ...categoryState.categories.map((Category cat) =>
+                                DropdownMenuItem<int>(
+                                    value: cat.id, child: Text(cat.name))),
+                          ],
+                          onChanged: (newValue) {
+                            if (newValue == -1) {
+                              _showCreateCategoryDialog();
+                            } else {
+                              context.read<AccountFormCubit>().selectCategory(
+                                  newValue);
+                            }
+                          },
                           validator: (value) =>
-                          value!.isEmpty ? l10n.validationEnterServiceName : null),
-                    ),
-                  const SizedBox(height: 10),
-                  CustomTextField(
-                      controller: _usernameController,
-                      labelText: l10n.accountFormUsernameHint,
-                      prefixIcon: AppIcons.user),
-                  const SizedBox(height: 10),
-                  CustomTextField(
-                    controller: _passwordController,
-                    labelText: l10n.accountDetailsPassword,
-                    prefixIcon: AppIcons.lock,
-                    isPassword: !_isPasswordVisible,
-                    suffixIcon: IconButton(
-                      icon: Icon(_isPasswordVisible
-                          ? AppIcons.eyeSlash
-                          : AppIcons.eye),
-                      onPressed: () =>
-                          setState(() => _isPasswordVisible = !_isPasswordVisible),
-                    ),
+                          value == null || value == -1
+                              ? l10n.validationSelectCategory
+                              : null,
+                        ),
+                      const SizedBox(height: 10),
+                      DropdownButtonFormField<String>(
+                        decoration: InputDecoration(
+                            labelText: l10n.accountFormServiceNameHint,
+                            prefixIcon: const Icon(AppIcons.service)),
+                        value: formState.selectedService,
+                        items: _services
+                            .map((String service) =>
+                            DropdownMenuItem<String>(
+                                value: service, child: CustomText(service)))
+                            .toList(),
+                        onChanged: (newValue) =>
+                            context.read<AccountFormCubit>().selectService(
+                                newValue),
+                        validator: (value) =>
+                        value == null ? l10n.validationSelectService : null,
+                      ),
+                      if (formState.selectedService == 'Other...')
+                        Padding(
+                          padding: const EdgeInsets.only(top: 10.0),
+                          child: CustomTextField(
+                              controller: _otherServiceController,
+                              labelText: l10n.accountFormEnterServiceName,
+                              prefixIcon: AppIcons.edit,
+                              validator: (value) =>
+                              value!.isEmpty
+                                  ? l10n.validationEnterServiceName
+                                  : null),
+                        ),
+                      const SizedBox(height: 10),
+                      CustomTextField(
+                          controller: _usernameController,
+                          labelText: l10n.accountFormUsernameHint,
+                          prefixIcon: AppIcons.user),
+                      const SizedBox(height: 10),
+                      Row(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Expanded(
+                            child: CustomTextField(
+                              controller: _passwordController,
+                              labelText: l10n.accountDetailsPassword,
+                              prefixIcon: AppIcons.lock,
+                              isPassword: !formState.isPasswordVisible,
+                              suffixIcon: IconButton(
+                                icon: Icon(formState.isPasswordVisible
+                                    ? AppIcons.eyeSlash
+                                    : AppIcons.eye),
+                                onPressed: () =>
+                                    context
+                                        .read<AccountFormCubit>()
+                                        .togglePasswordVisibility(),
+                              ),
+                            ),
+                          ),
+                          const SizedBox(width: 8),
+                          IconButton(
+                            icon: const Icon(Iconsax.magicpen),
+                            tooltip: l10n.passwordGeneratorTooltip,
+                            onPressed: () async {
+                              final newPassword = await showDialog<String>(
+                                context: context,
+                                builder: (_) => const PasswordGeneratorDialog(),
+                              );
+                              if (newPassword != null &&
+                                  newPassword.isNotEmpty) {
+                                _passwordController.text = newPassword;
+                              }
+                            },
+                          ),
+                        ],
+                      ),
+                      const SizedBox(height: 8),
+                      _PasswordStrengthIndicator(
+                        strength: formState.passwordStrength,
+                        strengthText: _getStrengthText(context,
+                            formState.passwordStrength),
+                      ),
+                       SizedBox(height: _recoveryController.text=="" ? 10 : 15),
+                      CustomTextField(
+                          controller: _recoveryController,
+                          labelText: l10n.accountFormRecoveryHint,
+                          prefixIcon: AppIcons.email),
+                      const SizedBox(height: 10),
+                      CustomTextField(
+                          controller: _phoneController,
+                          labelText: l10n.accountFormPhoneHint,
+                          prefixIcon: AppIcons.phone),
+                      const SizedBox(height: 20),
+                      CustomElevatedButton(onPressed: () =>
+                          _onSave(formState.selectedCategoryId,
+                              formState.selectedService),
+                          text: l10n.accountFormSaveButton),
+                    ],
                   ),
-                  const SizedBox(height: 8),
-                  _PasswordStrengthIndicator(
-                    strength: _passwordStrength,
-                    strengthText: _passwordStrengthText,
-                  ),
-                  const SizedBox(height: 10),
-                  CustomTextField(
-                      controller: _recoveryController,
-                      labelText: l10n.accountFormRecoveryHint,
-                      prefixIcon: AppIcons.email),
-                  const SizedBox(height: 10),
-                  CustomTextField(
-                      controller: _phoneController,
-                      labelText: l10n.accountFormPhoneHint,
-                      prefixIcon: AppIcons.phone),
-                  const SizedBox(height: 20),
-                  CustomElevatedButton(
-                      onPressed: _onSave, text: l10n.accountFormSaveButton),
-                ],
+                ),
               ),
-            ),
-          ),
+            );
+          },
         );
       },
     );
@@ -296,29 +367,30 @@ class _AccountFormState extends State<AccountForm> {
     final categoryNameController = TextEditingController();
     showDialog(
       context: context,
-      builder: (dialogContext) => AlertDialog(
-        title: Text(l10n.manageCategoriesAddDialogTitle),
-        content: CustomTextField(
-            controller: categoryNameController,
-            labelText: l10n.manageCategoriesNameHint,
-            prefixIcon: AppIcons.createFolder),
-        actions: [
-          TextButton(
-              onPressed: () => Navigator.pop(dialogContext),
-              child: Text(l10n.dialogCancel)),
-          TextButton(
-            onPressed: () {
-              if (categoryNameController.text.isNotEmpty) {
-                context
-                    .read<CategoryCubit>()
-                    .addCategory(categoryNameController.text);
-                Navigator.pop(dialogContext);
-              }
-            },
-            child: Text(l10n.dialogCreate),
+      builder: (dialogContext) =>
+          AlertDialog(
+            title: Text(l10n.manageCategoriesAddDialogTitle),
+            content: CustomTextField(
+                controller: categoryNameController,
+                labelText: l10n.manageCategoriesNameHint,
+                prefixIcon: AppIcons.createFolder),
+            actions: [
+              TextButton(
+                  onPressed: () => Navigator.pop(dialogContext),
+                  child: Text(l10n.dialogCancel)),
+              TextButton(
+                onPressed: () {
+                  if (categoryNameController.text.isNotEmpty) {
+                    context
+                        .read<CategoryCubit>()
+                        .addCategory(categoryNameController.text);
+                    Navigator.pop(dialogContext);
+                  }
+                },
+                child: Text(l10n.dialogCreate),
+              ),
+            ],
           ),
-        ],
-      ),
     );
   }
 }
@@ -362,21 +434,10 @@ class _PasswordStrengthIndicator extends StatelessWidget {
   }
 }
 
-double _checkPasswordStrength(String password) {
-  if (password.isEmpty) return 0.0;
-  double score = 0;
-  if (password.length >= 8) score += 0.25;
-  if (RegExp(r'[a-z]').hasMatch(password) &&
-      RegExp(r'[A-Z]').hasMatch(password)) score += 0.25;
-  if (RegExp(r'[0-9]').hasMatch(password)) score += 0.25;
-  if (RegExp(r'[^a-zA-Z0-9]').hasMatch(password)) score += 0.25;
-  return score;
-}
-
 String _getStrengthText(BuildContext context, double strength) {
   // TODO: Localize these strings
-  if (strength < 0.5) return AppLocalizations.of(context)!.passwordStrengthWeak;
-  if (strength < 0.75) return AppLocalizations.of(context)!.passwordStrengthGood;
-  if (strength < 1.0) return AppLocalizations.of(context)!.passwordStrengthStrong;
-  return AppLocalizations.of(context)!.passwordStrengthVeryStrong;
+  if (strength < 0.5) return AppLocalizations.of(context)!.passwordGeneratorWeak;
+  if (strength < 0.75) return AppLocalizations.of(context)!.passwordGeneratorMedium;
+  if (strength < 1.0) return AppLocalizations.of(context)!.passwordGeneratorStrong;
+  return AppLocalizations.of(context)!.passwordGeneratorVeryStrong;
 }

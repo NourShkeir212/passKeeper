@@ -481,14 +481,41 @@ class AppLocalizationsEn extends AppLocalizations {
   String get aboutScreenContactWhatsApp => 'WhatsApp';
 
   @override
-  String get passwordStrengthWeak => 'Weak';
+  String get passwordGeneratorTitle => 'Password Generator';
 
   @override
-  String get passwordStrengthGood => 'Good';
+  String get passwordGeneratorLength => 'Length:';
 
   @override
-  String get passwordStrengthStrong => 'Strong';
+  String get passwordGeneratorUppercase => 'Uppercase (A-Z)';
 
   @override
-  String get passwordStrengthVeryStrong => 'Very Strong';
+  String get passwordGeneratorNumbers => 'Numbers (0-9)';
+
+  @override
+  String get passwordGeneratorSymbols => 'Symbols (!@#\$)';
+
+  @override
+  String get passwordGeneratorUseButton => 'Use Password';
+
+  @override
+  String get passwordGeneratorWeak => 'Weak';
+
+  @override
+  String get passwordGeneratorMedium => 'Medium';
+
+  @override
+  String get passwordGeneratorStrong => 'Strong';
+
+  @override
+  String get passwordGeneratorVeryStrong => 'Very Strong';
+
+  @override
+  String get passwordGeneratorTooltip => 'Generate Password';
+
+  @override
+  String get expandedTextShowLess => 'Show Less';
+
+  @override
+  String get expandedTextShowMore => 'Show More';
 }

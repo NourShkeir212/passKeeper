@@ -972,29 +972,83 @@ abstract class AppLocalizations {
   /// **'WhatsApp'**
   String get aboutScreenContactWhatsApp;
 
-  /// No description provided for @passwordStrengthWeak.
+  /// No description provided for @passwordGeneratorTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Password Generator'**
+  String get passwordGeneratorTitle;
+
+  /// No description provided for @passwordGeneratorLength.
+  ///
+  /// In en, this message translates to:
+  /// **'Length:'**
+  String get passwordGeneratorLength;
+
+  /// No description provided for @passwordGeneratorUppercase.
+  ///
+  /// In en, this message translates to:
+  /// **'Uppercase (A-Z)'**
+  String get passwordGeneratorUppercase;
+
+  /// No description provided for @passwordGeneratorNumbers.
+  ///
+  /// In en, this message translates to:
+  /// **'Numbers (0-9)'**
+  String get passwordGeneratorNumbers;
+
+  /// No description provided for @passwordGeneratorSymbols.
+  ///
+  /// In en, this message translates to:
+  /// **'Symbols (!@#\$)'**
+  String get passwordGeneratorSymbols;
+
+  /// No description provided for @passwordGeneratorUseButton.
+  ///
+  /// In en, this message translates to:
+  /// **'Use Password'**
+  String get passwordGeneratorUseButton;
+
+  /// No description provided for @passwordGeneratorWeak.
   ///
   /// In en, this message translates to:
   /// **'Weak'**
-  String get passwordStrengthWeak;
+  String get passwordGeneratorWeak;
 
-  /// No description provided for @passwordStrengthGood.
+  /// No description provided for @passwordGeneratorMedium.
   ///
   /// In en, this message translates to:
-  /// **'Good'**
-  String get passwordStrengthGood;
+  /// **'Medium'**
+  String get passwordGeneratorMedium;
 
-  /// No description provided for @passwordStrengthStrong.
+  /// No description provided for @passwordGeneratorStrong.
   ///
   /// In en, this message translates to:
   /// **'Strong'**
-  String get passwordStrengthStrong;
+  String get passwordGeneratorStrong;
 
-  /// No description provided for @passwordStrengthVeryStrong.
+  /// No description provided for @passwordGeneratorVeryStrong.
   ///
   /// In en, this message translates to:
   /// **'Very Strong'**
-  String get passwordStrengthVeryStrong;
+  String get passwordGeneratorVeryStrong;
+
+  /// No description provided for @passwordGeneratorTooltip.
+  ///
+  /// In en, this message translates to:
+  /// **'Generate Password'**
+  String get passwordGeneratorTooltip;
+
+  /// No description provided for @expandedTextShowLess.
+  ///
+  /// In en, this message translates to:
+  /// **'Show Less'**
+  String get expandedTextShowLess;
+
+  /// No description provided for @expandedTextShowMore.
+  ///
+  /// In en, this message translates to:
+  /// **'Show More'**
+  String get expandedTextShowMore;
 }
 
 class _AppLocalizationsDelegate
