@@ -13,14 +13,14 @@ import '../auth/screens/on_boarding_screen/on_boarding_screen.dart';
 import '../auth/screens/sign_in/sign_in_screen.dart';
 import '../home/home_screen.dart';
 
-class SplashScreen extends StatefulWidget {
-  const SplashScreen({super.key});
+class InitialScreen extends StatefulWidget {
+  const InitialScreen({super.key});
 
   @override
-  State<SplashScreen> createState() => _SplashScreenState();
+  State<InitialScreen> createState() => _InitialScreenState();
 }
 
-class _SplashScreenState extends State<SplashScreen> {
+class _InitialScreenState extends State<InitialScreen> {
   @override
   void initState() {
     super.initState();
@@ -32,7 +32,7 @@ class _SplashScreenState extends State<SplashScreen> {
     final prefs = await SharedPreferences.getInstance();
     final bool onboardingCompleted = prefs.getBool('onboarding_completed') ?? false;
 
-    // Remove the native splash screen
+    // Remove the native initial screen
 
     if (!onboardingCompleted) {
       // If not completed, go to OnboardingScreen
