@@ -200,158 +200,160 @@ class __AccountFormViewState extends State<_AccountFormView> {
       builder: (context, formState) {
         return BlocBuilder<CategoryCubit, CategoryState>(
           builder: (context, categoryState) {
-            return Padding(
-              padding: EdgeInsets.only(
-                  top: 20,
-                  left: 20,
-                  right: 20,
-                  bottom: MediaQuery
-                      .of(context)
-                      .viewInsets
-                      .bottom + 20),
-              child: Form(
-                key: _formKey,
-                child: SingleChildScrollView(
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Container(
-                          width: 40,
-                          height: 5,
-                          decoration: BoxDecoration(
-                              color: Colors.grey[400],
-                              borderRadius: BorderRadius.circular(10))),
-                      const SizedBox(height: 20),
-                      CustomText(
-                          widget.accountToEdit != null
-                              ? l10n.accountFormEditTitle
-                              : l10n.accountFormAddTitle,
-                          style: Theme
-                              .of(context)
-                              .textTheme
-                              .headlineSmall),
-                      const SizedBox(height: 20),
-                      if (categoryState is CategoryLoaded)
-                        DropdownButtonFormField<int>(
-                          decoration: InputDecoration(
-                              labelText: l10n.accountFormCategoryHint,
-                              prefixIcon: const Icon(AppIcons.category)),
-                          value: formState.selectedCategoryId,
-                          items: [
-                            DropdownMenuItem(
-                                value: -1,
-                                child: Text(l10n.accountFormCreateCategory)),
-                            ...categoryState.categories.map((Category cat) =>
-                                DropdownMenuItem<int>(
-                                    value: cat.id, child: Text(cat.name))),
-                          ],
-                          onChanged: (newValue) {
-                            if (newValue == -1) {
-                              _showCreateCategoryDialog();
-                            } else {
-                              context.read<AccountFormCubit>().selectCategory(
-                                  newValue);
-                            }
-                          },
-                          validator: (value) =>
-                          value == null || value == -1
-                              ? l10n.validationSelectCategory
-                              : null,
-                        ),
-                      const SizedBox(height: 10),
-                      DropdownButtonFormField<String>(
-                        decoration: InputDecoration(
-                            labelText: l10n.accountFormServiceNameHint,
-                            prefixIcon: const Icon(AppIcons.service)),
-                        value: formState.selectedService,
-                        items: _services
-                            .map((String service) =>
-                            DropdownMenuItem<String>(
-                                value: service, child: CustomText(service)))
-                            .toList(),
-                        onChanged: (newValue) =>
-                            context.read<AccountFormCubit>().selectService(
-                                newValue),
-                        validator: (value) =>
-                        value == null ? l10n.validationSelectService : null,
-                      ),
-                      if (formState.selectedService == 'Other...')
-                        Padding(
-                          padding: const EdgeInsets.only(top: 10.0),
-                          child: CustomTextField(
-                              controller: _otherServiceController,
-                              labelText: l10n.accountFormEnterServiceName,
-                              prefixIcon: AppIcons.edit,
-                              validator: (value) =>
-                              value!.isEmpty
-                                  ? l10n.validationEnterServiceName
-                                  : null),
-                        ),
-                      const SizedBox(height: 10),
-                      CustomTextField(
-                          controller: _usernameController,
-                          labelText: l10n.accountFormUsernameHint,
-                          prefixIcon: AppIcons.user),
-                      const SizedBox(height: 10),
-                      Row(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Expanded(
-                            child: CustomTextField(
-                              controller: _passwordController,
-                              labelText: l10n.accountDetailsPassword,
-                              prefixIcon: AppIcons.lock,
-                              isPassword: !formState.isPasswordVisible,
-                              suffixIcon: IconButton(
-                                icon: Icon(formState.isPasswordVisible
-                                    ? AppIcons.eyeSlash
-                                    : AppIcons.eye),
-                                onPressed: () =>
-                                    context
-                                        .read<AccountFormCubit>()
-                                        .togglePasswordVisibility(),
-                              ),
-                            ),
-                          ),
-                          const SizedBox(width: 8),
-                          IconButton(
-                            icon: const Icon(Iconsax.magicpen),
-                            tooltip: l10n.passwordGeneratorTooltip,
-                            onPressed: () async {
-                              final newPassword = await showDialog<String>(
-                                context: context,
-                                builder: (_) => const PasswordGeneratorDialog(),
-                              );
-                              if (newPassword != null &&
-                                  newPassword.isNotEmpty) {
-                                _passwordController.text = newPassword;
+            return SafeArea(
+              child: Padding(
+                padding: EdgeInsets.only(
+                    top: 20,
+                    left: 20,
+                    right: 20,
+                    bottom: MediaQuery
+                        .of(context)
+                        .viewInsets
+                        .bottom + 20),
+                child: Form(
+                  key: _formKey,
+                  child: SingleChildScrollView(
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Container(
+                            width: 40,
+                            height: 5,
+                            decoration: BoxDecoration(
+                                color: Colors.grey[400],
+                                borderRadius: BorderRadius.circular(10))),
+                        const SizedBox(height: 20),
+                        CustomText(
+                            widget.accountToEdit != null
+                                ? l10n.accountFormEditTitle
+                                : l10n.accountFormAddTitle,
+                            style: Theme
+                                .of(context)
+                                .textTheme
+                                .headlineSmall),
+                        const SizedBox(height: 20),
+                        if (categoryState is CategoryLoaded)
+                          DropdownButtonFormField<int>(
+                            decoration: InputDecoration(
+                                labelText: l10n.accountFormCategoryHint,
+                                prefixIcon: const Icon(AppIcons.category)),
+                            value: formState.selectedCategoryId,
+                            items: [
+                              DropdownMenuItem(
+                                  value: -1,
+                                  child: Text(l10n.accountFormCreateCategory)),
+                              ...categoryState.categories.map((Category cat) =>
+                                  DropdownMenuItem<int>(
+                                      value: cat.id, child: Text(cat.name))),
+                            ],
+                            onChanged: (newValue) {
+                              if (newValue == -1) {
+                                _showCreateCategoryDialog();
+                              } else {
+                                context.read<AccountFormCubit>().selectCategory(
+                                    newValue);
                               }
                             },
+                            validator: (value) =>
+                            value == null || value == -1
+                                ? l10n.validationSelectCategory
+                                : null,
                           ),
-                        ],
-                      ),
-                      const SizedBox(height: 8),
-                      _PasswordStrengthIndicator(
-                        strength: formState.passwordStrength,
-                        strengthText: _getStrengthText(context,
-                            formState.passwordStrength),
-                      ),
-                       SizedBox(height: _recoveryController.text=="" ? 10 : 15),
-                      CustomTextField(
-                          controller: _recoveryController,
-                          labelText: l10n.accountFormRecoveryHint,
-                          prefixIcon: AppIcons.email),
-                      const SizedBox(height: 10),
-                      CustomTextField(
-                          controller: _phoneController,
-                          labelText: l10n.accountFormPhoneHint,
-                          prefixIcon: AppIcons.phone),
-                      const SizedBox(height: 20),
-                      CustomElevatedButton(onPressed: () =>
-                          _onSave(formState.selectedCategoryId,
-                              formState.selectedService),
-                          text: l10n.accountFormSaveButton),
-                    ],
+                        const SizedBox(height: 10),
+                        DropdownButtonFormField<String>(
+                          decoration: InputDecoration(
+                              labelText: l10n.accountFormServiceNameHint,
+                              prefixIcon: const Icon(AppIcons.service)),
+                          value: formState.selectedService,
+                          items: _services
+                              .map((String service) =>
+                              DropdownMenuItem<String>(
+                                  value: service, child: CustomText(service)))
+                              .toList(),
+                          onChanged: (newValue) =>
+                              context.read<AccountFormCubit>().selectService(
+                                  newValue),
+                          validator: (value) =>
+                          value == null ? l10n.validationSelectService : null,
+                        ),
+                        if (formState.selectedService == 'Other...')
+                          Padding(
+                            padding: const EdgeInsets.only(top: 10.0),
+                            child: CustomTextField(
+                                controller: _otherServiceController,
+                                labelText: l10n.accountFormEnterServiceName,
+                                prefixIcon: AppIcons.edit,
+                                validator: (value) =>
+                                value!.isEmpty
+                                    ? l10n.validationEnterServiceName
+                                    : null),
+                          ),
+                        const SizedBox(height: 10),
+                        CustomTextField(
+                            controller: _usernameController,
+                            labelText: l10n.accountFormUsernameHint,
+                            prefixIcon: AppIcons.user),
+                        const SizedBox(height: 10),
+                        Row(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Expanded(
+                              child: CustomTextField(
+                                controller: _passwordController,
+                                labelText: l10n.accountDetailsPassword,
+                                prefixIcon: AppIcons.lock,
+                                isPassword: !formState.isPasswordVisible,
+                                suffixIcon: IconButton(
+                                  icon: Icon(formState.isPasswordVisible
+                                      ? AppIcons.eyeSlash
+                                      : AppIcons.eye),
+                                  onPressed: () =>
+                                      context
+                                          .read<AccountFormCubit>()
+                                          .togglePasswordVisibility(),
+                                ),
+                              ),
+                            ),
+                            const SizedBox(width: 8),
+                            IconButton(
+                              icon: const Icon(Iconsax.magicpen),
+                              tooltip: l10n.passwordGeneratorTooltip,
+                              onPressed: () async {
+                                final newPassword = await showDialog<String>(
+                                  context: context,
+                                  builder: (_) => const PasswordGeneratorDialog(),
+                                );
+                                if (newPassword != null &&
+                                    newPassword.isNotEmpty) {
+                                  _passwordController.text = newPassword;
+                                }
+                              },
+                            ),
+                          ],
+                        ),
+                        const SizedBox(height: 8),
+                        _PasswordStrengthIndicator(
+                          strength: formState.passwordStrength,
+                          strengthText: _getStrengthText(context,
+                              formState.passwordStrength),
+                        ),
+                         SizedBox(height: _recoveryController.text=="" ? 10 : 15),
+                        CustomTextField(
+                            controller: _recoveryController,
+                            labelText: l10n.accountFormRecoveryHint,
+                            prefixIcon: AppIcons.email),
+                        const SizedBox(height: 10),
+                        CustomTextField(
+                            controller: _phoneController,
+                            labelText: l10n.accountFormPhoneHint,
+                            prefixIcon: AppIcons.phone),
+                        const SizedBox(height: 20),
+                        CustomElevatedButton(onPressed: () =>
+                            _onSave(formState.selectedCategoryId,
+                                formState.selectedService),
+                            text: l10n.accountFormSaveButton),
+                      ],
+                    ),
                   ),
                 ),
               ),
