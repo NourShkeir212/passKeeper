@@ -16,6 +16,7 @@ A secure, offline-first password manager built with Flutter. PassKeeper allows y
 * **Zero Knowledge Model:** Your master password is **hashed** for verification and is **never stored**. It's the key to unlock your vault and exists only in your memory.
 * **Session-Based Security:** The encryption key is derived from your master password only when you need it and is cleared from memory when the app is closed.
 * **Biometric App Lock:** Use your device's fingerprint or Face ID for quick and convenient access to the app.
+* **Auto-Lock Timer:** For added security, the app automatically locks the vault and requires re-authentication if it's left in the background for a set period of time.
 
 ### 🗂️ Organization & Management
 * **Custom Categories:** Create, edit, delete, and reorder your own custom categories.
@@ -42,13 +43,13 @@ A secure, offline-first password manager built with Flutter. PassKeeper allows y
 * **Local Storage:** `shared_preferences` for session and settings.
 * **Cryptography:** `encrypt` & `crypto` for AES encryption and SHA-256 hashing.
 * **Key Packages:**
-  * `local_auth` for biometric authentication.
-  * `flutter_slidable` for swipe actions.
-  * `excel`, `file_picker`, `share_plus` for data import/export.
-  * `flutter_animate` & `animated_text_kit` for animations.
-  * `google_fonts` for typography.
-  * `flutter_svg` for scalable illustrations.
-  * `collection` for advanced data manipulation.
+    * `local_auth` for biometric authentication.
+    * `flutter_slidable` for swipe actions.
+    * `excel`, `file_picker`, `share_plus` for data import/export.
+    * `flutter_animate` & `animated_text_kit` for animations.
+    * `google_fonts` for typography.
+    * `flutter_svg` for scalable illustrations.
+    * `collection` for advanced data manipulation.
 
 ---
 
