@@ -267,7 +267,7 @@ class SettingsView extends StatelessWidget {
                         final success = await authCubit.verifyMasterPassword(password);
                         if (!success && context.mounted) {
                           ScaffoldMessenger.of(context).showSnackBar(
-                            const SnackBar(content: Text("Incorrect password"), backgroundColor: Colors.red),
+                             SnackBar(content: Text(AppLocalizations.of(context)!.errorIncorrectPassword), backgroundColor: Colors.red),
                           );
                           return; // Stop on failure
                         }

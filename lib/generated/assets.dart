@@ -2,12 +2,13 @@
 class Assets {
   Assets._();
 
-  static const String onBoardingCloudDark = 'assets/svg/on_boarding/onboarding_access_dark.svg';
-  static const String onBoardingCloudLight = 'assets/svg/on_boarding/onboarding_access_light.svg';
-  static const String onBoardingFolderDark = 'assets/svg/on_boarding/onboarding_organize_dark.svg';
-  static const String onBoardingFolderLight = 'assets/svg/on_boarding/onboarding_organize_light.svg';
-  static const String onBoardingVaultDark = 'assets/svg/on_boarding/onboarding_secure_dark.svg';
-  static const String onBoardingVaultLight = 'assets/svg/on_boarding/onboarding_secure_light.svg';
+  static const String logoLogo = 'assets/icon/logo/logo.png';
+  static const String onBoardingOnboardingAccessDark = 'assets/svg/on_boarding/onboarding_access_dark.svg';
+  static const String onBoardingOnboardingAccessLight = 'assets/svg/on_boarding/onboarding_access_light.svg';
+  static const String onBoardingOnboardingOrganizeDark = 'assets/svg/on_boarding/onboarding_organize_dark.svg';
+  static const String onBoardingOnboardingOrganizeLight = 'assets/svg/on_boarding/onboarding_organize_light.svg';
+  static const String onBoardingOnboardingSecureDark = 'assets/svg/on_boarding/onboarding_secure_dark.svg';
+  static const String onBoardingOnboardingSecureLight = 'assets/svg/on_boarding/onboarding_secure_light.svg';
   static const String svgNoDataDarkMode = 'assets/svg/no_data_dark_mode.svg';
   static const String svgNoDataLightMode = 'assets/svg/no_data_light_mode.svg';
 

@@ -60,9 +60,11 @@ dependencies:
   introduction_screen: ^3.1.14
   url_launcher: ^6.3.0
 
+
 dev_dependencies:
   flutter_test:
     sdk: flutter
+  flutter_launcher_icons: ^0.13.1
 
   # The "flutter_lints" package below contains a set of recommended lints to
   # encourage good coding practices. The lint set provided by the package is
@@ -86,6 +88,12 @@ flutter:
   assets:
     - assets/svg/
     - assets/svg/on_boarding/
+    - assets/icon/logo/logo.png
+
+flutter_launcher_icons:
+  android: true
+  ios: true
+  image_path: "assets/icon/logo/logo.png"
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/to/resolution-aware-images
 

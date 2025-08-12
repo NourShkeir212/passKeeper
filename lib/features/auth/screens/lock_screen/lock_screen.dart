@@ -38,10 +38,13 @@ class _LockScreenState extends State<LockScreen> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Icon(
-              AppIcons.shield,
-              size: 100,
-              color: Theme.of(context).colorScheme.primary,
+            ClipRRect(
+              borderRadius: BorderRadius.circular(16.0),
+              child: Image.asset(
+                'assets/icon/logo/logo.png',
+                height: 100,
+                width: 100,
+              ),
             ),
             const SizedBox(height: 24),
             CustomText(

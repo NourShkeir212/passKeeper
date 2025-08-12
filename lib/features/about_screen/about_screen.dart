@@ -31,13 +31,15 @@ class AboutScreen extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            // App Logo and Name
-            Icon(
-              AppIcons.shield,
-              size: 80,
-              color: Theme.of(context).colorScheme.primary,
+            ClipRRect(
+              borderRadius: BorderRadius.circular(16.0),
+              child: Image.asset(
+                'assets/icon/logo/logo.png',
+                height: 100,
+                width: 100,
+              ),
             ),
-            const SizedBox(height: 16),
+            const SizedBox(height: 10),
             CustomText(
               AppLocalizations.of(context)!.appTitle,
               style: Theme.of(context).textTheme.headlineMedium,
