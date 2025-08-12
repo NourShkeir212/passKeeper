@@ -198,5 +198,8 @@
     "passwordGeneratorVeryStrong": "Very Strong",
     "passwordGeneratorTooltip": "Generate Password",
     "expandedTextShowLess" : "Show Less",
-    "expandedTextShowMore" : "Show More"
+    "expandedTextShowMore" : "Show More",
+    "dialogConfirmLogoutTitle": "Confirm Logout",
+    "dialogConfirmLogoutContent": "Are you sure you want to log out?",
+    "dialogLogoutButton": "Logout"
 }

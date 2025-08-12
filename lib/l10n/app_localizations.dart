@@ -1049,6 +1049,24 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Show More'**
   String get expandedTextShowMore;
+
+  /// No description provided for @dialogConfirmLogoutTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Confirm Logout'**
+  String get dialogConfirmLogoutTitle;
+
+  /// No description provided for @dialogConfirmLogoutContent.
+  ///
+  /// In en, this message translates to:
+  /// **'Are you sure you want to log out?'**
+  String get dialogConfirmLogoutContent;
+
+  /// No description provided for @dialogLogoutButton.
+  ///
+  /// In en, this message translates to:
+  /// **'Logout'**
+  String get dialogLogoutButton;
 }
 
 class _AppLocalizationsDelegate

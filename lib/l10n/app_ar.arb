@@ -209,5 +209,8 @@
     "passwordGeneratorVeryStrong": "قوية جداً",
     "passwordGeneratorTooltip": "إنشاء كلمة مرور",
     "expandedTextShowLess" : "إظهار أقل",
-    "expandedTextShowMore" : "إظهار اكثر"
+    "expandedTextShowMore" : "إظهار اكثر",
+    "dialogConfirmLogoutTitle": "تأكيد تسجيل الخروج",
+    "dialogConfirmLogoutContent": "هل أنت متأكد من رغبتك في تسجيل الخروج؟",
+    "dialogLogoutButton": "تسجيل الخروج"
 }

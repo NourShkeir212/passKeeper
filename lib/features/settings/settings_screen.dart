@@ -308,7 +308,31 @@ class SettingsView extends StatelessWidget {
                     leading: Icon(AppIcons.logout,
                         color: Theme.of(context).colorScheme.error),
                     onTap: () {
-                      context.read<AuthCubit>().logout();
+                      showDialog(
+                        context: context,
+                        builder: (dialogContext) => AlertDialog(
+                          title: Text(AppLocalizations.of(context)!.dialogConfirmLogoutTitle),
+                          content: Text(AppLocalizations.of(context)!.dialogConfirmLogoutContent),
+                          actions: [
+                            TextButton(
+                              onPressed: () => Navigator.of(dialogContext).pop(),
+                              child: Text(AppLocalizations.of(context)!.dialogCancel),
+                            ),
+                            TextButton(
+                              onPressed: () {
+                                // Close the dialog first
+                                Navigator.of(dialogContext).pop();
+                                // Then call the logout method
+                                context.read<AuthCubit>().logout();
+                              },
+                              child: Text(
+                                AppLocalizations.of(context)!.dialogLogoutButton,
+                                style: TextStyle(color: Theme.of(context).colorScheme.error),
+                              ),
+                            ),
+                          ],
+                        ),
+                      );
                     },
                   ),
                 ],

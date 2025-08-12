@@ -518,4 +518,13 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get expandedTextShowMore => 'Show More';
+
+  @override
+  String get dialogConfirmLogoutTitle => 'Confirm Logout';
+
+  @override
+  String get dialogConfirmLogoutContent => 'Are you sure you want to log out?';
+
+  @override
+  String get dialogLogoutButton => 'Logout';
 }

@@ -515,4 +515,14 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get expandedTextShowMore => 'إظهار اكثر';
+
+  @override
+  String get dialogConfirmLogoutTitle => 'تأكيد تسجيل الخروج';
+
+  @override
+  String get dialogConfirmLogoutContent =>
+      'هل أنت متأكد من رغبتك في تسجيل الخروج؟';
+
+  @override
+  String get dialogLogoutButton => 'تسجيل الخروج';
 }
