@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../features/auth/cubit/auth_cubit/cubit.dart';
 import '../../features/auth/cubit/auth_cubit/states.dart';
+import '../services/settings_service.dart';
 
 
 class AppLifecycleObserver extends StatefulWidget {
@@ -13,7 +14,8 @@ class AppLifecycleObserver extends StatefulWidget {
   State<AppLifecycleObserver> createState() => _AppLifecycleObserverState();
 }
 
-class _AppLifecycleObserverState extends State<AppLifecycleObserver> with WidgetsBindingObserver {
+class _AppLifecycleObserverState extends State<AppLifecycleObserver>
+    with WidgetsBindingObserver {
   Timer? _logoutTimer;
 
   @override
@@ -30,19 +32,24 @@ class _AppLifecycleObserverState extends State<AppLifecycleObserver> with Widget
   }
 
   @override
-  void didChangeAppLifecycleState(AppLifecycleState state) {
+  void didChangeAppLifecycleState(AppLifecycleState state) async {
     super.didChangeAppLifecycleState(state);
 
     final authCubit = context.read<AuthCubit>();
 
     switch (state) {
       case AppLifecycleState.resumed:
+      // User returned to the app, so cancel the timer.
         _logoutTimer?.cancel();
         break;
       case AppLifecycleState.paused:
-      // Only start the timer if the user is actually logged in
+      // User left the app. Start a timer to lock the vault.
+      // Only start the timer if the user is currently logged in.
         if (authCubit.state is AuthSuccess) {
-          _logoutTimer = Timer(const Duration(minutes: 5), () {
+          // Load the user's preferred timeout duration from settings.
+          final minutes = await SettingsService().loadAutoLockTime();
+          _logoutTimer = Timer(Duration(minutes: minutes), () {
+            // If the timer finishes, call the logout method.
             authCubit.logout();
           });
         }
@@ -51,6 +58,7 @@ class _AppLifecycleObserverState extends State<AppLifecycleObserver> with Widget
         break;
     }
   }
+
   @override
   Widget build(BuildContext context) {
     return widget.child;

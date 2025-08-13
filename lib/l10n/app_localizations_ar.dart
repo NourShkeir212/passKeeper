@@ -210,6 +210,25 @@ class AppLocalizationsAr extends AppLocalizations {
   String get settingsLogout => 'تسجيل الخروج';
 
   @override
+  String get settingsAutoLockTitle => 'مؤقت القفل التلقائي';
+
+  @override
+  String settingsAutoLockMinutes(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count دقيقة',
+      few: '$count دقائق',
+      two: 'دقيقتان',
+      one: 'دقيقة واحدة',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get settingsAutoLockGroupTitle => 'القفل التلقائي';
+
+  @override
   String get changePasswordTitle => 'تغيير كلمة المرور';
 
   @override

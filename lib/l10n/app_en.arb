@@ -79,6 +79,16 @@
     "settingsDeleteAllData": "Delete All Data",
     "settingsAccount": "Account",
     "settingsLogout": "Logout",
+    "settingsAutoLockTitle": "Auto-Lock Timer",
+    "settingsAutoLockMinutes": "{count,plural, =1{1 Minute}other{{count} Minutes}}",
+    "@settingsAutoLockMinutes": {
+        "placeholders": {
+            "count": {
+                "type": "int"
+            }
+        }
+    },
+    "settingsAutoLockGroupTitle": "Auto-Lock",
     "changePasswordTitle": "Change Password",
     "changePasswordCurrent": "Current Password",
     "changePasswordNew": "New Password",

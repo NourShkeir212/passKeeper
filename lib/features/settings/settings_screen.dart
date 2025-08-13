@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:iconsax_flutter/iconsax_flutter.dart';
-import 'package:secure_accounts/l10n/app_localizations.dart';
 import '../../core/localization/locale_cubit.dart';
 import '../../core/services/database_services.dart';
 import '../../core/services/encryption_service.dart';
@@ -11,6 +10,7 @@ import '../../core/theme/app_icons.dart';
 import '../../core/theme/theme_cubit.dart';
 import '../../core/widgets/custom_text.dart';
 import '../../core/widgets/master_password_dialog.dart';
+import '../../l10n/app_localizations.dart';
 import '../about_screen/about_screen.dart';
 import '../auth/cubit/auth_cubit/cubit.dart';
 import '../auth/cubit/auth_cubit/states.dart';
@@ -41,6 +41,7 @@ class SettingsView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     return MultiBlocListener(
       listeners: [
         BlocListener<AuthCubit, AuthState>(
@@ -64,8 +65,8 @@ class SettingsView extends StatelessWidget {
                         const CircularProgressIndicator(),
                         const SizedBox(width: 20),
                         Text(state is SettingsExporting
-                            ? AppLocalizations.of(context)!.feedbackExporting
-                            : AppLocalizations.of(context)!.feedbackImporting),
+                            ? l10n.feedbackExporting
+                            : l10n.feedbackImporting),
                       ],
                     ),
                   ),
@@ -87,7 +88,7 @@ class SettingsView extends StatelessWidget {
                   ? state.error
                   : (state as SettingsImportFailure).error;
               ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                content: Text(AppLocalizations.of(context)!.errorExportFailed(error.toString())),
+                content: Text(l10n.errorExportFailed(error.toString())),
                 backgroundColor: Theme.of(context).colorScheme.error,
               ));
             }
@@ -95,13 +96,13 @@ class SettingsView extends StatelessWidget {
         ),
       ],
       child: Scaffold(
-        appBar: AppBar(title:  Text(AppLocalizations.of(context)!.settingsScreenTitle)),
+        appBar: AppBar(title:  Text(l10n.settingsScreenTitle)),
         body: BlocBuilder<SettingsCubit, SettingsState>(
           builder: (context, settingsState) {
             if (settingsState is SettingsInitial) {
               return ListView(
                 children: [
-                   _SettingsGroupTitle(title:AppLocalizations.of(context)!.settingsAppearance),
+                   _SettingsGroupTitle(title:l10n.settingsAppearance),
                   Padding(
                     padding: const EdgeInsets.symmetric(
                         horizontal: 16.0, vertical: 8.0),
@@ -112,17 +113,17 @@ class SettingsView extends StatelessWidget {
                             ButtonSegment<ThemeMode>(
                               value: ThemeMode.light,
                               icon: Icon(AppIcons.sun),
-                              label: Text(AppLocalizations.of(context)!.settingsThemeLight),
+                              label: Text(l10n.settingsThemeLight),
                             ),
                             ButtonSegment<ThemeMode>(
                               value: ThemeMode.dark,
                               icon: Icon(AppIcons.moon),
-                              label: Text(AppLocalizations.of(context)!.settingsThemeDark),
+                              label: Text(l10n.settingsThemeDark),
                             ),
                             ButtonSegment<ThemeMode>(
                               value: ThemeMode.system,
                               icon: Icon(AppIcons.auto),
-                              label: Text(AppLocalizations.of(context)!.settingsThemeSystem),
+                              label: Text(l10n.settingsThemeSystem),
                             ),
                           ],
                           selected: <ThemeMode>{themeState.themeMode},
@@ -151,17 +152,17 @@ class SettingsView extends StatelessWidget {
                       },
                     ),
                   ),
-                  // --- NEW: Language Section ---
-                   _SettingsGroupTitle(title: AppLocalizations.of(context)!.settingsLanguage),
+                  // --- Language Section ---
+                   _SettingsGroupTitle(title: l10n.settingsLanguage),
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
                     child: BlocBuilder<LocaleCubit, LocaleState>(
                       builder: (context, localeState) {
                         return SegmentedButton<String>(
                           segments:  <ButtonSegment<String>>[
-                            ButtonSegment<String>(value: 'en', label: Text(AppLocalizations.of(context)!.settingsLangEnglish)),
-                            ButtonSegment<String>(value: 'ar', label: Text(AppLocalizations.of(context)!.settingsLangArabic)),
-                            ButtonSegment<String>(value: 'system', label: Text(AppLocalizations.of(context)!.settingsLangAuto), icon: Icon(AppIcons.auto)),
+                            ButtonSegment<String>(value: 'en', label: Text(l10n.settingsLangEnglish)),
+                            ButtonSegment<String>(value: 'ar', label: Text(l10n.settingsLangArabic)),
+                            ButtonSegment<String>(value: 'system', label: Text(l10n.settingsLangAuto), icon: Icon(AppIcons.auto)),
                           ],
                           // Determine the selected segment
                           selected: <String>{
@@ -196,9 +197,9 @@ class SettingsView extends StatelessWidget {
                     ),
                   ),
                   const Divider(),
-                   _SettingsGroupTitle(title: AppLocalizations.of(context)!.manageCategoriesTitle), // New or existing group
+                   _SettingsGroupTitle(title: l10n.manageCategoriesTitle), // New or existing group
                   ListTile(
-                    title:  Text(AppLocalizations.of(context)!.accountFormCategoryHint),
+                    title:  Text(l10n.accountFormCategoryHint),
                     leading: const Icon(AppIcons.category),
                     onTap: () {
                       Navigator.push(context, MaterialPageRoute(
@@ -221,17 +222,37 @@ class SettingsView extends StatelessWidget {
 
                 // ... Security section
                   const Divider(),
-                   _SettingsGroupTitle(title: AppLocalizations.of(context)!.settingsSecurity),
+                   _SettingsGroupTitle(title: l10n.settingsSecurity),
                   SwitchListTile(
-                    title:  Text(AppLocalizations.of(context)!.settingsBiometricTitle),
+                    title:  Text(l10n.settingsBiometricTitle),
                     subtitle:  Text(
-                        AppLocalizations.of(context)!.settingsBiometricSubtitle),
+                        l10n.settingsBiometricSubtitle),
                     value: settingsState.isBiometricEnabled,
                     onChanged: (val) =>
                         context.read<SettingsCubit>().toggleBiometrics(val),
                   ),
                   ListTile(
-                    title:  Text(AppLocalizations.of(context)!.settingsChangePassword),
+                    leading: const Icon(AppIcons.timer),
+                    title:  Text(l10n.settingsAutoLockTitle,maxLines: 3,),
+                    trailing: DropdownButton<int>(
+                      underline: SizedBox.shrink(),
+                      value: settingsState.autoLockMinutes,
+                      items:  [
+                        DropdownMenuItem(value: 1, child: Text(l10n.settingsAutoLockMinutes(1))),
+                        DropdownMenuItem(value: 5, child: Text(l10n.settingsAutoLockMinutes(5))),
+                        DropdownMenuItem(value: 10, child: Text(l10n.settingsAutoLockMinutes(10))),
+                        DropdownMenuItem(value: 15, child: Text(l10n.settingsAutoLockMinutes(15))),
+                        DropdownMenuItem(value: 30, child: Text(l10n.settingsAutoLockMinutes(30))),
+                      ],
+                      onChanged: (value) {
+                        if (value != null) {
+                          context.read<SettingsCubit>().changeAutoLockTime(value);
+                        }
+                      },
+                    ),
+                  ),
+                  ListTile(
+                    title:  Text(l10n.settingsChangePassword),
                     leading: const Icon(AppIcons.password),
                     onTap: () {
                       Navigator.push(context, MaterialPageRoute(
@@ -247,10 +268,11 @@ class SettingsView extends StatelessWidget {
                     },
                   ),
                   const Divider(),
-                   _SettingsGroupTitle(title: AppLocalizations.of(context)!.settingsDataManagement),
+                   // --- DATA MANAGEMENT ---
+                   _SettingsGroupTitle(title: l10n.settingsDataManagement),
                   ListTile(
-                    title:  Text(AppLocalizations.of(context)!.settingsImportTitle),
-                    subtitle:  Text(AppLocalizations.of(context)!.settingsImportSubtitle),
+                    title:  Text(l10n.settingsImportTitle),
+                    subtitle:  Text(l10n.settingsImportSubtitle),
                     leading: const Icon(AppIcons.import),
                     onTap: () async { // Make the onTap async
                       final authCubit = context.read<AuthCubit>();
@@ -261,15 +283,15 @@ class SettingsView extends StatelessWidget {
                       if (!encryptionService.isInitialized) {
                         final password = await showMasterPasswordDialog(
                           context,
-                          title: AppLocalizations.of(context)!.dialogUnlockToImportTitle,
-                          content: AppLocalizations.of(context)!.dialogUnlockToImportContent,
+                          title: l10n.dialogUnlockToImportTitle,
+                          content: l10n.dialogUnlockToImportContent,
                         );
                         if (password == null || password.isEmpty) return; // User cancelled
 
                         final success = await authCubit.verifyMasterPassword(password);
                         if (!success && context.mounted) {
                           ScaffoldMessenger.of(context).showSnackBar(
-                             SnackBar(content: Text(AppLocalizations.of(context)!.errorIncorrectPassword), backgroundColor: Colors.red),
+                             SnackBar(content: Text(l10n.errorIncorrectPassword), backgroundColor: Colors.red),
                           );
                           return; // Stop on failure
                         }
@@ -283,18 +305,19 @@ class SettingsView extends StatelessWidget {
                     },
                   ),
                   ListTile(
-                    title:  Text(AppLocalizations.of(context)!.settingsExportTitle),
+                    title:  Text(l10n.settingsExportTitle),
                     subtitle:  Text(
-                        AppLocalizations.of(context)!.settingsExportSubtitle),
+                        l10n.settingsExportSubtitle),
                     leading: const Icon(AppIcons.export),
                     onTap: () {
                       context.read<SettingsCubit>().exportData();
                     },
                   ),
                   const Divider(),
-                   _SettingsGroupTitle(title: AppLocalizations.of(context)!.aboutTitle),
+                   // --- ABOUT ---
+                   _SettingsGroupTitle(title: l10n.aboutTitle),
                   ListTile(
-                    title:  Text(AppLocalizations.of(context)!.aboutScreenTitle),
+                    title:  Text(l10n.aboutScreenTitle),
                     leading: const Icon(AppIcons.shield), // Or Icons.info_outline
                     onTap: () {
                       Navigator.push(context, MaterialPageRoute(builder: (_) => const AboutScreen()));
@@ -302,9 +325,10 @@ class SettingsView extends StatelessWidget {
                   ),
 
                   const Divider(),
-                   _SettingsGroupTitle(title: AppLocalizations.of(context)!.settingsAccount),
+                   // --- SETTINGS ---
+                   _SettingsGroupTitle(title: l10n.settingsAccount),
                   ListTile(
-                    title: Text(AppLocalizations.of(context)!.settingsLogout,
+                    title: Text(l10n.settingsLogout,
                         style: TextStyle(
                             color: Theme.of(context).colorScheme.error)),
                     leading: Icon(AppIcons.logout,
@@ -313,12 +337,12 @@ class SettingsView extends StatelessWidget {
                       showDialog(
                         context: context,
                         builder: (dialogContext) => AlertDialog(
-                          title: Text(AppLocalizations.of(context)!.dialogConfirmLogoutTitle),
-                          content: Text(AppLocalizations.of(context)!.dialogConfirmLogoutContent),
+                          title: Text(l10n.dialogConfirmLogoutTitle),
+                          content: Text(l10n.dialogConfirmLogoutContent),
                           actions: [
                             TextButton(
                               onPressed: () => Navigator.of(dialogContext).pop(),
-                              child: Text(AppLocalizations.of(context)!.dialogCancel),
+                              child: Text(l10n.dialogCancel),
                             ),
                             TextButton(
                               onPressed: () {
@@ -328,7 +352,7 @@ class SettingsView extends StatelessWidget {
                                 context.read<AuthCubit>().logout();
                               },
                               child: Text(
-                                AppLocalizations.of(context)!.dialogLogoutButton,
+                                l10n.dialogLogoutButton,
                                 style: TextStyle(color: Theme.of(context).colorScheme.error),
                               ),
                             ),
@@ -339,7 +363,7 @@ class SettingsView extends StatelessWidget {
                   ),
                   ListTile(
                     title: Text(
-                      AppLocalizations.of(context)!.settingsDeleteAllData,
+                      l10n.settingsDeleteAllData,
                       style: TextStyle(color: Theme.of(context).colorScheme.error),
                     ),
                     leading: Icon(Iconsax.profile_delete, color: Theme.of(context).colorScheme.error),

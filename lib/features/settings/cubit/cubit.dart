@@ -19,25 +19,31 @@ class SettingsCubit extends Cubit<SettingsState> {
   final DatabaseService _databaseService;
 
   SettingsCubit(this._settingsService, this._databaseService)
-      : super(const SettingsInitial(isBiometricEnabled: true));
+      : super(const SettingsInitial(isBiometricEnabled: true, autoLockMinutes: 5));
 
   Future<void> loadSettings() async {
     final isBiometricEnabled = await _settingsService.loadBiometricPreference();
-    emit(SettingsInitial(isBiometricEnabled: isBiometricEnabled));
+    final autoLockMinutes = await _settingsService.loadAutoLockTime();
+    emit(SettingsInitial(isBiometricEnabled: isBiometricEnabled,autoLockMinutes: autoLockMinutes));
   }
 
   Future<void> toggleBiometrics(bool isEnabled) async {
     await _settingsService.saveBiometricPreference(isEnabled);
-    emit(SettingsInitial(isBiometricEnabled: isEnabled));
+    loadSettings();
   }
+
+  Future<void> changeAutoLockTime(int minutes) async {
+    await _settingsService.saveAutoLockTime(minutes);
+    loadSettings();
+  }
+
 
   Future<void> changeMasterPassword({
     required String oldPassword,
     required String newPassword,
   }) async {
-    // Keep the last known value of biometrics to restore it later
-    final currentBiometricSetting = (state is SettingsInitial) ? (state as SettingsInitial).isBiometricEnabled : true;
-
+    // Keep the last known value of settings to restore it later
+    final currentState = state;
     emit(SettingsLoading());
     try {
       final userId = await SessionManager.getUserId();
@@ -46,7 +52,8 @@ class SettingsCubit extends Cubit<SettingsState> {
       // 1. Verify the user's OLD password.
       final encryptionService = EncryptionService();
       final hashedOldPassword = encryptionService.hashPassword(oldPassword);
-      final isVerified = await _databaseService.verifyPassword(userId, hashedOldPassword);
+      final isVerified = await _databaseService.verifyPassword(
+          userId, hashedOldPassword);
 
       if (!isVerified) {
         throw Exception("Incorrect current password.");
@@ -62,13 +69,15 @@ class SettingsCubit extends Cubit<SettingsState> {
       // 4. Decrypt with the old key and re-encrypt with the new key.
       final List<Account> reEncryptedAccounts = [];
       for (final account in allAccounts) {
-        // Decrypt the stored password using the old key
-        final decryptedPassword = oldEncrypter.decrypt64(account.password.split(':')[1], iv: IV.fromBase64(account.password.split(':')[0]));
+        final parts = account.password.split(':');
+        final iv = IV.fromBase64(parts[0]);
+        final encrypted = Encrypted.fromBase64(parts[1]);
+        final decryptedPassword = oldEncrypter.decrypt(encrypted, iv: iv);
 
-        // Re-encrypt the password with the new key
-        final iv = IV.fromSecureRandom(16);
-        final reEncryptedPassword = newEncrypter.encrypt(decryptedPassword, iv: iv);
-        final combined = '${iv.base64}:${reEncryptedPassword.base64}';
+        final newIv = IV.fromSecureRandom(16);
+        final reEncryptedPassword = newEncrypter.encrypt(
+            decryptedPassword, iv: newIv);
+        final combined = '${newIv.base64}:${reEncryptedPassword.base64}';
 
         reEncryptedAccounts.add(account.copyWith(password: combined));
       }
@@ -78,20 +87,22 @@ class SettingsCubit extends Cubit<SettingsState> {
         await _databaseService.updateAccountsBatch(reEncryptedAccounts);
       }
 
-      // 6. Finally, save the new HASHED master password.
+      // 6. Save the new HASHED master password to the database.
       final hashedNewPassword = encryptionService.hashPassword(newPassword);
       await _databaseService.updatePassword(userId, hashedNewPassword);
 
-      // 7. Re-initialize the encryption service with the new password for the current session.
+      // 8. Re-initialize the encryption service with the new password for the current session.
       encryptionService.init(newPassword);
 
       emit(ChangePasswordSuccess());
-
     } catch (e) {
       emit(ChangePasswordFailure(e.toString().replaceFirst("Exception: ", "")));
     } finally {
-      // Revert to a stable state so the previous screen doesn't show a spinner.
-      emit(SettingsInitial(isBiometricEnabled: currentBiometricSetting));
+      if (currentState is SettingsInitial) {
+        emit(currentState);
+      } else {
+        loadSettings();
+      }
     }
   }
 

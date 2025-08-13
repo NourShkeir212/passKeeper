@@ -488,6 +488,24 @@ abstract class AppLocalizations {
   /// **'Logout'**
   String get settingsLogout;
 
+  /// No description provided for @settingsAutoLockTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Auto-Lock Timer'**
+  String get settingsAutoLockTitle;
+
+  /// No description provided for @settingsAutoLockMinutes.
+  ///
+  /// In en, this message translates to:
+  /// **'{count,plural, =1{1 Minute}other{{count} Minutes}}'**
+  String settingsAutoLockMinutes(int count);
+
+  /// No description provided for @settingsAutoLockGroupTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Auto-Lock'**
+  String get settingsAutoLockGroupTitle;
+
   /// No description provided for @changePasswordTitle.
   ///
   /// In en, this message translates to:

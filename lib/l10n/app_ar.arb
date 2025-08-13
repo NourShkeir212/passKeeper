@@ -89,7 +89,16 @@
     "settingsDeleteAllData": "حذف كل البيانات",
     "settingsAccount": "الحساب",
     "settingsLogout": "تسجيل الخروج",
-
+    "settingsAutoLockTitle": "مؤقت القفل التلقائي",
+    "settingsAutoLockMinutes": "{count,plural, =1{دقيقة واحدة} =2{دقيقتان} few{{count} دقائق} other{{count} دقيقة}}",
+    "@settingsAutoLockMinutes": {
+        "placeholders": {
+            "count": {
+                "type": "int"
+            }
+        }
+    },
+    "settingsAutoLockGroupTitle": "القفل التلقائي",
     "changePasswordTitle": "تغيير كلمة المرور",
     "changePasswordCurrent": "كلمة المرور الحالية",
     "changePasswordNew": "كلمة المرور الجديدة",

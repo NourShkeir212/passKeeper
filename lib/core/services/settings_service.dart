@@ -4,7 +4,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 class SettingsService {
   static const _themeKey = 'themeMode';
   static const _biometricKey = 'biometricEnabled';
-
+  static const _autoLockKey = 'autoLockMinutes';
   // --- Theme ---
   Future<void> saveThemeMode(ThemeMode mode) async {
     final prefs = await SharedPreferences.getInstance();
@@ -45,5 +45,17 @@ class SettingsService {
       return Locale(languageCode);
     }
     return null; // Return null to use system default
+  }
+
+  // --- Auto-Lock Timer ---
+  Future<void> saveAutoLockTime(int minutes) async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setInt(_autoLockKey, minutes);
+  }
+
+  Future<int> loadAutoLockTime() async {
+    final prefs = await SharedPreferences.getInstance();
+    // Default to 5 minutes
+    return prefs.getInt(_autoLockKey) ?? 5;
   }
 }

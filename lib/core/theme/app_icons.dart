@@ -38,6 +38,7 @@ class AppIcons {
   static const IconData auto = Iconsax.monitor;
   static const IconData import = Iconsax.document_download;
   static const IconData export = Iconsax.document_upload;
+  static const IconData timer  = Iconsax.timer;
 
 
   // --- PASSWORD --- //

@@ -212,6 +212,23 @@ class AppLocalizationsEn extends AppLocalizations {
   String get settingsLogout => 'Logout';
 
   @override
+  String get settingsAutoLockTitle => 'Auto-Lock Timer';
+
+  @override
+  String settingsAutoLockMinutes(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count Minutes',
+      one: '1 Minute',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get settingsAutoLockGroupTitle => 'Auto-Lock';
+
+  @override
   String get changePasswordTitle => 'Change Password';
 
   @override
