@@ -17,6 +17,7 @@ A secure, offline-first password manager built with Flutter. PassKeeper allows y
 * **Session-Based Security:** The encryption key is derived from your master password only when you need it and is cleared from memory when the app is closed.
 * **Biometric App Lock:** Use your device's fingerprint or Face ID for quick and convenient access to the app.
 * **Auto-Lock Timer:** For added security, the app automatically locks the vault and requires re-authentication if it's left in the background for a set period of time.
+* **Permanent Data Deletion:** Securely delete your entire user profile and all associated data with master password confirmation.
 
 ### 🗂️ Organization & Management
 * **Custom Categories:** Create, edit, delete, and reorder your own custom categories.
