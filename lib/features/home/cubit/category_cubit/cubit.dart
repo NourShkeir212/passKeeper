@@ -75,4 +75,13 @@ class CategoryCubit extends Cubit<CategoryState> {
       await _databaseService.updateCategoryOrder(categories);
     }
   }
+
+  Future<void> deleteMultipleCategories(Set<int> categoryIds) async {
+    try {
+      await _databaseService.deleteCategoriesBatch(categoryIds.toList());
+      loadCategories(); // Reload to show changes
+    } catch (e) {
+      // Handle error
+    }
+  }
 }

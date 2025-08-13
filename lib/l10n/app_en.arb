@@ -89,6 +89,24 @@
     "manageCategoriesEmptyTitle": "No categories created yet.",
     "manageCategoriesAddDialogTitle": "Add New Category",
     "manageCategoriesEditDialogTitle": "Edit Category",
+    "manageCategoriesSelect": "Select",
+    "manageCategoriesSelectAll": "Select All",
+    "manageCategoriesSelected": "{count} Selected",
+    "@manageCategoriesSelected": {
+        "placeholders": {
+            "count": {
+                "type": "int"
+            }
+        }
+    },
+    "dialogConfirmDeleteMulti": "Are you sure you want to delete {count} categories? All accounts within them will also be deleted.",
+    "@dialogConfirmDeleteMulti": {
+        "placeholders": {
+            "count": {
+                "type": "int"
+            }
+        }
+    },
     "manageCategoriesNameHint": "Category Name",
     "dialogCancel": "Cancel",
     "dialogCreate": "Create",

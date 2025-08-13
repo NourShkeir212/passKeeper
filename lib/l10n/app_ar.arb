@@ -102,7 +102,24 @@
     "manageCategoriesAddDialogTitle": "إضافة فئة جديدة",
     "manageCategoriesEditDialogTitle": "تعديل الفئة",
     "manageCategoriesNameHint": "اسم الفئة",
-
+    "manageCategoriesSelect": "تحديد",
+    "manageCategoriesSelectAll": "تحديد الكل",
+    "manageCategoriesSelected": "تم تحديد {count}",
+    "@manageCategoriesSelected": {
+        "placeholders": {
+            "count": {
+                "type": "int"
+            }
+        }
+    },
+    "dialogConfirmDeleteMulti": "هل أنت متأكد من رغبتك في حذف {count} فئات؟ سيتم حذف جميع الحسابات الموجودة بداخلها أيضًا.",
+    "@dialogConfirmDeleteMulti": {
+        "placeholders": {
+            "count": {
+                "type": "int"
+            }
+        }
+    },
     "dialogCancel": "إلغاء",
     "dialogCreate": "إنشاء",
     "dialogSave": "حفظ",

@@ -548,6 +548,30 @@ abstract class AppLocalizations {
   /// **'Edit Category'**
   String get manageCategoriesEditDialogTitle;
 
+  /// No description provided for @manageCategoriesSelect.
+  ///
+  /// In en, this message translates to:
+  /// **'Select'**
+  String get manageCategoriesSelect;
+
+  /// No description provided for @manageCategoriesSelectAll.
+  ///
+  /// In en, this message translates to:
+  /// **'Select All'**
+  String get manageCategoriesSelectAll;
+
+  /// No description provided for @manageCategoriesSelected.
+  ///
+  /// In en, this message translates to:
+  /// **'{count} Selected'**
+  String manageCategoriesSelected(int count);
+
+  /// No description provided for @dialogConfirmDeleteMulti.
+  ///
+  /// In en, this message translates to:
+  /// **'Are you sure you want to delete {count} categories? All accounts within them will also be deleted.'**
+  String dialogConfirmDeleteMulti(int count);
+
   /// No description provided for @manageCategoriesNameHint.
   ///
   /// In en, this message translates to:

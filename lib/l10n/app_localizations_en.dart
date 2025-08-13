@@ -243,6 +243,22 @@ class AppLocalizationsEn extends AppLocalizations {
   String get manageCategoriesEditDialogTitle => 'Edit Category';
 
   @override
+  String get manageCategoriesSelect => 'Select';
+
+  @override
+  String get manageCategoriesSelectAll => 'Select All';
+
+  @override
+  String manageCategoriesSelected(int count) {
+    return '$count Selected';
+  }
+
+  @override
+  String dialogConfirmDeleteMulti(int count) {
+    return 'Are you sure you want to delete $count categories? All accounts within them will also be deleted.';
+  }
+
+  @override
   String get manageCategoriesNameHint => 'Category Name';
 
   @override

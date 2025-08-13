@@ -241,6 +241,22 @@ class AppLocalizationsAr extends AppLocalizations {
   String get manageCategoriesEditDialogTitle => 'تعديل الفئة';
 
   @override
+  String get manageCategoriesSelect => 'تحديد';
+
+  @override
+  String get manageCategoriesSelectAll => 'تحديد الكل';
+
+  @override
+  String manageCategoriesSelected(int count) {
+    return 'تم تحديد $count';
+  }
+
+  @override
+  String dialogConfirmDeleteMulti(int count) {
+    return 'هل أنت متأكد من رغبتك في حذف $count فئات؟ سيتم حذف جميع الحسابات الموجودة بداخلها أيضًا.';
+  }
+
+  @override
   String get manageCategoriesNameHint => 'اسم الفئة';
 
   @override

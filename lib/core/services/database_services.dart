@@ -169,6 +169,16 @@ class DatabaseService {
     );
   }
 
+  /// Deletes multiple categories in a single batch transaction.
+  Future<void> deleteCategoriesBatch(List<int> ids) async {
+    final db = await database;
+    final batch = db.batch();
+    for (var id in ids) {
+      batch.delete('categories', where: 'id = ?', whereArgs: [id]);
+    }
+    await batch.commit(noResult: true);
+  }
+
 
   // --- Account Methods ---
   Future<int> insertAccount(Account account) async {
