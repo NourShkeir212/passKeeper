@@ -8,7 +8,6 @@ class AppIcons {
   // --- GENERAL ---
   static const IconData user = Iconsax.user_octagon;
   static const IconData lock = Iconsax.lock_1;
-  static const IconData eye = Iconsax.eye;
   static const IconData eyeSlash = Iconsax.eye_slash;
   static const IconData shield = Iconsax.shield_tick;
   static const IconData category = Iconsax.category;
@@ -39,4 +38,9 @@ class AppIcons {
   static const IconData auto = Iconsax.monitor;
   static const IconData import = Iconsax.document_download;
   static const IconData export = Iconsax.document_upload;
+
+
+  // --- PASSWORD --- //
+  static const IconData eyeClosed = Iconsax.eye_slash;
+  static const IconData eye = Iconsax.eye;
 }

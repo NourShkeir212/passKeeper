@@ -1067,6 +1067,30 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Logout'**
   String get dialogLogoutButton;
+
+  /// No description provided for @deleteAccountScreenTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete Account'**
+  String get deleteAccountScreenTitle;
+
+  /// No description provided for @deleteAccountWarningTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Are you absolutely sure?'**
+  String get deleteAccountWarningTitle;
+
+  /// No description provided for @deleteAccountWarningBody.
+  ///
+  /// In en, this message translates to:
+  /// **'This action is irreversible. All of your saved accounts, categories, and settings will be permanently deleted. We cannot recover this data for you.'**
+  String get deleteAccountWarningBody;
+
+  /// No description provided for @deleteAccountConfirmationPrompt.
+  ///
+  /// In en, this message translates to:
+  /// **'To confirm, please enter your master password.'**
+  String get deleteAccountConfirmationPrompt;
 }
 
 class _AppLocalizationsDelegate

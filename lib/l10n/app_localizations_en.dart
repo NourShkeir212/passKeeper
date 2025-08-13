@@ -527,4 +527,18 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get dialogLogoutButton => 'Logout';
+
+  @override
+  String get deleteAccountScreenTitle => 'Delete Account';
+
+  @override
+  String get deleteAccountWarningTitle => 'Are you absolutely sure?';
+
+  @override
+  String get deleteAccountWarningBody =>
+      'This action is irreversible. All of your saved accounts, categories, and settings will be permanently deleted. We cannot recover this data for you.';
+
+  @override
+  String get deleteAccountConfirmationPrompt =>
+      'To confirm, please enter your master password.';
 }

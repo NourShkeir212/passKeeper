@@ -15,6 +15,7 @@ import '../auth/cubit/auth_cubit/cubit.dart';
 import '../auth/cubit/auth_cubit/states.dart';
 import '../auth/screens/sign_in/sign_in_screen.dart';
 import '../change_password/change_password_screen.dart';
+import '../delete_account/delete_account_screen.dart';
 import '../home/cubit/account_cubit/cubit.dart';
 import '../home/cubit/category_cubit/cubit.dart';
 import '../manage_categories/manage_categories_screen.dart';
@@ -333,6 +334,24 @@ class SettingsView extends StatelessWidget {
                           ],
                         ),
                       );
+                    },
+                  ),
+                  ListTile(
+                    title: Text(
+                      AppLocalizations.of(context)!.settingsDeleteAllData,
+                      style: TextStyle(color: Theme.of(context).colorScheme.error),
+                    ),
+                    leading: Icon(Icons.delete_forever, color: Theme.of(context).colorScheme.error),
+                    onTap: () {
+                      Navigator.push(context, MaterialPageRoute(
+                        builder: (_) => MultiBlocProvider(
+                          providers: [
+                            BlocProvider.value(value: context.read<SettingsCubit>()),
+                            BlocProvider.value(value: context.read<AuthCubit>()),
+                          ],
+                          child: const DeleteAccountScreen(),
+                        ),
+                      ));
                     },
                   ),
                 ],

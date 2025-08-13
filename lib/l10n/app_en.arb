@@ -201,5 +201,10 @@
     "expandedTextShowMore" : "Show More",
     "dialogConfirmLogoutTitle": "Confirm Logout",
     "dialogConfirmLogoutContent": "Are you sure you want to log out?",
-    "dialogLogoutButton": "Logout"
+    "dialogLogoutButton": "Logout",
+    "deleteAccountScreenTitle": "Delete Account",
+    "deleteAccountWarningTitle": "Are you absolutely sure?",
+    "deleteAccountWarningBody": "This action is irreversible. All of your saved accounts, categories, and settings will be permanently deleted. We cannot recover this data for you.",
+    "deleteAccountConfirmationPrompt": "To confirm, please enter your master password."
+
 }

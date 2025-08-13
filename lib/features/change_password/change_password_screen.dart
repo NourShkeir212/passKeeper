@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:secure_accounts/l10n/app_localizations.dart';
+import '../../core/theme/app_icons.dart';
 import '../../core/widgets/custom_elevated_button.dart';
 import '../../core/widgets/custom_text_field.dart';
 import '../../core/widgets/password_validation_rules.dart';
@@ -87,11 +88,11 @@ class ChangePasswordView extends StatelessWidget {
                     return CustomTextField(
                       controller: oldPasswordController,
                       labelText:AppLocalizations.of(context)!.changePasswordCurrent,
-                      prefixIcon: Icons.lock_open,
+                      prefixIcon: AppIcons.lock,
                       isPassword: !state.isCurrentPasswordVisible,
                       validator: (v) => v!.isEmpty ?AppLocalizations.of(context)!.changePasswordCurrent : null,
                       suffixIcon: IconButton(
-                        icon: Icon(state.isCurrentPasswordVisible ? Icons.visibility_off : Icons.visibility),
+                        icon: Icon(state.isCurrentPasswordVisible ? AppIcons.eyeClosed : AppIcons.eye),
                         onPressed: () => context.read<ChangePasswordCubit>().toggleCurrentPasswordVisibility(),
                       ),
                     );
@@ -103,12 +104,12 @@ class ChangePasswordView extends StatelessWidget {
                     return CustomTextField(
                       controller: newPasswordController,
                       labelText: AppLocalizations.of(context)!.changePasswordNew,
-                      prefixIcon: Icons.lock_outline,
+                      prefixIcon: AppIcons.lock,
                       isPassword: !state.isNewPasswordVisible,
                       validator: validateNewPassword,
                       onChanged: (password) => context.read<ChangePasswordCubit>().validatePasswordRealtime(password),
                       suffixIcon: IconButton(
-                        icon: Icon(state.isNewPasswordVisible ? Icons.visibility_off : Icons.visibility),
+                        icon: Icon(state.isNewPasswordVisible ? AppIcons.eyeClosed : AppIcons.eye),
                         onPressed: () => context.read<ChangePasswordCubit>().toggleNewPasswordVisibility(),
                       ),
                     );
@@ -137,11 +138,11 @@ class ChangePasswordView extends StatelessWidget {
                     return CustomTextField(
                       controller: confirmPasswordController,
                       labelText: AppLocalizations.of(context)!.changePasswordConfirm,
-                      prefixIcon: Icons.lock_person,
+                      prefixIcon: AppIcons.lock,
                       isPassword: !state.isConfirmPasswordVisible,
                       validator: (value) => value != newPasswordController.text ? AppLocalizations.of(context)!.validationPasswordsNoMatch : null,
                       suffixIcon: IconButton(
-                        icon: Icon(state.isConfirmPasswordVisible ? Icons.visibility_off : Icons.visibility),
+                        icon: Icon(state.isConfirmPasswordVisible ?  AppIcons.eyeClosed : AppIcons.eye),
                         onPressed: () => context.read<ChangePasswordCubit>().toggleConfirmPasswordVisibility(),
                       ),
                     );

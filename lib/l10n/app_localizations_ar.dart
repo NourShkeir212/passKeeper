@@ -351,7 +351,7 @@ class AppLocalizationsAr extends AppLocalizations {
   String get validationCategoryNameEmpty => 'لا يمكن أن يكون الاسم فارغًا';
 
   @override
-  String get errorIncorrectPassword => 'كلمة المرور الحالية غير صحيحة';
+  String get errorIncorrectPassword => 'كلمة المرور غير صحيحة';
 
   @override
   String get errorInvalidCredentials =>
@@ -525,4 +525,18 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get dialogLogoutButton => 'تسجيل الخروج';
+
+  @override
+  String get deleteAccountScreenTitle => 'حذف الحساب';
+
+  @override
+  String get deleteAccountWarningTitle => 'هل أنت متأكد تماماً؟';
+
+  @override
+  String get deleteAccountWarningBody =>
+      'لا يمكن التراجع عن هذا الإجراء. سيتم حذف جميع حساباتك وفئاتك وإعداداتك المحفوظة بشكل دائم. لا يمكننا استعادة هذه البيانات لك.';
+
+  @override
+  String get deleteAccountConfirmationPrompt =>
+      'للتأكيد، الرجاء إدخال كلمة المرور الرئيسية الخاصة بك.';
 }

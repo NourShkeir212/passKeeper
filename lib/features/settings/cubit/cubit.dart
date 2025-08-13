@@ -2,6 +2,7 @@ import 'package:encrypt/encrypt.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:path/path.dart';
+import 'package:secure_accounts/l10n/app_localizations.dart';
 import '../../../core/services/database_services.dart';
 import '../../../core/services/encryption_service.dart';
 import '../../../core/services/excel_service.dart';
@@ -124,6 +125,34 @@ class SettingsCubit extends Cubit<SettingsState> {
       loadSettings();
     } catch (e) {
       emit(SettingsImportFailure(e.toString()));
+    }
+  }
+
+  Future<void> deleteUserAccount(String password,context) async {
+    // Keep the current state to revert to on failure
+    final currentState = state;
+    emit(SettingsLoading());
+    try {
+      final userId = await SessionManager.getUserId();
+      if (userId == null) throw Exception("User session not found.");
+
+      // 1. Verify the password
+      final encryptionService = EncryptionService();
+      final hashedPassword = encryptionService.hashPassword(password);
+      final isVerified = await _databaseService.verifyPassword(userId, hashedPassword);
+
+      if (!isVerified) {
+        throw Exception(AppLocalizations.of(context)!.errorIncorrectPassword);
+      }
+
+      // 2. If verified, delete the user from the database
+      await _databaseService.deleteUser(userId);
+      emit(DeleteUserSuccess());
+
+    } catch (e) {
+      emit(DeleteUserFailure(e.toString().replaceFirst("Exception: ", "")));
+      // Revert to the previous state on failure
+      emit(currentState);
     }
   }
 }

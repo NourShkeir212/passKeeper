@@ -144,7 +144,7 @@
     "validationSelectCategory": "الرجاء اختيار فئة",
     "validationCategoryNameEmpty": "لا يمكن أن يكون الاسم فارغًا",
 
-    "errorIncorrectPassword": "كلمة المرور الحالية غير صحيحة",
+    "errorIncorrectPassword": "كلمة المرور غير صحيحة",
     "errorInvalidCredentials": "اسم المستخدم أو كلمة المرور غير صالحة.",
     "errorUsernameExists": "اسم المستخدم موجود بالفعل. الرجاء اختيار اسم آخر.",
     "errorImportFailed": "فشل الاستيراد: {error}",
@@ -212,5 +212,9 @@
     "expandedTextShowMore" : "إظهار اكثر",
     "dialogConfirmLogoutTitle": "تأكيد تسجيل الخروج",
     "dialogConfirmLogoutContent": "هل أنت متأكد من رغبتك في تسجيل الخروج؟",
-    "dialogLogoutButton": "تسجيل الخروج"
+    "dialogLogoutButton": "تسجيل الخروج",
+    "deleteAccountScreenTitle": "حذف الحساب",
+    "deleteAccountWarningTitle": "هل أنت متأكد تماماً؟",
+    "deleteAccountWarningBody": "لا يمكن التراجع عن هذا الإجراء. سيتم حذف جميع حساباتك وفئاتك وإعداداتك المحفوظة بشكل دائم. لا يمكننا استعادة هذه البيانات لك.",
+    "deleteAccountConfirmationPrompt": "للتأكيد، الرجاء إدخال كلمة المرور الرئيسية الخاصة بك."
 }

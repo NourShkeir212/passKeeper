@@ -96,6 +96,16 @@ class DatabaseService {
     }
   }
 
+  /// Deletes a user and all their associated data from the database.
+  Future<void> deleteUser(int userId) async {
+    final db = await database;
+    await db.delete(
+      'users',
+      where: 'id = ?',
+      whereArgs: [userId],
+    );
+  }
+
   /// Fetches a user by their username only.
   Future<User?> getUserByUsername(String username) async {
     final db = await database;

@@ -34,3 +34,8 @@ class SettingsImportFailure extends SettingsState {
   final String error;
   const SettingsImportFailure(this.error);
 }
+class DeleteUserSuccess extends SettingsState {}
+class DeleteUserFailure extends SettingsState {
+  final String error;
+  const DeleteUserFailure(this.error);
+}
