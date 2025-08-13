@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:iconsax_flutter/iconsax_flutter.dart';
 import 'package:secure_accounts/l10n/app_localizations.dart';
 import '../../core/localization/locale_cubit.dart';
 import '../../core/services/database_services.dart';
@@ -341,7 +342,7 @@ class SettingsView extends StatelessWidget {
                       AppLocalizations.of(context)!.settingsDeleteAllData,
                       style: TextStyle(color: Theme.of(context).colorScheme.error),
                     ),
-                    leading: Icon(Icons.delete_forever, color: Theme.of(context).colorScheme.error),
+                    leading: Icon(Iconsax.profile_delete, color: Theme.of(context).colorScheme.error),
                     onTap: () {
                       Navigator.push(context, MaterialPageRoute(
                         builder: (_) => MultiBlocProvider(
