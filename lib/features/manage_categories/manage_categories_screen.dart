@@ -56,7 +56,6 @@ class ManageCategoriesView extends StatelessWidget {
                       : l10n.manageCategoriesTitle,
                 ),
                 actions: [
-                  // --- CORRECTED LOGIC ---
                   if (isSelectionMode) ...[
                     if (selectedCount > 0)
                       IconButton(
