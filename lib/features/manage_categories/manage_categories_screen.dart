@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../../core/theme/app_icons.dart';
 import '../../core/widgets/custom_text.dart';
@@ -37,70 +38,68 @@ class ManageCategoriesView extends StatelessWidget {
             final isSelectionMode = manageState.isSelectionMode;
             final selectedCount = manageState.selectedCategoryIds.length;
             final hasCategories =
-                categoryState is CategoryLoaded &&
-                categoryState.categories.isNotEmpty;
+                categoryState is CategoryLoaded && categoryState.categories.isNotEmpty;
 
             return Scaffold(
               appBar: AppBar(
-                leading: isSelectionMode
-                    ? IconButton(
-                        icon: const Icon(AppIcons.close),
-                        onPressed: () => context
-                            .read<ManageCategoriesCubit>()
-                            .toggleSelectionMode(),
-                      )
-                    : null,
-                title: Text(
-                  isSelectionMode
-                      ? l10n.manageCategoriesSelected(selectedCount)
-                      : l10n.manageCategoriesTitle,
+                // --- UI UPDATE: Animated leading icon ---
+                leading: AnimatedSwitcher(
+                  duration: const Duration(milliseconds: 300),
+                  transitionBuilder: (child, animation) => ScaleTransition(scale: animation, child: child),
+                  child: isSelectionMode
+                      ? IconButton(
+                    key: const ValueKey('close_icon'),
+                    icon: const Icon(AppIcons.close),
+                    onPressed: () => context.read<ManageCategoriesCubit>().toggleSelectionMode(),
+                  )
+                      : const BackButton(),
+                ),
+                // --- Animated title ---
+                title: AnimatedSwitcher(
+                  duration: const Duration(milliseconds: 300),
+                  child: Text(
+                    isSelectionMode ? l10n.manageCategoriesSelected(selectedCount) : l10n.manageCategoriesTitle,
+                    key: ValueKey(isSelectionMode),
+                  ),
                 ),
                 actions: [
-                  if (isSelectionMode) ...[
-                    if (selectedCount > 0)
-                      IconButton(
-                        icon: Icon(
-                          AppIcons.delete,
-                          color: Theme.of(context).colorScheme.error,
-                        ),
-                        onPressed: () => _showMultiDeleteConfirmation(
-                          context,
-                          manageState.selectedCategoryIds,
-                        ),
-                      )
-                    else if (hasCategories)
-                      TextButton(
-                        onPressed: () {
-                          final allIds = categoryState.categories
-                              .map((c) => c.id!)
-                              .toList();
-                          context
-                              .read<ManageCategoriesCubit>()
-                              .selectAllCategories(allIds);
-                        },
-                        child: Text(
-                          AppLocalizations.of(
-                            context,
-                          )!.manageCategoriesSelectAll,
-                        ),
-                      ),
-                  ] else if (hasCategories) ...[
-                    TextButton(
-                      onPressed: () => context
-                          .read<ManageCategoriesCubit>()
-                          .toggleSelectionMode(),
+                  // --- Animated actions ---
+                  AnimatedSwitcher(
+                    duration: const Duration(milliseconds: 300),
+                    child: isSelectionMode
+                        ? (selectedCount > 0
+                        ? IconButton(
+                      key: const ValueKey('delete_icon'),
+                      icon: Icon(AppIcons.delete, color: Theme.of(context).colorScheme.error),
+                      onPressed: () => _showMultiDeleteConfirmation(context, manageState.selectedCategoryIds),
+                    )
+                        : TextButton(
+                      key: const ValueKey('select_all_button'),
+                      onPressed: () {
+                        if (categoryState is CategoryLoaded) {
+                          final allIds = categoryState.categories.map((c) => c.id!).toList();
+                          context.read<ManageCategoriesCubit>().selectAllCategories(allIds);
+                        }
+                      },
+                      child: Text(AppLocalizations.of(context)!.manageCategoriesSelectAll),
+                    ))
+                        : (hasCategories
+                        ? TextButton(
+                      key: const ValueKey('select_button'),
+                      onPressed: () => context.read<ManageCategoriesCubit>().toggleSelectionMode(),
                       child: Text(l10n.manageCategoriesSelect),
-                    ),
-                  ],
+                    )
+                        : const SizedBox.shrink()),
+                  ),
                 ],
               ),
               body: _buildBody(context, categoryState, manageState),
               floatingActionButton: isSelectionMode
                   ? null
                   : FloatingActionButton(
-                      onPressed: () => _showAddEditDialog(context),
-                      child: const Icon(AppIcons.add),
-                    ),
+                onPressed: () => _showAddEditDialog(context),
+                child: const Icon(AppIcons.add),
+              ).animate().scale(),
             );
           },
         );
@@ -108,11 +107,7 @@ class ManageCategoriesView extends StatelessWidget {
     );
   }
 
-  Widget _buildBody(
-    BuildContext context,
-    CategoryState categoryState,
-    ManageCategoriesState manageState,
-  ) {
+  Widget _buildBody(BuildContext context, CategoryState categoryState, ManageCategoriesState manageState) {
     final l10n = AppLocalizations.of(context)!;
     final isSelectionMode = manageState.isSelectionMode;
 
@@ -123,59 +118,76 @@ class ManageCategoriesView extends StatelessWidget {
       if (categoryState.categories.isEmpty) {
         return BuildEmptyWidget(
           title: l10n.manageCategoriesEmptyTitle,
-          subTitle: l10n.manageCategoriesEmptySubTitle,
+          subTitle: l10n.manageCategoriesEmptySubTitle
         );
       }
       return ReorderableListView.builder(
+        padding: const EdgeInsets.all(8.0),
         buildDefaultDragHandles: !isSelectionMode,
         itemCount: categoryState.categories.length,
         itemBuilder: (context, index) {
           final category = categoryState.categories[index];
           final isSelected = manageState.selectedCategoryIds.contains(
-            category.id,
-          );
-
-          return ListTile(
-            key: ValueKey(category.id),
-            leading: isSelectionMode
-                ? Checkbox(
-                    value: isSelected,
-                    onChanged: (_) => context
-                        .read<ManageCategoriesCubit>()
-                        .selectCategory(category.id!),
-                  )
-                : const Icon(AppIcons.category),
-            title: CustomText(category.name, maxLines: 2),
-            onTap: isSelectionMode
-                ? () => context.read<ManageCategoriesCubit>().selectCategory(
-                    category.id!,
-                  )
-                : null,
-            trailing: !isSelectionMode
-                ? Row(
-                    mainAxisSize: MainAxisSize.min,
+              category.id);
+          return Card(
+              key: ValueKey(category.id),
+              elevation: isSelected ? 8 : 2,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(12),
+                side: BorderSide(
+                  color: isSelected ? Theme
+                      .of(context)
+                      .colorScheme
+                      .primary : Colors.transparent,
+                  width: 1.5,
+                ),
+              ),
+              child: InkWell(
+                borderRadius: BorderRadius.circular(12),
+                onTap: () {
+                  if (isSelectionMode) {
+                    context.read<ManageCategoriesCubit>().selectCategory(
+                        category.id!);
+                  } else {
+                    _showAddEditDialog(context, category: category);
+                  }
+                },
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(
+                      horizontal: 8.0, vertical: 4.0),
+                  child: Row(
                     children: [
-                      IconButton(
-                        icon: const Icon(AppIcons.edit),
-                        onPressed: () =>
-                            _showAddEditDialog(context, category: category),
-                      ),
-                      IconButton(
-                        icon: Icon(
-                          AppIcons.delete,
-                          color: Theme.of(context).colorScheme.error,
+                      if (isSelectionMode)
+                        Checkbox(
+                          value: isSelected,
+                          onChanged: (_) =>
+                              context
+                                  .read<ManageCategoriesCubit>()
+                                  .selectCategory(category.id!),
+                        )
+                      else
+                        const Padding(
+                          padding: EdgeInsets.all(8.0),
+                          child: Icon(AppIcons.category),
                         ),
-                        onPressed: () =>
-                            _showSingleDeleteConfirmation(context, category),
-                      ),
-                      const Icon(Icons.drag_handle),
+                      const SizedBox(width: 8),
+                      Expanded(child: CustomText(category.name)),
+                      if (!isSelectionMode) ...[
+                        IconButton(
+                          icon: const Icon(AppIcons.edit),
+                          onPressed: () =>
+                              _showAddEditDialog(context, category: category),
+                        ),
+                        IconButton(
+                          icon:  Icon(AppIcons.delete,color: Theme.of(context).colorScheme.error),
+                          onPressed: () =>
+                              _showSingleDeleteConfirmation(context,category),
+                        ),
+                      ],
                     ],
-                  )
-                : null,
-            selected: isSelected,
-            selectedTileColor: Theme.of(
-              context,
-            ).colorScheme.primary.withOpacity(0.1),
+                  ),
+                ),
+              ).animate().fadeIn(delay: (50 * index).ms)
           );
         },
         onReorder: (oldIndex, newIndex) {
