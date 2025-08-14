@@ -166,9 +166,9 @@ class ManageCategoriesView extends StatelessWidget {
                                   .selectCategory(category.id!),
                         )
                       else
-                        const Padding(
+                         Padding(
                           padding: EdgeInsets.all(8.0),
-                          child: Icon(AppIcons.category),
+                          child: Icon(AppIcons.category,color: Theme.of(context).primaryColor,),
                         ),
                       const SizedBox(width: 8),
                       Expanded(child: CustomText(category.name)),
@@ -182,6 +182,10 @@ class ManageCategoriesView extends StatelessWidget {
                           icon:  Icon(AppIcons.delete,color: Theme.of(context).colorScheme.error),
                           onPressed: () =>
                               _showSingleDeleteConfirmation(context,category),
+                        ),
+                        IconButton(
+                          icon:  Icon(Icons.drag_handle),
+                          onPressed: () {}
                         ),
                       ],
                     ],
@@ -267,7 +271,7 @@ class ManageCategoriesView extends StatelessWidget {
       context: context,
       builder: (ctx) => AlertDialog(
         title: CustomText(l10n.dialogConfirmDeleteTitle),
-        content: CustomText(l10n.dialogConfirmDeleteMulti(categoryIds.length)),
+        content: CustomText(l10n.dialogConfirmDeleteMulti(categoryIds.length,),maxLines: 5,),
         actions: [
           TextButton(
             child: CustomText(l10n.dialogCancel),
@@ -305,7 +309,7 @@ class ManageCategoriesView extends StatelessWidget {
       context: context,
       builder: (ctx) => AlertDialog(
         title: CustomText(l10n.dialogConfirmDeleteTitle),
-        content: CustomText(l10n.dialogConfirmDeleteCategory),
+        content: CustomText(l10n.dialogConfirmDeleteCategory,maxLines: 5,),
         actions: [
           TextButton(
             child: CustomText(l10n.dialogCancel),

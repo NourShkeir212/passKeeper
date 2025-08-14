@@ -200,7 +200,7 @@ class SettingsView extends StatelessWidget {
                    _SettingsGroupTitle(title: l10n.manageCategoriesTitle), // New or existing group
                   ListTile(
                     title:  Text(l10n.accountFormCategoryHint),
-                    leading: const Icon(AppIcons.category),
+                    leading:  Icon(color:Theme.of(context).colorScheme.primary,AppIcons.category),
                     onTap: () {
                       Navigator.push(context, MaterialPageRoute(
                         builder: (_) => MultiBlocProvider(
@@ -232,7 +232,7 @@ class SettingsView extends StatelessWidget {
                         context.read<SettingsCubit>().toggleBiometrics(val),
                   ),
                   ListTile(
-                    leading: const Icon(AppIcons.timer),
+                    leading:  Icon(color:Theme.of(context).colorScheme.primary,AppIcons.timer),
                     title:  Text(l10n.settingsAutoLockTitle,maxLines: 3,),
                     trailing: DropdownButton<int>(
                       underline: SizedBox.shrink(),
@@ -253,7 +253,7 @@ class SettingsView extends StatelessWidget {
                   ),
                   ListTile(
                     title:  Text(l10n.settingsChangePassword),
-                    leading: const Icon(AppIcons.password),
+                    leading:  Icon(color:Theme.of(context).colorScheme.primary,AppIcons.password),
                     onTap: () {
                       Navigator.push(context, MaterialPageRoute(
                         builder: (_) => MultiBlocProvider(
@@ -273,7 +273,7 @@ class SettingsView extends StatelessWidget {
                   ListTile(
                     title:  Text(l10n.settingsImportTitle),
                     subtitle:  Text(l10n.settingsImportSubtitle),
-                    leading: const Icon(AppIcons.import),
+                    leading:  Icon(color:Theme.of(context).colorScheme.primary,AppIcons.import),
                     onTap: () async { // Make the onTap async
                       final authCubit = context.read<AuthCubit>();
                       final settingsCubit = context.read<SettingsCubit>();
@@ -308,7 +308,7 @@ class SettingsView extends StatelessWidget {
                     title:  Text(l10n.settingsExportTitle),
                     subtitle:  Text(
                         l10n.settingsExportSubtitle),
-                    leading: const Icon(AppIcons.export),
+                    leading:  Icon(color:Theme.of(context).colorScheme.primary,AppIcons.export),
                     onTap: () {
                       context.read<SettingsCubit>().exportData();
                     },
@@ -318,7 +318,7 @@ class SettingsView extends StatelessWidget {
                    _SettingsGroupTitle(title: l10n.aboutTitle),
                   ListTile(
                     title:  Text(l10n.aboutScreenTitle),
-                    leading: const Icon(AppIcons.shield), // Or Icons.info_outline
+                    leading:  Icon(color:Theme.of(context).colorScheme.primary,AppIcons.shield),
                     onTap: () {
                       Navigator.push(context, MaterialPageRoute(builder: (_) => const AboutScreen()));
                     },
@@ -402,7 +402,7 @@ class _SettingsGroupTitle extends StatelessWidget {
         title.toUpperCase(),
         style: TextStyle(
           color: Theme.of(context).colorScheme.primary,
-          fontWeight: FontWeight.bold,
+          fontWeight: FontWeight.w900,
           letterSpacing: 1.2,
         ),
       ),

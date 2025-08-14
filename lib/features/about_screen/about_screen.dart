@@ -22,7 +22,7 @@ class AboutScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title:  Text(AppLocalizations.of(context)!.aboutScreenTitle),
+        title:  Text(AppLocalizations.of(context)!.aboutTitle),
       ),
       body: SingleChildScrollView(
         padding: EdgeInsets.symmetric(
@@ -40,9 +40,21 @@ class AboutScreen extends StatelessWidget {
               ),
             ),
             const SizedBox(height: 10),
-            CustomText(
-              AppLocalizations.of(context)!.appTitle,
-              style: Theme.of(context).textTheme.headlineMedium,
+            RichText(
+              text: TextSpan(
+                // Sets the default style for all text spans below
+                style: Theme.of(context).textTheme.headlineMedium,
+                children: <TextSpan>[
+                  TextSpan(
+                    text: 'Pass',
+                    // Overrides the default style with the primary color
+                    style: TextStyle(color: Theme.of(context).colorScheme.primary),
+                  ),
+                  const TextSpan(
+                    text: 'Keeper',
+                  ),
+                ],
+              ),
             ),
             CustomText(
               AppLocalizations.of(context)!.aboutScreenVersion,
@@ -120,7 +132,7 @@ class _ContactTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ListTile(
-      leading: Icon(icon),
+      leading: Icon(icon,color: Theme.of(context).primaryColor,),
       title: CustomText(title,),
       subtitle: CustomText(subtitle, style: Theme.of(context).textTheme.bodySmall,maxLines: 2,),
       onTap: onTap,

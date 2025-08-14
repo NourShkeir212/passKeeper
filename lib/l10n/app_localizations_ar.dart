@@ -491,7 +491,7 @@ class AppLocalizationsAr extends AppLocalizations {
   String get aboutScreenTitle => 'حول تطبيق PassKeeper';
 
   @override
-  String get aboutTitle => 'حول عنا';
+  String get aboutTitle => 'حول عنا / تواصل معنا';
 
   @override
   String get aboutScreenVersion => 'الإصدار 1.0.0';

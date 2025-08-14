@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:secure_accounts/core/theme/app_colors.dart';
 
 class CustomTextField extends StatelessWidget {
   final TextEditingController controller;
@@ -26,13 +27,47 @@ class CustomTextField extends StatelessWidget {
   Widget build(BuildContext context) {
     return TextFormField(
       controller: controller,
-      style: Theme.of(context).textTheme.bodyLarge,
+      style: Theme
+          .of(context)
+          .textTheme
+          .bodyLarge,
       obscureText: isPassword,
       keyboardType: keyboardType,
       onChanged: onChanged,
       decoration: InputDecoration(
+        border: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(10),
+            borderSide: BorderSide(
+                color: Theme
+                    .of(context)
+                    .colorScheme
+                    .primary
+                    .withOpacity(0.3)
+            )
+        ),
+        disabledBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(10),
+            borderSide: BorderSide(
+                color: Theme
+                    .of(context)
+                    .colorScheme
+                    .primary
+                    .withOpacity(0.3)
+            )
+        ),
+        enabledBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(10),
+            borderSide: BorderSide(
+                color: Theme
+                    .of(context)
+                    .colorScheme
+                    .primary
+                    .withOpacity(0.3)
+            )
+        ),
+        fillColor: Theme.of(context).colorScheme.background,
         labelText: labelText,
-        prefixIcon: Icon(prefixIcon),
+        prefixIcon: Icon(prefixIcon, color: Theme.of(context).colorScheme.primary),
         suffixIcon: suffixIcon,
       ),
       validator: validator,

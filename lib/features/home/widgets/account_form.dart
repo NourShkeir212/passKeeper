@@ -235,8 +235,9 @@ class __AccountFormViewState extends State<_AccountFormView> {
                         if (categoryState is CategoryLoaded)
                           DropdownButtonFormField<int>(
                             decoration: InputDecoration(
+                                fillColor: Theme.of(context).scaffoldBackgroundColor,
                                 labelText: l10n.accountFormCategoryHint,
-                                prefixIcon: const Icon(AppIcons.category)),
+                                prefixIcon:  Icon(AppIcons.category,color: Theme.of(context).colorScheme.primary,)),
                             value: formState.selectedCategoryId,
                             items: [
                               DropdownMenuItem(
@@ -262,8 +263,10 @@ class __AccountFormViewState extends State<_AccountFormView> {
                         const SizedBox(height: 10),
                         DropdownButtonFormField<String>(
                           decoration: InputDecoration(
+                            fillColor: Theme.of(context).scaffoldBackgroundColor,
                               labelText: l10n.accountFormServiceNameHint,
-                              prefixIcon: const Icon(AppIcons.service)),
+                              prefixIcon:  Icon(AppIcons.service,color:  Theme.of(context).colorScheme.primary,),
+                          ),
                           value: formState.selectedService,
                           items: _services
                               .map((String service) =>
@@ -321,7 +324,8 @@ class __AccountFormViewState extends State<_AccountFormView> {
                               onPressed: () async {
                                 final newPassword = await showDialog<String>(
                                   context: context,
-                                  builder: (_) => const PasswordGeneratorDialog(),
+                                  builder: (
+                                      _) => const PasswordGeneratorDialog(),
                                 );
                                 if (newPassword != null &&
                                     newPassword.isNotEmpty) {
@@ -337,7 +341,9 @@ class __AccountFormViewState extends State<_AccountFormView> {
                           strengthText: _getStrengthText(context,
                               formState.passwordStrength),
                         ),
-                         SizedBox(height: _recoveryController.text=="" ? 10 : 15),
+                        SizedBox(height: _recoveryController.text == ""
+                            ? 10
+                            : 15),
                         CustomTextField(
                             controller: _recoveryController,
                             labelText: l10n.accountFormRecoveryHint,
@@ -348,10 +354,14 @@ class __AccountFormViewState extends State<_AccountFormView> {
                             labelText: l10n.accountFormPhoneHint,
                             prefixIcon: AppIcons.phone),
                         const SizedBox(height: 20),
-                        CustomElevatedButton(onPressed: () =>
-                            _onSave(formState.selectedCategoryId,
-                                formState.selectedService),
-                            text: l10n.accountFormSaveButton),
+                        CustomElevatedButton(
+                            onPressed: () =>
+                                _onSave(
+                                    formState.selectedCategoryId,
+                                    formState.selectedService
+                                ),
+                            text: l10n.accountFormSaveButton
+                        ),
                       ],
                     ),
                   ),
@@ -363,7 +373,6 @@ class __AccountFormViewState extends State<_AccountFormView> {
       },
     );
   }
-
   void _showCreateCategoryDialog() {
     final l10n = AppLocalizations.of(context)!;
     final categoryNameController = TextEditingController();

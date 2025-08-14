@@ -29,6 +29,7 @@ Future<String?> showMasterPasswordDialog(BuildContext context, {String? title, S
                     obscureText: !isPasswordVisible,
                     autofocus: true,
                     decoration: InputDecoration(
+                      fillColor: Theme.of(context).colorScheme.surface,
                       labelText: AppLocalizations.of(context)!.accountFormPasswordHint,
                       suffixIcon: IconButton(
                         icon: Icon(isPasswordVisible ? AppIcons.eyeSlash : AppIcons.eye),

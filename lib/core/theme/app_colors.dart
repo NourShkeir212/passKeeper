@@ -1,20 +1,46 @@
 import 'package:flutter/material.dart';
+
+
 class AppColors {
   AppColors._();
 
-  static const Color primaryDark = Color(0xFFA17FFF);
-  static const Color accentDark = Color(0xFFB599FF);
-  static const Color backgroundDark = Color(0xFF16161E);
-  static const Color cardDark = Color(0xFF1E1E28);
+  // --- DARK THEME --- ///
+  /// Dark background, almost black with a hint of blue
+  static const Color backgroundDark = Color(0xFF1A1A24);
+
+  /// Cards and primary surfaces
+  static const Color cardDark = Color(0xFF2D2D82);
+
+  /// Primary color for highlights, links,
+  static const Color primaryDark = Color(0xFF41CFD7);
+
+  /// Accent color for buttons and calls to action (Bright Gold)
+  static const Color accentDark = Color(0xFFFFC107);
+
+  /// Text colors for high and medium emphasis
   static const Color textDark = Colors.white;
   static const Color textDarkSecondary = Colors.white70;
 
-  static const Color primaryLight = Color(0xFF007AFF);
-  static const Color accentLight = Color(0xFF3395FF);
+
+  // --- LIGHT THEME --- ///
+  /// Standard light gray background
   static const Color backgroundLight = Color(0xFFF5F5F7);
-  static const Color textLight = Color(0xFF1D1D1F);
+
+  /// Cards and primary surfaces
   static const Color cardLight = Colors.white;
+
+  /// Primary color for branding and text
+  static const Color primaryLight = Color(0xFF2D2D82);
+
+  /// Lighter accent color for UI elements
+  static const Color accentLight = Color(0xFF41CFD7);
+
+  /// Text colors for high and medium emphasis
+  static const Color textLight = Color(0xFF1D1D1F);
   static const Color textLightSecondary = Colors.black54;
 
+
+  // --- SHARED COLORS --- ///
   static const Color white = Colors.white;
+  static const Color gold = Color(0xFFFFC107);
 }

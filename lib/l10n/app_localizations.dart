@@ -975,7 +975,7 @@ abstract class AppLocalizations {
   /// No description provided for @aboutTitle.
   ///
   /// In en, this message translates to:
-  /// **'About us'**
+  /// **'About & Contact us'**
   String get aboutTitle;
 
   /// No description provided for @aboutScreenVersion.

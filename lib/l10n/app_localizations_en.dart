@@ -492,7 +492,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get aboutScreenTitle => 'About PassKeeper';
 
   @override
-  String get aboutTitle => 'About us';
+  String get aboutTitle => 'About & Contact us';
 
   @override
   String get aboutScreenVersion => 'Version 1.0.0';

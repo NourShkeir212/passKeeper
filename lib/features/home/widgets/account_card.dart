@@ -66,7 +66,7 @@ class _AccountCardState extends State<AccountCard> {
             children: [
               Row(
                 children: [
-                  const Icon(AppIcons.service, size: 20),
+                   Icon(AppIcons.service, size: 20,color: Theme.of(context).primaryColor,),
                   const SizedBox(width: 8),
                   Expanded(
                     child: CustomText(

@@ -32,33 +32,64 @@ class HomeScreenAppBar extends StatelessWidget implements PreferredSizeWidget {
             title: TextField(
               controller: searchController,
               autofocus: true,
-              decoration:  InputDecoration(hintText: AppLocalizations.of(context)!.homeScreenSearchHint, border: InputBorder.none),
-              onChanged: (query) => context.read<AccountCubit>().searchAccounts(query),
+              decoration: InputDecoration(
+                  hintText: AppLocalizations.of(context)!.homeScreenSearchHint,
+                  border: InputBorder.none),
+              onChanged: (query) =>
+                  context.read<AccountCubit>().searchAccounts(query),
             ),
             actions: [
-              IconButton(icon: const Icon(AppIcons.close), onPressed: () => searchController.clear()),
+              IconButton(icon: const Icon(AppIcons.close),
+                  onPressed: () => searchController.clear()),
               // NEW: Settings Button
             ],
           );
         } else {
           return AppBar(
-            title:  CustomText(AppLocalizations.of(context)!.appTitle,style: TextStyle(fontWeight: FontWeight.bold),),
+            elevation: 2,
+            title: RichText(
+              text: TextSpan(
+                // Sets the default style for all text spans below
+                style: Theme
+                    .of(context)
+                    .textTheme
+                    .headlineMedium,
+                children: <TextSpan>[
+                  TextSpan(
+                    text: 'Pass',
+                    // Overrides the default style with the primary color
+                    style: TextStyle(color: Theme
+                        .of(context)
+                        .colorScheme
+                        .primary),
+                  ),
+                  const TextSpan(
+                    text: 'Keeper',
+                  ),
+                ],
+              ),
+            ),
             automaticallyImplyLeading: false,
             actions: [
-              IconButton(icon: const Icon(AppIcons.search), onPressed: () => context.read<HomeScreenCubit>().toggleSearch()),
+              IconButton(icon: const Icon(AppIcons.search),
+                  onPressed: () =>
+                      context.read<HomeScreenCubit>().toggleSearch()),
               IconButton(
                 icon: const Icon(AppIcons.settings),
                 tooltip: AppLocalizations.of(context)!.settingsAccount,
                 onPressed: () {
                   Navigator.push(context, MaterialPageRoute(
-                    builder: (_) => MultiBlocProvider(
-                      providers: [
-                        // Provide the existing cubits to the settings page
-                        BlocProvider.value(value: context.read<AccountCubit>()),
-                        BlocProvider.value(value: context.read<CategoryCubit>()),
-                      ],
-                      child: const SettingsScreen(),
-                    ),
+                    builder: (_) =>
+                        MultiBlocProvider(
+                          providers: [
+                            // Provide the existing cubits to the settings page
+                            BlocProvider.value(
+                                value: context.read<AccountCubit>()),
+                            BlocProvider.value(
+                                value: context.read<CategoryCubit>()),
+                          ],
+                          child: const SettingsScreen(),
+                        ),
                   ));
                 },
               ),

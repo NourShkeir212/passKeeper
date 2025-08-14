@@ -98,6 +98,8 @@ class AccountList extends StatelessWidget {
                 '${accounts.length}',
                 style: Theme.of(context).textTheme.bodySmall?.copyWith(
                   color: Theme.of(context).colorScheme.primary.withOpacity(0.7),
+                  fontSize: 15,
+                  fontWeight: FontWeight.bold
                 ),
               ),
             ],
@@ -289,15 +291,15 @@ class AccountList extends StatelessWidget {
       context: context,
       builder: (BuildContext ctx) {
         return AlertDialog(
-          title:  CustomText(AppLocalizations.of(context)!.dialogConfirmDeleteTitle),
-          content:  CustomText(AppLocalizations.of(context)!.dialogConfirmDeleteAccount),
+          title:  CustomText(AppLocalizations.of(context)!.dialogConfirmDeleteTitle,style:TextStyle(color: Theme.of(context).colorScheme.error),),
+          content:  CustomText(AppLocalizations.of(context)!.dialogConfirmDeleteAccount,maxLines: 5,),
           actions: <Widget>[
             TextButton(
-              child:  CustomText(AppLocalizations.of(context)!.dialogCancel),
+              child:  CustomText(AppLocalizations.of(context)!.dialogCancel,),
               onPressed: () => Navigator.of(ctx).pop(),
             ),
             TextButton(
-              child: CustomText(AppLocalizations.of(context)!.dialogConfirmDeleteTitle, style: TextStyle(color: Theme.of(context).colorScheme.error)),
+              child: CustomText(AppLocalizations.of(context)!.dialogDelete, style: TextStyle(color: Theme.of(context).colorScheme.error),),
               onPressed: () {
                 context.read<AccountCubit>().deleteAccount(accountId);
                 context.read<CategoryCubit>().loadCategories();
