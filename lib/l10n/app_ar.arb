@@ -99,12 +99,13 @@
         }
     },
     "settingsAutoLockGroupTitle": "القفل التلقائي",
-    "changePasswordTitle": "تغيير كلمة المرور",
+    "changePasswordTitle": "تحديث كلمة المرور",
+    "changePasswordSubHeader": "كلمة السر الجديدة يجب أن تكون اقوى من القديمة",
     "changePasswordCurrent": "كلمة المرور الحالية",
+    "errorChangePasswordCurrent": "كلمة المرور الحالية غير صحيحة",
     "changePasswordNew": "كلمة المرور الجديدة",
     "changePasswordConfirm": "تأكيد كلمة المرور الجديدة",
     "changePasswordSaveButton": "حفظ التغييرات",
-
     "manageCategoriesTitle": "إدارة الفئات",
     "manageCategoriesEmptyTitle": "لم يتم إنشاء فئات بعد.",
     "manageCategoriesEmptySubTitle": "اضغط على زر '+' لإضافة أول فئة لك.",

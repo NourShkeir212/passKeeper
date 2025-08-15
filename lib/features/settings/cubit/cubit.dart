@@ -40,6 +40,7 @@ class SettingsCubit extends Cubit<SettingsState> {
 
   Future<void> changeMasterPassword({
     required String oldPassword,
+    required BuildContext context,
     required String newPassword,
   }) async {
     // Keep the last known value of settings to restore it later
@@ -56,7 +57,7 @@ class SettingsCubit extends Cubit<SettingsState> {
           userId, hashedOldPassword);
 
       if (!isVerified) {
-        throw Exception("Incorrect current password.");
+        throw Exception(AppLocalizations.of(context)!.errorChangePasswordCurrent);
       }
 
       // 2. Fetch ALL accounts.

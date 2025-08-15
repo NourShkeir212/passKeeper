@@ -51,6 +51,7 @@ class ChangePasswordView extends StatelessWidget {
     void submitChange() {
       if (formKey.currentState!.validate()) {
         context.read<SettingsCubit>().changeMasterPassword(
+          context: context,
           oldPassword: oldPasswordController.text,
           newPassword: newPasswordController.text,
         );
@@ -58,7 +59,7 @@ class ChangePasswordView extends StatelessWidget {
     }
 
     return Scaffold(
-      appBar: AppBar(title:  Text(AppLocalizations.of(context)!.changePasswordTitle)),
+      appBar: AppBar(),
       body: BlocListener<SettingsCubit, SettingsState>(
         listener: (context, state) {
           if (state is ChangePasswordSuccess) {
@@ -83,6 +84,17 @@ class ChangePasswordView extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
+                Text(
+                  AppLocalizations.of(context)!.changePasswordTitle, // e.g., "Update your password"
+                  style: Theme.of(context).textTheme.headlineMedium?.copyWith(fontWeight: FontWeight.bold),
+                ),
+                const SizedBox(height: 8),
+                Text(
+                  AppLocalizations.of(context)!.changePasswordSubHeader, // e.g., "Your new password must be secure and different from the old one."
+                  style: Theme.of(context).textTheme.bodyMedium?.copyWith(color: Colors.grey.shade600),
+                ),
+                const SizedBox(height: 32),
+
                 BlocBuilder<ChangePasswordCubit, ChangePasswordState>(
                   builder: (context, state) {
                     return CustomTextField(
@@ -117,14 +129,9 @@ class ChangePasswordView extends StatelessWidget {
                 ),
                 const SizedBox(height: 12),
                 BlocBuilder<ChangePasswordCubit, ChangePasswordState>(
-                  // We only rebuild when the validation rules change
-                  buildWhen: (p, c) =>
-                  p.hasMinLength != c.hasMinLength ||
-                      p.hasLetter != c.hasLetter ||
-                      p.hasDigit != c.hasDigit ||
-                      p.hasSpecialChar != c.hasSpecialChar,
                   builder: (context, state) {
                     return PasswordValidationRules(
+                      isChange: true,
                       hasMinLength: state.hasMinLength,
                       hasLetter: state.hasLetter,
                       hasDigit: state.hasDigit,

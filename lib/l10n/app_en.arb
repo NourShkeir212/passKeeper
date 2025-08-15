@@ -89,8 +89,10 @@
         }
     },
     "settingsAutoLockGroupTitle": "Auto-Lock",
-    "changePasswordTitle": "Change Password",
+    "changePasswordTitle": "Update your password",
+    "changePasswordSubHeader" : "Your new password must be secure and different from the old one.",
     "changePasswordCurrent": "Current Password",
+    "errorChangePasswordCurrent" :"Incorrect Current Password",
     "changePasswordNew": "New Password",
     "changePasswordConfirm": "Confirm New Password",
     "changePasswordSaveButton": "Save Changes",

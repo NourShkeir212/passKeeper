@@ -9,19 +9,21 @@ class PasswordValidationRules extends StatelessWidget {
   final bool hasLetter;
   final bool hasDigit;
   final bool hasSpecialChar;
+  final bool isChange;
 
   const PasswordValidationRules({
     super.key,
     required this.hasMinLength,
     required this.hasLetter,
     required this.hasDigit,
+    this.isChange =false,
     required this.hasSpecialChar,
   });
 
   @override
   Widget build(BuildContext context) {
     // Show the rules only if the user has started typing
-    if (hasMinLength || hasLetter || hasDigit || hasSpecialChar) {
+    if (isChange || hasMinLength || hasLetter || hasDigit || hasSpecialChar) {
       return Column(
         children: [
           _ValidationRuleItem(

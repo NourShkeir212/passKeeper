@@ -509,14 +509,26 @@ abstract class AppLocalizations {
   /// No description provided for @changePasswordTitle.
   ///
   /// In en, this message translates to:
-  /// **'Change Password'**
+  /// **'Update your password'**
   String get changePasswordTitle;
+
+  /// No description provided for @changePasswordSubHeader.
+  ///
+  /// In en, this message translates to:
+  /// **'Your new password must be secure and different from the old one.'**
+  String get changePasswordSubHeader;
 
   /// No description provided for @changePasswordCurrent.
   ///
   /// In en, this message translates to:
   /// **'Current Password'**
   String get changePasswordCurrent;
+
+  /// No description provided for @errorChangePasswordCurrent.
+  ///
+  /// In en, this message translates to:
+  /// **'Incorrect Current Password'**
+  String get errorChangePasswordCurrent;
 
   /// No description provided for @changePasswordNew.
   ///

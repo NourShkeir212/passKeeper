@@ -253,7 +253,7 @@ class SettingsView extends StatelessWidget {
                     ),
                   ),
                   ListTile(
-                    title:  Text(l10n.settingsChangePassword),
+                    title:  Text(l10n.changePasswordTitle),
                     leading:  Icon(color:Theme.of(context).colorScheme.primary,AppIcons.password),
                     onTap: () {
                       Navigator.push(context, MaterialPageRoute(
