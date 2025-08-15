@@ -21,6 +21,7 @@ class AuthLinkText extends StatelessWidget {
       children: [
         CustomText(leadingText),
         CustomTextButton(
+
           onPressed: onPressed,
           text: linkText,
         ),

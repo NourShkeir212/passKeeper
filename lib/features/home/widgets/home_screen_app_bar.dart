@@ -33,6 +33,7 @@ class HomeScreenAppBar extends StatelessWidget implements PreferredSizeWidget {
               controller: searchController,
               autofocus: true,
               decoration: InputDecoration(
+                fillColor: Theme.of(context).colorScheme.background,
                   hintText: AppLocalizations.of(context)!.homeScreenSearchHint,
                   border: InputBorder.none),
               onChanged: (query) =>

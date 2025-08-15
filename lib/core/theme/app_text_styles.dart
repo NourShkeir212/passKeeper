@@ -8,14 +8,11 @@ class AppTextStyles {
 
 
   static TextTheme getCustomTextTheme(Brightness brightness) {
-    final Color textColor =
-    brightness == Brightness.dark ? AppColors.textDark : AppColors.textLight;
+    final Color textColor = brightness == Brightness.dark ? AppColors.textDark : AppColors.textLight;
     final Color labelColor = brightness == Brightness.dark
         ? AppColors.textDarkSecondary
         : AppColors.textLightSecondary;
-
     final TextTheme baseTextTheme = GoogleFonts.poppinsTextTheme();
-
     return baseTextTheme.copyWith(
       headlineLarge: baseTextTheme.headlineLarge!.copyWith(fontSize: 32.0, fontWeight: FontWeight.bold, color: textColor),
       headlineMedium: baseTextTheme.headlineMedium!.copyWith(fontSize: 28.0, fontWeight: FontWeight.bold, color: textColor),

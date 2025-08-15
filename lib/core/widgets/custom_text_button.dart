@@ -14,7 +14,7 @@ class CustomTextButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return TextButton(
       onPressed: onPressed,
-      child: Text(text),
+      child: Text(text,style: TextStyle(fontWeight: FontWeight.bold),),
     );
   }
 }

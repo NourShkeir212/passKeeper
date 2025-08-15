@@ -34,7 +34,6 @@ class PassKeeperApp extends StatelessWidget {
           builder: (context, themeState) {
             return BlocBuilder<LocaleCubit, LocaleState>(
               builder: (context, localeState) {
-
                 return MaterialApp(
                   navigatorKey: NavigationService.navigatorKey,
                   debugShowCheckedModeBanner: false,

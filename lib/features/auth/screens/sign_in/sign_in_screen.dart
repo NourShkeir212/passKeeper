@@ -59,6 +59,7 @@ class _LoginViewState extends State<LoginView> {
 
   @override
   Widget build(BuildContext context) {
+    Color color = Brightness == Brightness.dark ?Colors.white :Colors.white;
     return BlocListener<AuthCubit, AuthState>(
       listener: (context, state) {
         if (state is AuthSuccess) {
@@ -88,22 +89,33 @@ class _LoginViewState extends State<LoginView> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
-                    // --- UI remains the same here ---
-                    Text(
-                      AppLocalizations.of(context)!.appTitle,
-                      textAlign: TextAlign.center,
-                      style: Theme.of(context).textTheme.headlineSmall?.copyWith(
-                        color: Theme.of(context).colorScheme.primary,
-                        fontWeight: FontWeight.w600,
-                      ),
-                    ).animate().fadeIn(duration: 400.ms),
+                    Center(
+                      child: RichText(
+                        text: TextSpan(
+                          // Sets the default style for all text spans below
+                          style: Theme.of(context).textTheme.headlineMedium,
+                          children: <TextSpan>[
+                            TextSpan(
+                              text: 'Pass',
+                              style: TextStyle(color: Theme.of(context).colorScheme.primary),
+                            ),
+                            const TextSpan(
+                              text: 'Keeper',
+                            ),
+                          ],
+                        ),
+                      ).animate().fadeIn(duration: 400.ms),
+                    ),
                     const SizedBox(height: 8.0),
                     AnimatedTextKit(
                       totalRepeatCount: 1,
                       animatedTexts: [
                         TypewriterAnimatedText(
                           AppLocalizations.of(context)!.loginScreenWelcome,
-                          textStyle: Theme.of(context).textTheme.headlineLarge,
+                          textStyle: TextStyle(
+                            fontSize: 32,
+                            fontWeight: FontWeight.bold
+                          ),
                           speed: const Duration(milliseconds: 100),
                         ),
                       ],
