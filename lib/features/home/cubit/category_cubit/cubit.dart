@@ -1,4 +1,3 @@
-import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../../core/services/database_services.dart';
 import '../../../../core/services/session_manager.dart';

@@ -2,7 +2,7 @@
     "@@locale": "en",
     "appTitle": "PassKeeper",
     "initialScreenLoading": "Loading...",
-    "lockScreenTitle": "PassKeeper is Locked",
+    "lockScreenTitle": "is Locked",
     "lockScreenSubtitle": "Authenticate to unlock your vault",
     "unlockButton": "Unlock with Fingerprint",
     "loginScreenWelcome": "Welcome Back",

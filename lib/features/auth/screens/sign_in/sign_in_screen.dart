@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:animated_text_kit/animated_text_kit.dart';
+import 'package:secure_accounts/core/widgets/app_title_name.dart';
 import 'package:secure_accounts/l10n/app_localizations.dart';
 import '../../../../core/services/navigation_service.dart';
 import '../../../../core/theme/app_icons.dart';
@@ -90,21 +91,7 @@ class _LoginViewState extends State<LoginView> {
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
                     Center(
-                      child: RichText(
-                        text: TextSpan(
-                          // Sets the default style for all text spans below
-                          style: Theme.of(context).textTheme.headlineMedium,
-                          children: <TextSpan>[
-                            TextSpan(
-                              text: 'Pass',
-                              style: TextStyle(color: Theme.of(context).colorScheme.primary),
-                            ),
-                            const TextSpan(
-                              text: 'Keeper',
-                            ),
-                          ],
-                        ),
-                      ).animate().fadeIn(duration: 400.ms),
+                      child: AppTitleNameWidget().animate().fadeIn(duration: 400.ms),
                     ),
                     const SizedBox(height: 8.0),
                     AnimatedTextKit(

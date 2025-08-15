@@ -109,6 +109,7 @@ class SettingsView extends StatelessWidget {
                     child: BlocBuilder<ThemeCubit, ThemeState>(
                       builder: (context, themeState) {
                         return SegmentedButton<ThemeMode>(
+
                           segments:  <ButtonSegment<ThemeMode>>[
                             ButtonSegment<ThemeMode>(
                               value: ThemeMode.light,

@@ -5,6 +5,7 @@ import 'package:secure_accounts/l10n/app_localizations.dart';
 
 import '../../../../core/services/biometric_service.dart';
 import '../../../../core/services/navigation_service.dart';
+import '../../../../core/widgets/app_title_name.dart';
 import '../../../../core/widgets/custom_text.dart';
 import '../../../home/home_screen.dart';
 
@@ -47,9 +48,29 @@ class _LockScreenState extends State<LockScreen> {
               ),
             ),
             const SizedBox(height: 24),
-            CustomText(
-              AppLocalizations.of(context)!.lockScreenTitle,
-              style: Theme.of(context).textTheme.headlineMedium,
+            Flexible(
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Visibility(
+                    visible: AppLocalizations.of(context)!.localeName=="en",
+                    child: AppTitleNameWidget()
+                  ),
+                  if(AppLocalizations.of(context)!.localeName=="en")
+                  SizedBox(width: 10,),
+                  CustomText(
+                    maxLines: 2,
+                    AppLocalizations.of(context)!.lockScreenTitle,
+                    style: Theme.of(context).textTheme.headlineMedium,
+                  ),
+                  if(AppLocalizations.of(context)!.localeName=="ar")
+                    SizedBox(width: 10,),
+                  Visibility(
+                    visible: AppLocalizations.of(context)!.localeName=="ar",
+                    child: AppTitleNameWidget()
+                  ),
+                ],
+              )
             ),
             const SizedBox(height: 8),
              CustomText(AppLocalizations.of(context)!.lockScreenSubtitle,),

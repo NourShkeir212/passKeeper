@@ -113,7 +113,7 @@ abstract class AppLocalizations {
   /// No description provided for @lockScreenTitle.
   ///
   /// In en, this message translates to:
-  /// **'PassKeeper is Locked'**
+  /// **'is Locked'**
   String get lockScreenTitle;
 
   /// No description provided for @lockScreenSubtitle.

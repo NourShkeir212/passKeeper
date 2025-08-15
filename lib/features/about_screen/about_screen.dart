@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:iconsax_flutter/iconsax_flutter.dart';
+import 'package:secure_accounts/core/widgets/app_title_name.dart';
 import 'package:secure_accounts/l10n/app_localizations.dart';
 import 'package:url_launcher/url_launcher.dart';
 import '../../core/theme/app_icons.dart';
@@ -40,22 +41,7 @@ class AboutScreen extends StatelessWidget {
               ),
             ),
             const SizedBox(height: 10),
-            RichText(
-              text: TextSpan(
-                // Sets the default style for all text spans below
-                style: Theme.of(context).textTheme.headlineMedium,
-                children: <TextSpan>[
-                  TextSpan(
-                    text: 'Pass',
-                    // Overrides the default style with the primary color
-                    style: TextStyle(color: Theme.of(context).colorScheme.primary),
-                  ),
-                  const TextSpan(
-                    text: 'Keeper',
-                  ),
-                ],
-              ),
-            ),
+            AppTitleNameWidget(),
             CustomText(
               AppLocalizations.of(context)!.aboutScreenVersion,
               style: Theme.of(context).textTheme.bodySmall,

@@ -15,7 +15,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get initialScreenLoading => 'Loading...';
 
   @override
-  String get lockScreenTitle => 'PassKeeper is Locked';
+  String get lockScreenTitle => 'is Locked';
 
   @override
   String get lockScreenSubtitle => 'Authenticate to unlock your vault';

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:secure_accounts/core/widgets/app_title_name.dart';
 import '../../../core/theme/app_icons.dart';
 import '../../../core/widgets/custom_text.dart';
 import '../../../l10n/app_localizations.dart';
@@ -48,28 +49,7 @@ class HomeScreenAppBar extends StatelessWidget implements PreferredSizeWidget {
         } else {
           return AppBar(
             elevation: 2,
-            title: RichText(
-              text: TextSpan(
-                // Sets the default style for all text spans below
-                style: Theme
-                    .of(context)
-                    .textTheme
-                    .headlineMedium,
-                children: <TextSpan>[
-                  TextSpan(
-                    text: 'Pass',
-                    // Overrides the default style with the primary color
-                    style: TextStyle(color: Theme
-                        .of(context)
-                        .colorScheme
-                        .primary),
-                  ),
-                  const TextSpan(
-                    text: 'Keeper',
-                  ),
-                ],
-              ),
-            ),
+            title: AppTitleNameWidget(),
             automaticallyImplyLeading: false,
             actions: [
               IconButton(icon: const Icon(AppIcons.search),

@@ -15,7 +15,7 @@ class AppLocalizationsAr extends AppLocalizations {
   String get initialScreenLoading => 'جار التحميل...';
 
   @override
-  String get lockScreenTitle => 'PassKeeper مغلق';
+  String get lockScreenTitle => 'مغلق';
 
   @override
   String get lockScreenSubtitle => 'استخدم بصمتك لفتح خزنتك';

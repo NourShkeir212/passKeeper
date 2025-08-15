@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:animated_text_kit/animated_text_kit.dart';
+import 'package:secure_accounts/core/widgets/app_title_name.dart';
 import '../../../../core/services/navigation_service.dart';
 import '../../../../core/theme/app_icons.dart';
 import '../../../../core/widgets/custom_elevated_button.dart';
@@ -98,14 +99,7 @@ class SignUpView extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.center,
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
-                    Text(
-                      AppLocalizations.of(context)!.appTitle,
-                      textAlign: TextAlign.center,
-                      style: Theme.of(context).textTheme.headlineSmall?.copyWith(
-                        color: Theme.of(context).colorScheme.primary,
-                        fontWeight: FontWeight.w600,
-                      ),
-                    ).animate().fadeIn(duration: 400.ms).slideY(begin: -0.5),
+                      Center(child: AppTitleNameWidget().animate().fadeIn(duration: 400.ms).slideY(begin: -0.5)),
                     const SizedBox(height: 8.0),
                     AnimatedTextKit(
                       totalRepeatCount: 1,
