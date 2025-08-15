@@ -100,7 +100,7 @@
     },
     "settingsAutoLockGroupTitle": "القفل التلقائي",
     "changePasswordTitle": "تحديث كلمة المرور",
-    "changePasswordSubHeader": "كلمة السر الجديدة يجب أن تكون اقوى من القديمة",
+    "changePasswordSubHeader": "كلمة السر الجديدة يجب أن تكون مختلفة و أقوى من القديمة",
     "changePasswordCurrent": "كلمة المرور الحالية",
     "errorChangePasswordCurrent": "كلمة المرور الحالية غير صحيحة",
     "changePasswordNew": "كلمة المرور الجديدة",
