@@ -233,7 +233,7 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get changePasswordSubHeader =>
-      'كلمة السر الجديدة يجب أن تكون اقوى من القديمة';
+      'كلمة السر الجديدة يجب أن تكون مختلفة و أقوى من القديمة';
 
   @override
   String get changePasswordCurrent => 'كلمة المرور الحالية';

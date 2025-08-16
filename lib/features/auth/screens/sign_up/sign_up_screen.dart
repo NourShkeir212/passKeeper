@@ -27,50 +27,67 @@ class SignUpScreen extends StatelessWidget {
   }
 }
 
-class SignUpView extends StatelessWidget {
+// CHANGED: Converted to StatefulWidget
+class SignUpView extends StatefulWidget {
   const SignUpView({super.key});
 
   @override
+  State<SignUpView> createState() => _SignUpViewState();
+}
+
+class _SignUpViewState extends State<SignUpView> {
+  // --- THE FIX ---
+  // Controllers and the key are now instance variables of the State class.
+  // This means they will NOT be recreated on every build.
+  final _formKey = GlobalKey<FormState>();
+  final _usernameController = TextEditingController();
+  final _passwordController = TextEditingController();
+
+  @override
+  void dispose() {
+    // It's crucial to dispose of controllers to prevent memory leaks.
+    _usernameController.dispose();
+    _passwordController.dispose();
+    super.dispose();
+  }
+
+  // Helper methods are now part of the State class
+  String? validatePassword(String? value) {
+    if (value == null || value.isEmpty) {
+      return AppLocalizations.of(context)!.validationEnterPassword;
+    }
+    if (value.length < 8) {
+      return AppLocalizations.of(context)!.signUpScreenPasswordRuleLength;
+    }
+    final hasLetter = RegExp(r'[a-zA-Z]').hasMatch(value);
+    final hasDigit = RegExp(r'[0-9]').hasMatch(value);
+    final hasSpecialChar = RegExp(r'[^a-zA-Z0-9]').hasMatch(value);
+    if (!hasLetter || !hasDigit || !hasSpecialChar) {
+      return AppLocalizations.of(context)!.validationPasswordRules;
+    }
+    return null;
+  }
+
+  void createAccount() {
+    FocusScope.of(context).unfocus();
+    if (_formKey.currentState!.validate()) {
+      context.read<AuthCubit>().signUp(
+        context: context,
+        username: _usernameController.text.trim(),
+        password: _passwordController.text,
+      );
+    }
+  }
+
+  @override
   Widget build(BuildContext context) {
-    final formKey = GlobalKey<FormState>();
-    final usernameController = TextEditingController();
-    final passwordController = TextEditingController();
-
-    // Helper functions can be defined locally.
-    String? validatePassword(String? value) {
-      if (value == null || value.isEmpty) {
-        return AppLocalizations.of(context)!.validationEnterPassword;
-      }
-      if (value.length < 8) {
-        return AppLocalizations.of(context)!.signUpScreenPasswordRuleLength;
-      }
-      final hasLetter = RegExp(r'[a-zA-Z]').hasMatch(value);
-      final hasDigit = RegExp(r'[0-9]').hasMatch(value);
-      final hasSpecialChar = RegExp(r'[^a-zA-Z0-9]').hasMatch(value);
-      if (!hasLetter || !hasDigit || !hasSpecialChar) {
-        return AppLocalizations.of(context)!.validationPasswordRules;
-      }
-      return null;
-    }
-
-    void createAccount() {
-      FocusScope.of(context).unfocus();
-      if (formKey.currentState!.validate()) {
-        context.read<AuthCubit>().signUp(
-          context: context,
-          username: usernameController.text.trim(),
-          password: passwordController.text,
-        );
-      }
-    }
-
     return BlocListener<AuthCubit, AuthState>(
       listener: (context, state) {
         if (state is AuthSuccessSignUp) {
           ScaffoldMessenger.of(context)
             ..hideCurrentSnackBar()
             ..showSnackBar(
-               SnackBar(
+              SnackBar(
                 content: Text(AppLocalizations.of(context)!.feedbackAccountCreated),
                 backgroundColor: Colors.green,
               ),
@@ -94,12 +111,12 @@ class SignUpView extends StatelessWidget {
             child: SingleChildScrollView(
               padding: const EdgeInsets.symmetric(horizontal: 24.0),
               child: Form(
-                key: formKey,
+                key: _formKey, // Use the state's form key
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
-                      Center(child: AppTitleNameWidget().animate().fadeIn(duration: 400.ms).slideY(begin: -0.5)),
+                    Center(child: AppTitleNameWidget().animate().fadeIn(duration: 400.ms).slideY(begin: -0.5)),
                     const SizedBox(height: 8.0),
                     AnimatedTextKit(
                       totalRepeatCount: 1,
@@ -111,7 +128,7 @@ class SignUpView extends StatelessWidget {
                     ),
                     const SizedBox(height: 48.0),
                     CustomTextField(
-                      controller: usernameController,
+                      controller: _usernameController, // Use the state's controller
                       labelText: AppLocalizations.of(context)!.signUpScreenUsernameHint,
                       prefixIcon: AppIcons.user,
                       validator: (value) =>
@@ -121,7 +138,7 @@ class SignUpView extends StatelessWidget {
                     BlocBuilder<SignUpCubit, SignUpState>(
                       builder: (context, state) {
                         return CustomTextField(
-                          controller: passwordController,
+                          controller: _passwordController, // Use the state's controller
                           labelText: AppLocalizations.of(context)!.signUpScreenPasswordHint,
                           prefixIcon: AppIcons.lock,
                           isPassword: !state.isPasswordVisible,
@@ -140,14 +157,12 @@ class SignUpView extends StatelessWidget {
                     ),
                     const SizedBox(height: 12.0),
                     BlocBuilder<SignUpCubit, SignUpState>(
-                      // We only rebuild when the validation rules change
                       buildWhen: (p, c) =>
                       p.hasMinLength != c.hasMinLength ||
                           p.hasLetter != c.hasLetter ||
                           p.hasDigit != c.hasDigit ||
                           p.hasSpecialChar != c.hasSpecialChar,
                       builder: (context, state) {
-                        // Pass the state down to the reusable widget
                         return PasswordValidationRules(
                           hasMinLength: state.hasMinLength,
                           hasLetter: state.hasLetter,
@@ -163,15 +178,15 @@ class SignUpView extends StatelessWidget {
                           onPressed: createAccount,
                           text: AppLocalizations.of(context)!.signUpScreenCreateButton,
                           isLoading: state is AuthLoading,
-                        ).animate().fadeIn(delay: 900.ms).shake(hz: 4, );
+                        ).animate().fadeIn(delay: 900.ms).shake(hz: 4,);
                       },
                     ),
                     const SizedBox(height: 16.0),
                     AuthLinkText(
-                      leadingText:  AppLocalizations.of(context)!.signUpScreenHaveAccount,
-                      linkText:  AppLocalizations.of(context)!.signUpScreenLoginLink,
+                      leadingText: AppLocalizations.of(context)!.signUpScreenHaveAccount,
+                      linkText: AppLocalizations.of(context)!.signUpScreenLoginLink,
                       onPressed: () {
-                        NavigationService.push(SignInScreen());
+                        NavigationService.push(const SignInScreen());
                       },
                     )
                   ],

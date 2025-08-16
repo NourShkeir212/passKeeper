@@ -85,24 +85,28 @@ class AccountList extends StatelessWidget {
         // THE CATEGORY HEADER
         Padding(
           padding: const EdgeInsets.fromLTRB(20, 20, 20, 8),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              CustomText(
-                category.name,
-                style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                  color: Theme.of(context).colorScheme.primary,
-                ),
-              ),
-              CustomText(
-                '${accounts.length}',
-                style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                  color: Theme.of(context).colorScheme.primary.withOpacity(0.7),
-                  fontSize: 15,
-                  fontWeight: FontWeight.bold
-                ),
-              ),
-            ],
+          child: Builder(
+            builder: (innerContext) {
+              return Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  CustomText(
+                    category.name,
+                    style: Theme.of(innerContext).textTheme.titleMedium?.copyWith(
+                      color: Theme.of(innerContext).colorScheme.primary,
+                    ),
+                  ),
+                  CustomText(
+                    '${accounts.length}',
+                    style: Theme.of(innerContext).textTheme.bodySmall?.copyWith(
+                      color: Theme.of(innerContext).colorScheme.primary.withOpacity(0.7),
+                      fontSize: 15,
+                      fontWeight: FontWeight.bold
+                    ),
+                  ),
+                ],
+              );
+            }
           ),
         ),
         // This is the reorderable list for accounts WITHIN this category.
