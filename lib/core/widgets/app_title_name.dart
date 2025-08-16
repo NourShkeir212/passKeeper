@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 
 class AppTitleNameWidget extends StatelessWidget {
-  const AppTitleNameWidget({super.key});
+  final double? fontSize;
+
+  const AppTitleNameWidget({super.key, this.fontSize});
 
   @override
   Widget build(BuildContext context) {
@@ -23,13 +25,13 @@ class AppTitleNameWidget extends StatelessWidget {
                     .of(context)
                     .colorScheme
                     .primary,
-                fontSize: 28.0
+                fontSize: fontSize ?? 28.0
             ),
           ),
-          const TextSpan(
+          TextSpan(
               text: 'Keeper',
               style: TextStyle(
-                  fontSize: 28.0
+                  fontSize: fontSize ?? 28.0
               )
           ),
         ],

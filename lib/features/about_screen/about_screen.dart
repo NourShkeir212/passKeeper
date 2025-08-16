@@ -41,7 +41,7 @@ class AboutScreen extends StatelessWidget {
               ),
             ),
             const SizedBox(height: 10),
-            AppTitleNameWidget(),
+            AppTitleNameWidget(fontSize: 30.0,),
             CustomText(
               AppLocalizations.of(context)!.aboutScreenVersion,
               style: Theme.of(context).textTheme.bodySmall,

@@ -91,9 +91,9 @@ class _LoginViewState extends State<LoginView> {
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
                     Center(
-                      child: AppTitleNameWidget().animate().fadeIn(duration: 400.ms),
+                      child: AppTitleNameWidget(fontSize: 38.0,).animate().fadeIn(duration: 400.ms),
                     ),
-                    const SizedBox(height: 8.0),
+                    const SizedBox(height: 30.0),
                     AnimatedTextKit(
                       totalRepeatCount: 1,
                       animatedTexts: [
