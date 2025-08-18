@@ -247,7 +247,7 @@ class AppLocalizationsAr extends AppLocalizations {
   String get settingsAutoLockGroupTitle => 'القفل التلقائي';
 
   @override
-  String get changePasswordTitle => 'تحديث كلمة المرور';
+  String get changePasswordTitle => 'تحديث كلمة المرور التطبيق';
 
   @override
   String get changePasswordSubHeader =>

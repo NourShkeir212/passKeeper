@@ -521,7 +521,7 @@ abstract class AppLocalizations {
   /// No description provided for @changePasswordTitle.
   ///
   /// In en, this message translates to:
-  /// **'Update your password'**
+  /// **'Update your App password'**
   String get changePasswordTitle;
 
   /// No description provided for @changePasswordSubHeader.

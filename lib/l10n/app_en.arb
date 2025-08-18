@@ -98,7 +98,7 @@
         }
     },
     "settingsAutoLockGroupTitle": "Auto-Lock",
-    "changePasswordTitle": "Update your password",
+    "changePasswordTitle": "Update your App password",
     "changePasswordSubHeader" : "Your new password must be secure and different from the old one.",
     "changePasswordCurrent": "Current Password",
     "errorChangePasswordCurrent" :"Incorrect Current Password",

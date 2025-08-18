@@ -244,7 +244,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get settingsAutoLockGroupTitle => 'Auto-Lock';
 
   @override
-  String get changePasswordTitle => 'Update your password';
+  String get changePasswordTitle => 'Update your App password';
 
   @override
   String get changePasswordSubHeader =>
