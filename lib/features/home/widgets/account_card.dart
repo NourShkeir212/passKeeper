@@ -117,9 +117,12 @@ class _AccountCardState extends State<AccountCard> {
         final password = await showMasterPasswordDialog(context);
         if (password == null || password.isEmpty) return; // User cancelled
 
-        final success = await context.read<AuthCubit>().verifyMasterPassword(password);
+        final success = await context.read<AuthCubit>().verifyMasterPassword(
+            password);
         if (!success && context.mounted) {
-          ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text("Incorrect password"), backgroundColor: Colors.red));
+          ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+              content: Text("Incorrect password"),
+              backgroundColor: Colors.red));
           return; // Stop on failure
         }
       }
@@ -135,27 +138,35 @@ class _AccountCardState extends State<AccountCard> {
     return Row(
       children: [
         Icon(AppIcons.lock,
-            size: 20, color: Theme.of(context).textTheme.bodySmall?.color),
+            size: 20, color: Theme
+                .of(context)
+                .textTheme
+                .bodySmall
+                ?.color),
         const SizedBox(width: 12),
         Expanded(
           child: CustomText(
             maxLines: 2,
-          _isPasswordVisible && encryptionService.isInitialized ? encryptionService.decryptText(widget.account.password) : '••••••••••',
+            _isPasswordVisible && encryptionService.isInitialized
+                ? encryptionService.decryptText(widget.account.password)
+                : '••••••••••',
             style: const TextStyle(
                 fontFamily: 'monospace', letterSpacing: 1.5, fontSize: 16),
           ),
         ),
-           IconButton(
-            icon: const Icon(AppIcons.copy, size: 20),
-            onPressed:()=>handleCopyAction("Password", widget.account.password),
-          ),
         IconButton(
           icon: Icon(
-            _isPasswordVisible ? AppIcons.eyeSlash : AppIcons.eye
+              _isPasswordVisible ? AppIcons.eyeSlash : AppIcons.eye
           ),
           onPressed: _handlePasswordVisibility,
           splashRadius: 20,
         ),
+        IconButton(
+          icon: const Icon(AppIcons.copy, size: 20),
+          onPressed: () =>
+              handleCopyAction("Password", widget.account.password),
+        ),
+
       ],
     );
   }
