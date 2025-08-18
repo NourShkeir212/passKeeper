@@ -78,6 +78,9 @@ class AppLocalizationsAr extends AppLocalizations {
   String get homeScreenSearchHint => 'بحث...';
 
   @override
+  String get homeScreenAllChipTitle => 'الكل';
+
+  @override
   String get homeScreenEmptyTitle => 'خزنتك فارغة';
 
   @override

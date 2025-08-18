@@ -25,9 +25,9 @@
     "signUpScreenPasswordRuleLetters": "تحتوي على أحرف (a-z, A-Z)",
     "signUpScreenPasswordRuleNumbers": "تحتوي على أرقام (0-9)",
     "signUpScreenPasswordRuleSpecial": "تحتوي على رمز خاص (مثل !@#$)",
-
     "homeScreenTitle": "حساباتي",
     "homeScreenSearchHint": "بحث...",
+    "homeScreenAllChipTitle" : "الكل",
     "homeScreenEmptyTitle": "خزنتك فارغة",
     "homeScreenEmptySubtitle": "اضغط على زر '+' لإضافة أول حساب آمن لك.",
     "homeScreenFavoritesCategory": "المفضلة",

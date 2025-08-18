@@ -79,6 +79,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get homeScreenSearchHint => 'Search...';
 
   @override
+  String get homeScreenAllChipTitle => 'All';
+
+  @override
   String get homeScreenEmptyTitle => 'Your Vault is Empty';
 
   @override

@@ -121,4 +121,19 @@ class AccountCubit extends Cubit<AccountState> {
       await _databaseService.updateAccountOrder(accountsInCat);
     }
   }
+
+  void filterByCategory(int? categoryId) {
+    final currentState = state;
+    if (currentState is AccountLoaded) {
+      if (categoryId == null) {
+        // If null, clear the filter
+        emit(AccountLoaded(currentState.accounts, filteredAccounts: null));
+      } else {
+        final filteredList = currentState.accounts
+            .where((account) => account.categoryId == categoryId)
+            .toList();
+        emit(AccountLoaded(currentState.accounts, filteredAccounts: filteredList));
+      }
+    }
+  }
 }

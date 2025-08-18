@@ -236,6 +236,12 @@ abstract class AppLocalizations {
   /// **'Search...'**
   String get homeScreenSearchHint;
 
+  /// No description provided for @homeScreenAllChipTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'All'**
+  String get homeScreenAllChipTitle;
+
   /// No description provided for @homeScreenEmptyTitle.
   ///
   /// In en, this message translates to:

@@ -23,6 +23,7 @@
     "signUpScreenPasswordRuleSpecial": "Contains a special character (e.g., !@#$)",
     "homeScreenTitle": "My Accounts",
     "homeScreenSearchHint": "Search...",
+    "homeScreenAllChipTitle" : "All",
     "homeScreenEmptyTitle": "Your Vault is Empty",
     "homeScreenEmptySubtitle": "Tap the '+' button to add your first secure account.",
     "homeScreenNoResults": "No accounts found for '{query}'",

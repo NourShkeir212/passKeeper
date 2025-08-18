@@ -12,6 +12,7 @@ import 'cubit/home_cubit/cubit.dart';
 import 'cubit/home_cubit/states.dart';
 import 'widgets/account_form.dart';
 import 'widgets/account_list.dart';
+import 'widgets/category_filter_chips.dart';
 import 'widgets/home_screen_app_bar.dart';
 
 class HomeScreen extends StatelessWidget {
@@ -47,7 +48,12 @@ class HomeScreenView extends StatelessWidget {
         builder: (context, homeState) {
           return Scaffold(
             appBar: HomeScreenAppBar(searchController: searchController),
-            body: const AccountList(),
+            body: Column(
+              children: [
+                const CategoryFilterChips(),
+                Expanded(child: const AccountList()),
+              ],
+            ),
             floatingActionButton: homeState.isSearching
                 ? null
                 : FloatingActionButton(
