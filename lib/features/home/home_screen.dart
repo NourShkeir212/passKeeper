@@ -50,6 +50,7 @@ class HomeScreenView extends StatelessWidget {
             appBar: HomeScreenAppBar(searchController: searchController),
             body: Column(
               children: [
+                const SizedBox(height: 20,),
                 const CategoryFilterChips(),
                 Expanded(child: const AccountList()),
               ],
