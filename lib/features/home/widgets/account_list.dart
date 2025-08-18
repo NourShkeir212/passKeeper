@@ -185,6 +185,32 @@ class AccountList extends StatelessWidget {
       builder: (ctx) {
         return StatefulBuilder(
           builder: (BuildContext context, StateSetter setModalState) {
+
+            // --- Handler function for the copy action ---
+            void handleCopyAction(String title, String value) async {
+              final encryptionService = EncryptionService();
+              String textToCopy = value;
+
+              // If trying to copy the password and the vault is locked, prompt for master password
+              if (title == "Password" && !encryptionService.isInitialized) {
+                final password = await showMasterPasswordDialog(context);
+                if (password == null || password.isEmpty) return; // User cancelled
+
+                final success = await context.read<AuthCubit>().verifyMasterPassword(password);
+                if (!success && context.mounted) {
+                  ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text("Incorrect password"), backgroundColor: Colors.red));
+                  return; // Stop on failure
+                }
+              }
+
+              // If the value is a password, make sure to decrypt it before copying
+              if (title == "Password") {
+                textToCopy = encryptionService.decryptText(account.password);
+              }
+
+              Clipboard.setData(ClipboardData(text: textToCopy));
+            }
+
             void handleDetailsPasswordVisibility() async {
               final encryptionService = EncryptionService();
               if (encryptionService.isInitialized) {
@@ -238,6 +264,8 @@ class AccountList extends StatelessWidget {
                       onPressed:
                       handleDetailsPasswordVisibility,
                     ),
+                    onCopy: () => handleCopyAction("Password", account.password),
+                    isPassword: true
                   ),
                   if (account.recoveryAccount != null &&
                       account.recoveryAccount!.isNotEmpty)
@@ -259,8 +287,16 @@ class AccountList extends StatelessWidget {
 
 
   Widget _buildDetailRow(
-      BuildContext context, IconData icon, String title, String value,
-      {Widget? trailing}) {
+      BuildContext context,
+      IconData icon,
+      String title,
+      String displayValue,
+      {
+        Widget? trailing,
+        VoidCallback? onCopy,
+        bool isPassword=false
+      }
+      ) {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 8.0),
       child: Row(
@@ -274,16 +310,17 @@ class AccountList extends StatelessWidget {
               children: [
                 CustomText(title, style: Theme.of(context).textTheme.bodySmall),
                 const SizedBox(height: 2),
-                CustomText(value, style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w500,),maxLines: 2,),
+                CustomText(displayValue, style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w500,),maxLines: 2,),
               ],
             ),
           ),
           if (trailing != null) trailing,
-          IconButton(
-            icon: const Icon(AppIcons.copy, size: 20),
-            onPressed: () {
-              Clipboard.setData(ClipboardData(text: value));
-            },
+          Visibility(
+            visible: isPassword,
+            child: IconButton(
+              icon: const Icon(AppIcons.copy, size: 20),
+              onPressed:onCopy,
+            ),
           )
         ],
       ),
