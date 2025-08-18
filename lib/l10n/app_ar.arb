@@ -39,7 +39,14 @@
             }
         }
     },
-
+    "homeScreenAccountCount": "{count,plural, =0{لا توجد حسابات} =1{حساب واحد} =2{حسابان} few{{count} حسابات} many{{count} حسابًا} other{{count} حساب}}",
+    "@homeScreenAccountCount": {
+        "placeholders": {
+            "count": {
+                "type": "int"
+            }
+        }
+    },
     "accountCardEdit": "تعديل",
     "accountCardDelete": "حذف",
 

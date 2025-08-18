@@ -46,12 +46,14 @@ class HomeScreenView extends StatelessWidget {
       },
       child: BlocBuilder<HomeScreenCubit, HomeScreenState>(
         builder: (context, homeState) {
+          final isSearching = homeState.isSearching;
           return Scaffold(
-            appBar: HomeScreenAppBar(searchController: searchController),
+            appBar: HomeScreenAppBar(searchController: searchController,isSearching: isSearching,),
             body: Column(
               children: [
                 const SizedBox(height: 20,),
-                const CategoryFilterChips(),
+                if (!isSearching)
+                  const CategoryFilterChips(),
                 Expanded(child: const AccountList()),
               ],
             ),

@@ -27,6 +27,14 @@
     "homeScreenEmptyTitle": "Your Vault is Empty",
     "homeScreenEmptySubtitle": "Tap the '+' button to add your first secure account.",
     "homeScreenNoResults": "No accounts found for '{query}'",
+    "homeScreenAccountCount": "{count,plural, =0{No accounts} =1{1 account} other{{count} accounts}}",
+    "@homeScreenAccountCount": {
+        "placeholders": {
+            "count": {
+                "type": "int"
+            }
+        }
+    },
     "@homeScreenNoResults": {
         "placeholders": {
             "query": {

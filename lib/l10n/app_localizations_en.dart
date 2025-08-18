@@ -94,6 +94,18 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
+  String homeScreenAccountCount(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count accounts',
+      one: '1 account',
+      zero: 'No accounts',
+    );
+    return '$_temp0';
+  }
+
+  @override
   String get accountCardEdit => 'Edit';
 
   @override

@@ -12,15 +12,17 @@ import '../cubit/home_cubit/states.dart';
 
 
 class HomeScreenAppBar extends StatelessWidget implements PreferredSizeWidget {
+  final bool isSearching;
   final TextEditingController searchController;
 
-  const HomeScreenAppBar({super.key, required this.searchController});
+  const HomeScreenAppBar({super.key, required this.searchController,required this.isSearching});
 
   @override
   Widget build(BuildContext context) {
+    final isSearching = context.watch<HomeScreenCubit>().state.isSearching;
     return BlocBuilder<HomeScreenCubit, HomeScreenState>(
       builder: (context, state) {
-        if (state.isSearching) {
+        if (isSearching) {
           return AppBar(
             leading: IconButton(
               icon: const Icon(AppIcons.back),

@@ -66,20 +66,6 @@ class _AccountCardState extends State<AccountCard> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Row(
-                children: [
-                   Icon(AppIcons.service, size: 20,color: Theme.of(context).primaryColor,),
-                  const SizedBox(width: 8),
-                  Expanded(
-                    child: CustomText(
-                      widget.account.serviceName,
-                      style: Theme.of(context).textTheme.titleLarge,
-                      overflow: TextOverflow.ellipsis,
-                    ),
-                  ),
-                ],
-              ),
-              const Divider(height: 24),
               _buildInfoRow(
                 context,
                 icon: AppIcons.user,

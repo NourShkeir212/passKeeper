@@ -52,16 +52,17 @@ class AccountList extends StatelessWidget {
                 itemBuilder: (context, index) {
                   final category = categories[index];
                   final accountsInCategory = groupedAccounts[category.id] ?? [];
+                  //   Group accounts inside the category by service name ---
+                  final groupedByService = groupBy(accountsInCategory, (Account acc) => acc.serviceName);
 
                   if (accountsInCategory.isEmpty) {
                     return const SizedBox.shrink();
                   }
-
                   // This helper builds the full section, including the header.
                   return _buildCategorySection(
                     context: context,
                     category: category,
-                    accounts: accountsInCategory,
+                    groupedAccounts: groupedByService,
                   );
                 },
               );
@@ -77,17 +78,17 @@ class AccountList extends StatelessWidget {
   Widget _buildCategorySection({
     required BuildContext context,
     required Category category,
-    required List<Account> accounts,
+    required Map<String, List<Account>> groupedAccounts,
   }) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        // THE CATEGORY HEADER
-        Padding(
-          padding: const EdgeInsets.fromLTRB(20, 20, 20, 8),
-          child: Builder(
-            builder: (innerContext) {
-              return Row(
+        // Category Header
+        Builder(
+          builder: (innerContext) {
+            return Padding(
+              padding: const EdgeInsets.fromLTRB(20, 20, 20, 8),
+              child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   CustomText(
@@ -97,59 +98,84 @@ class AccountList extends StatelessWidget {
                     ),
                   ),
                   CustomText(
-                    '${accounts.length}',
+                    '${groupedAccounts.values.fold(0, (prev, list) => prev + list.length)}',
                     style: Theme.of(innerContext).textTheme.bodySmall?.copyWith(
                       color: Theme.of(innerContext).colorScheme.primary.withOpacity(0.7),
-                      fontSize: 15,
-                      fontWeight: FontWeight.bold
                     ),
                   ),
                 ],
-              );
-            }
-          ),
-        ),
-        // This is the reorderable list for accounts WITHIN this category.
-        ReorderableListView.builder(
-          shrinkWrap: true,
-          physics: const NeverScrollableScrollPhysics(),
-          itemCount: accounts.length,
-          itemBuilder: (context, index) {
-            final account = accounts[index];
-            // Each item MUST have a key for the reordering to work.
-            return Slidable(
-              key: ValueKey(account.id),
-              startActionPane: ActionPane(
-                motion: const StretchMotion(),
-                children: [
-                  SlidableAction(
-                    onPressed: (_) => _showAccountForm(context, account: account),
-                    backgroundColor: Colors.blue,
-                    icon: AppIcons.edit,
-                    label: AppLocalizations.of(context)!.accountCardEdit,
-                  ),
-                ],
-              ),
-              endActionPane: ActionPane(
-                motion: const StretchMotion(),
-                children: [
-                  SlidableAction(
-                    onPressed: (_) => _showDeleteConfirmation(context, account.id!),
-                    backgroundColor: Colors.red,
-                    icon: AppIcons.delete,
-                    label: AppLocalizations.of(context)!.accountCardDelete,
-                  ),
-                ],
-              ),
-              child: AccountCard(
-                account: account,
-                onTap: () => _showAccountDetails(context, account),
               ),
             );
-          },
-          onReorder: (oldIndex, newIndex) {
-            // This call only affects the accounts within this specific category.
-            context.read<AccountCubit>().reorderAccounts(oldIndex, newIndex, category.id!);
+          }
+        ),
+        // List of services within this category
+        ListView.builder(
+          shrinkWrap: true,
+          physics: const NeverScrollableScrollPhysics(),
+          itemCount: groupedAccounts.keys.length,
+          itemBuilder: (context, index) {
+            final serviceName = groupedAccounts.keys.elementAt(index);
+            final accountsForService = groupedAccounts[serviceName]!;
+            return Card(
+              margin: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 4.0),
+              elevation: 2,
+              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+              clipBehavior: Clip.antiAlias,
+              child: Builder(
+                builder: (innerContext) {
+                  return ExpansionTile(
+                    collapsedBackgroundColor: Theme.of(innerContext).colorScheme.background,
+                    backgroundColor: Theme.of(innerContext).colorScheme.background,
+                    leading: const Icon(AppIcons.service),
+                    title: CustomText(serviceName, style: Theme.of(context).textTheme.titleMedium),
+                    subtitle: CustomText(AppLocalizations.of(context)!.homeScreenAccountCount(accountsForService.length)),
+                    children: [
+                      // This is the reorderable list for accounts within this service group
+                      ReorderableListView.builder(
+                        shrinkWrap: true,
+                        physics: const NeverScrollableScrollPhysics(),
+                        itemCount: accountsForService.length,
+                        itemBuilder: (context, itemIndex) {
+                          final account = accountsForService[itemIndex];
+                          return Slidable(
+                            key: ValueKey(account.id),
+                            startActionPane: ActionPane(
+                              motion: const StretchMotion(),
+                              children: [
+                                SlidableAction(
+                                  onPressed: (_) => _showAccountForm(context, account: account),
+                                  backgroundColor: Colors.blue,
+                                  icon: AppIcons.edit,
+                                  label: "Edit",
+                                ),
+                              ],
+                            ),
+                            endActionPane: ActionPane(
+                              motion: const StretchMotion(),
+                              children: [
+                                SlidableAction(
+                                  onPressed: (_) => _showDeleteConfirmation(context, account.id!),
+                                  backgroundColor: Colors.red,
+                                  icon: AppIcons.delete,
+                                  label: "Delete",
+                                ),
+                              ],
+                            ),
+                            child: AccountCard(
+                              account: account,
+                              onTap: () => _showAccountDetails(context, account),
+                            ),
+                          );
+                        },
+                        onReorder: (oldIndex, newIndex) {
+                          context.read<AccountCubit>().reorderAccounts(oldIndex, newIndex, category.id!);
+                        },
+                      )
+                    ],
+                  );
+                }
+              ),
+            );
           },
         ),
       ],

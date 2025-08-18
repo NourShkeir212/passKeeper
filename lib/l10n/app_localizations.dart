@@ -260,6 +260,12 @@ abstract class AppLocalizations {
   /// **'No accounts found for \'{query}\''**
   String homeScreenNoResults(String query);
 
+  /// No description provided for @homeScreenAccountCount.
+  ///
+  /// In en, this message translates to:
+  /// **'{count,plural, =0{No accounts} =1{1 account} other{{count} accounts}}'**
+  String homeScreenAccountCount(int count);
+
   /// No description provided for @accountCardEdit.
   ///
   /// In en, this message translates to:
