@@ -52,7 +52,6 @@ class _AccountCardState extends State<AccountCard> {
   }
   @override
   Widget build(BuildContext context) {
-    // --- Handler function for the copy action ---
     return Card(
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15.0)),
       margin: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),

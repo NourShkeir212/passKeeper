@@ -6,7 +6,7 @@ class AppColors {
 
   // --- DARK THEME --- ///
   /// Dark background, almost black with a hint of blue
-  static const Color backgroundDark = Color(0xFF1A1A24);
+  static const Color backgroundDark = Colors.black;
 
   /// Cards and primary surfaces
   static const Color cardDark = Color(0xFF2D2D82);
