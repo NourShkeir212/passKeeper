@@ -288,5 +288,7 @@
     "lockScreenUnlockButton": "فتح القفل",
     "dialogDisableBiometricsContent": "إذا قمت بإيقاف المصادقة الحيوية، سيتم فتح التطبيق مباشرة على خزنتك الحقيقية. ستفقد القدرة على فتح الخزنة الوهمية.",
     "dialogDisableButton": "إيقاف",
-    "dialogDisableBiometricsTitle" : "إيقاف المصادقة الحيوية ؟"
+    "dialogDisableBiometricsTitle" : "إيقاف المصادقة الحيوية ؟",
+    "reorderToolTip": "إعادة ترتيب الحسابات",
+    "reorderScreenTitle" : "إعادة ترتيب"
 }

@@ -14,11 +14,12 @@ class AccountLoading extends AccountState {}
 class AccountLoaded extends AccountState {
   final List<Account> accounts;
   final List<Account>? filteredAccounts;
+  final int? activeCategoryId;
 
-  const AccountLoaded(this.accounts, {this.filteredAccounts});
+  const AccountLoaded(this.accounts, {this.filteredAccounts,this.activeCategoryId});
 
   @override
-  List<Object?> get props => [accounts, filteredAccounts];
+  List<Object?> get props => [accounts, filteredAccounts,this.activeCategoryId];
 }
 
 class AccountFailure extends AccountState {

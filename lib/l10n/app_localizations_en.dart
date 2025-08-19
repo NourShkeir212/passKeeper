@@ -719,4 +719,10 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get dialogDisableBiometricsTitle => 'Disable Biometrics?';
+
+  @override
+  String get reorderToolTip => 'Reorder Accounts';
+
+  @override
+  String get reorderScreenTitle => 'Reorder';
 }

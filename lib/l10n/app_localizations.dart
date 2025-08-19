@@ -1391,6 +1391,18 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Disable Biometrics?'**
   String get dialogDisableBiometricsTitle;
+
+  /// No description provided for @reorderToolTip.
+  ///
+  /// In en, this message translates to:
+  /// **'Reorder Accounts'**
+  String get reorderToolTip;
+
+  /// No description provided for @reorderScreenTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Reorder'**
+  String get reorderScreenTitle;
 }
 
 class _AppLocalizationsDelegate

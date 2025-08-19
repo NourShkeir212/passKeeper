@@ -722,4 +722,10 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get dialogDisableBiometricsTitle => 'إيقاف المصادقة الحيوية ؟';
+
+  @override
+  String get reorderToolTip => 'إعادة ترتيب الحسابات';
+
+  @override
+  String get reorderScreenTitle => 'إعادة ترتيب';
 }

@@ -284,6 +284,8 @@
     "lockScreenUnlockButton": "Unlock",
     "dialogDisableBiometricsContent":  "If you disable biometrics, the app will open directly to your real vault . You will lose the ability to open your decoy vault.",
     "dialogDisableButton": "Disable",
-    "dialogDisableBiometricsTitle" : "Disable Biometrics?"
+    "dialogDisableBiometricsTitle" : "Disable Biometrics?",
+    "reorderToolTip" : "Reorder Accounts",
+    "reorderScreenTitle" : "Reorder"
 
 }

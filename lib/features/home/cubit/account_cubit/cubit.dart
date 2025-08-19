@@ -18,61 +18,87 @@ class AccountCubit extends Cubit<AccountState> {
         newIndex -= 1;
       }
 
-      // 1. Create a mutable copy of the full list of accounts
+      // 1. Create a mutable copy of the full list of accounts.
       final fullList = List<Account>.from(currentState.accounts);
 
-      // 2. Isolate the specific group being reordered
-      final serviceGroup = fullList
+      // 2. Isolate the specific group being reordered.
+      final serviceGroupToReorder = fullList
           .where((a) => a.categoryId == categoryId && a.serviceName == serviceName)
           .toList();
 
-      // 3. Perform the reorder on the small, isolated list
-      final item = serviceGroup.removeAt(oldIndex);
-      serviceGroup.insert(newIndex, item);
+      // 3. Perform the reorder on the small list.
+      final item = serviceGroupToReorder.removeAt(oldIndex);
+      serviceGroupToReorder.insert(newIndex, item);
 
-      // 4. Update the order index for the items in THIS reordered group
-      for (int i = 0; i < serviceGroup.length; i++) {
-        serviceGroup[i] = serviceGroup[i].copyWith(accountOrder: i);
+      // 4. Update the order index for the items in this reordered group.
+      for (int i = 0; i < serviceGroupToReorder.length; i++) {
+        serviceGroupToReorder[i] = serviceGroupToReorder[i].copyWith(accountOrder: i);
       }
 
-      // 5. Find the starting index of this service group within the main list
-      final firstIndex = fullList.indexWhere((a) => a.categoryId == categoryId && a.serviceName == serviceName);
+      // 5. Remove the old, unsorted items from the main list.
+      fullList.removeWhere((a) => a.categoryId == categoryId && a.serviceName == serviceName);
 
-      // 6. If the group was found, remove the old items and insert the new, reordered items
-      if (firstIndex != -1) {
-        fullList.removeWhere((a) => a.categoryId == categoryId && a.serviceName == serviceName);
-        fullList.insertAll(firstIndex, serviceGroup);
+      // 6. Add the newly reordered items back into the main list.
+      fullList.addAll(serviceGroupToReorder);
+
+      // 7. Re-apply the filter if one is active.
+      List<Account>? newFilteredList;
+      if (currentState.activeCategoryId != null) {
+        newFilteredList = fullList
+            .where((acc) => acc.categoryId == currentState.activeCategoryId)
+            .toList();
       }
 
-      // 7. Emit this new, stable list immediately for a smooth UI update.
-      emit(AccountLoaded(fullList, filteredAccounts: currentState.filteredAccounts));
+      // 8. Emit this new, stable list IMMEDIATELY.
+      // This optimistic update matches the UI's animation, preventing the flicker.
+      emit(AccountLoaded(
+        fullList,
+        filteredAccounts: newFilteredList,
+        activeCategoryId: currentState.activeCategoryId,
+      ));
 
-      // 8. In the background, save the changes to the database.
+      // 9. In the background, save the changes to the database.
       try {
-        await _databaseService.updateAccountOrder(serviceGroup);
+        await _databaseService.updateAccountOrder(serviceGroupToReorder);
       } catch (e) {
-        // If saving fails, reload from the DB to revert the change
+        // If saving fails, reload from the DB to revert the change.
         loadAccounts();
       }
     }
   }
+
   Future<void> loadAccounts({bool showLoading = true}) async {
     try {
       if (showLoading) {
         emit(AccountLoading());
       }
-
       final userId = SessionManager.currentVaultUserId;
       if (userId == null) {
         emit(const AccountLoaded([]));
         return;
       }
-
       final profileTag = SessionManager.currentSessionProfileTag;
       final accounts = await _databaseService.getAccounts(userId, profileTag);
       emit(AccountLoaded(accounts));
     } catch (e) {
       emit(AccountFailure(e.toString()));
+    }
+  }
+
+  void filterByCategory(int? categoryId) {
+    final currentState = state;
+    if (currentState is AccountLoaded) {
+      List<Account>? filteredList;
+      if (categoryId != null) {
+        filteredList = currentState.accounts
+            .where((account) => account.categoryId == categoryId)
+            .toList();
+      }
+      emit(AccountLoaded(
+        currentState.accounts,
+        filteredAccounts: filteredList,
+        activeCategoryId: categoryId,
+      ));
     }
   }
 
@@ -172,22 +198,6 @@ class AccountCubit extends Cubit<AccountState> {
 
       // Persist the new order to the database
       await _databaseService.updateAccountOrder(accountsInCat);
-    }
-  }
-
-  void filterByCategory(int? categoryId) {
-    final currentState = state;
-    if (currentState is AccountLoaded) {
-      if (categoryId == null) {
-        // If null, clear the filter
-        emit(AccountLoaded(currentState.accounts, filteredAccounts: null));
-      } else {
-        final filteredList = currentState.accounts
-            .where((account) => account.categoryId == categoryId)
-            .toList();
-        emit(AccountLoaded(
-            currentState.accounts, filteredAccounts: filteredList));
-      }
     }
   }
 }
