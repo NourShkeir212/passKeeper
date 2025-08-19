@@ -12,11 +12,13 @@ import '../../auth/cubit/auth_cubit/cubit.dart';
 class AccountCard extends StatefulWidget {
   final Account account;
   final VoidCallback onTap;
+  final Widget? trailing; // ADD THIS: To accept the drag handle
 
   const AccountCard({
     super.key,
     required this.account,
     required this.onTap,
+    this.trailing, // ADD THIS
   });
 
   @override
@@ -53,6 +55,7 @@ class _AccountCardState extends State<AccountCard> {
   @override
   Widget build(BuildContext context) {
     return Card(
+      color: Theme.of(context).cardColor,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15.0)),
       margin: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
       elevation: 4,
@@ -151,7 +154,7 @@ class _AccountCardState extends State<AccountCard> {
           onPressed: () =>
               handleCopyAction("Password", widget.account.password),
         ),
-
+        if (widget.trailing != null) widget.trailing!,
       ],
     );
   }

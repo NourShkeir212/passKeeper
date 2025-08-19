@@ -9,22 +9,67 @@ class AccountCubit extends Cubit<AccountState> {
 
   AccountCubit(this._databaseService) : super(AccountInitial());
 
-  Future<void> loadAccounts() async {
-    try {
-      emit(AccountLoading());
 
-      // 1. Get the current user's ID
-      final userId = SessionManager.currentVaultUserId;
-      if (userId == null) {
-        throw Exception("User not logged in.");
+  Future<void> reorderAccountsInService(
+      int oldIndex, int newIndex, int categoryId, String serviceName) async {
+    final currentState = state;
+    if (currentState is AccountLoaded) {
+      if (newIndex > oldIndex) {
+        newIndex -= 1;
       }
 
-      // 2. Get the ACTIVE PROFILE TAG for the current session
+      // 1. Create a mutable copy of the full list of accounts
+      final fullList = List<Account>.from(currentState.accounts);
+
+      // 2. Isolate the specific group being reordered
+      final serviceGroup = fullList
+          .where((a) => a.categoryId == categoryId && a.serviceName == serviceName)
+          .toList();
+
+      // 3. Perform the reorder on the small, isolated list
+      final item = serviceGroup.removeAt(oldIndex);
+      serviceGroup.insert(newIndex, item);
+
+      // 4. Update the order index for the items in THIS reordered group
+      for (int i = 0; i < serviceGroup.length; i++) {
+        serviceGroup[i] = serviceGroup[i].copyWith(accountOrder: i);
+      }
+
+      // 5. Find the starting index of this service group within the main list
+      final firstIndex = fullList.indexWhere((a) => a.categoryId == categoryId && a.serviceName == serviceName);
+
+      // 6. If the group was found, remove the old items and insert the new, reordered items
+      if (firstIndex != -1) {
+        fullList.removeWhere((a) => a.categoryId == categoryId && a.serviceName == serviceName);
+        fullList.insertAll(firstIndex, serviceGroup);
+      }
+
+      // 7. Emit this new, stable list immediately for a smooth UI update.
+      emit(AccountLoaded(fullList, filteredAccounts: currentState.filteredAccounts));
+
+      // 8. In the background, save the changes to the database.
+      try {
+        await _databaseService.updateAccountOrder(serviceGroup);
+      } catch (e) {
+        // If saving fails, reload from the DB to revert the change
+        loadAccounts();
+      }
+    }
+  }
+  Future<void> loadAccounts({bool showLoading = true}) async {
+    try {
+      if (showLoading) {
+        emit(AccountLoading());
+      }
+
+      final userId = SessionManager.currentVaultUserId;
+      if (userId == null) {
+        emit(const AccountLoaded([]));
+        return;
+      }
+
       final profileTag = SessionManager.currentSessionProfileTag;
-
-      // 3. Pass the profileTag to the database query
       final accounts = await _databaseService.getAccounts(userId, profileTag);
-
       emit(AccountLoaded(accounts));
     } catch (e) {
       emit(AccountFailure(e.toString()));
@@ -140,7 +185,8 @@ class AccountCubit extends Cubit<AccountState> {
         final filteredList = currentState.accounts
             .where((account) => account.categoryId == categoryId)
             .toList();
-        emit(AccountLoaded(currentState.accounts, filteredAccounts: filteredList));
+        emit(AccountLoaded(
+            currentState.accounts, filteredAccounts: filteredList));
       }
     }
   }

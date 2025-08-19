@@ -712,7 +712,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get dialogDisableBiometricsContent =>
-      'Disabling biometrics means  you will lose access to your decoy vault from the lock screen.';
+      'If you disable biometrics, the app will open directly to your real vault . You will lose the ability to open your decoy vault.';
 
   @override
   String get dialogDisableButton => 'Disable';

@@ -715,7 +715,7 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get dialogDisableBiometricsContent =>
-      'إذا قمت بإيقاف المصادقة الحيوية ستفقد الوصول إلى الخزنة الوهمية من شاشة القفل.';
+      'إذا قمت بإيقاف المصادقة الحيوية، سيتم فتح التطبيق مباشرة على خزنتك الحقيقية. ستفقد القدرة على فتح الخزنة الوهمية.';
 
   @override
   String get dialogDisableButton => 'إيقاف';

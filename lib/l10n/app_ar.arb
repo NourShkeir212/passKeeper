@@ -286,7 +286,7 @@
     "lockScreenOr": "أو",
     "lockScreenPasswordUnlock": "أدخل كلمة المرور الرئيسية",
     "lockScreenUnlockButton": "فتح القفل",
-    "dialogDisableBiometricsContent": "إذا قمت بإيقاف المصادقة الحيوية ستفقد الوصول إلى الخزنة الوهمية من شاشة القفل.",
+    "dialogDisableBiometricsContent": "إذا قمت بإيقاف المصادقة الحيوية، سيتم فتح التطبيق مباشرة على خزنتك الحقيقية. ستفقد القدرة على فتح الخزنة الوهمية.",
     "dialogDisableButton": "إيقاف",
     "dialogDisableBiometricsTitle" : "إيقاف المصادقة الحيوية ؟"
 }

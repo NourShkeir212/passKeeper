@@ -172,7 +172,7 @@ class __AccountFormViewState extends State<_AccountFormView> {
         recoveryAccount: _recoveryController.text,
         phoneNumbers: _phoneController.text,
       );
-      context.read<AccountCubit>().updateAccount(updatedAccount);
+      context.read<AccountCubit>().updateAccount(updatedAccount,);
     } else {
       final profileTag = SessionManager.currentSessionProfileTag;
       final newAccount = Account(

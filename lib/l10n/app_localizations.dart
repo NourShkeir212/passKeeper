@@ -1377,7 +1377,7 @@ abstract class AppLocalizations {
   /// No description provided for @dialogDisableBiometricsContent.
   ///
   /// In en, this message translates to:
-  /// **'Disabling biometrics means  you will lose access to your decoy vault from the lock screen.'**
+  /// **'If you disable biometrics, the app will open directly to your real vault . You will lose the ability to open your decoy vault.'**
   String get dialogDisableBiometricsContent;
 
   /// No description provided for @dialogDisableButton.
