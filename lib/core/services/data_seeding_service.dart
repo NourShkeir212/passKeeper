@@ -104,7 +104,7 @@ class DataSeedingService {
     for (int i = 0; i < (customization['instagram'] ?? 0); i++) {
       accountsToSeed.add(Account(
         userId: userId, categoryId: categoryIds['Social']!, serviceName: 'Instagram',
-        username: i == 0 ? '${baseName}_pics' : '${baseName}_social${_random.nextInt(99)}',
+        username: generatedEmails.isNotEmpty ? generatedEmails[i % generatedEmails.length] : _generateRandomEmail(baseName, i),
         password: _encryptionService.encryptText(_generateBelievablePassword('Instagram')),
         recoveryAccount: primaryRecoveryEmail,
         profileTag: decoyTag,
