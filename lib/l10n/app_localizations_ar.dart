@@ -507,6 +507,13 @@ class AppLocalizationsAr extends AppLocalizations {
       'قم بتصدير خزنتك بسهولة إلى ملف Excel واستوردها على أي جهاز. بياناتك تذهب معك أينما ذهبت.';
 
   @override
+  String get onboardingPage4Title => 'الخزنة الوهمية';
+
+  @override
+  String get onboardingPage4Body =>
+      'أنشئ خزنة ثانوية وهمية بكلمة مرور خاصة بها. في حالات الطوارئ، يمكنك إظهار الخزنة الوهمية بينما تبقى بياناتك الحقيقية مخفية تمامًا.';
+
+  @override
   String get onboardingSkipButton => 'تخطي';
 
   @override

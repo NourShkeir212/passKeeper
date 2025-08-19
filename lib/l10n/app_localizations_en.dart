@@ -505,6 +505,13 @@ class AppLocalizationsEn extends AppLocalizations {
       'Easily export your vault to an Excel file and import it on any device. Your data goes where you go.';
 
   @override
+  String get onboardingPage4Title => 'Decoy Vault';
+
+  @override
+  String get onboardingPage4Body =>
+      'Create a second, fake vault with its own password. In an emergency, you can reveal the decoy vault while your real data stays completely hidden.';
+
+  @override
   String get onboardingSkipButton => 'Skip';
 
   @override

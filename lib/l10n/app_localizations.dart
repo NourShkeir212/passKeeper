@@ -978,6 +978,18 @@ abstract class AppLocalizations {
   /// **'Easily export your vault to an Excel file and import it on any device. Your data goes where you go.'**
   String get onboardingPage3Body;
 
+  /// No description provided for @onboardingPage4Title.
+  ///
+  /// In en, this message translates to:
+  /// **'Decoy Vault'**
+  String get onboardingPage4Title;
+
+  /// No description provided for @onboardingPage4Body.
+  ///
+  /// In en, this message translates to:
+  /// **'Create a second, fake vault with its own password. In an emergency, you can reveal the decoy vault while your real data stays completely hidden.'**
+  String get onboardingPage4Body;
+
   /// No description provided for @onboardingSkipButton.
   ///
   /// In en, this message translates to:

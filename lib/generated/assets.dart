@@ -4,6 +4,8 @@ class Assets {
 
   static const String iconLogoLogo = 'assets/icon/logo/logo.png';
   static const String logoLogo = 'assets/icon/logo/logo.png';
+  static const String onBoardingDecoyDark = 'assets/svg/on_boarding/decoy_dark.svg';
+  static const String onBoardingDecoyLight = 'assets/svg/on_boarding/decoy_light.svg';
   static const String onBoardingNoDataDarkMode = 'assets/svg/on_boarding/no_data_dark_mode.svg';
   static const String onBoardingNoDataLightMode = 'assets/svg/on_boarding/no_data_light_mode.svg';
   static const String onBoardingOnboardingAccessDark = 'assets/svg/on_boarding/onboarding_access_dark.svg';

@@ -215,6 +215,8 @@
     "onboardingPage2Body": "Group your accounts into custom categories that you create and manage.",
     "onboardingPage3Title": "Backup & Restore",
     "onboardingPage3Body": "Easily export your vault to an Excel file and import it on any device. Your data goes where you go.",
+    "onboardingPage4Title": "Decoy Vault",
+    "onboardingPage4Body": "Create a second, fake vault with its own password. In an emergency, you can reveal the decoy vault while your real data stays completely hidden.",
     "onboardingSkipButton": "Skip",
     "onboardingDoneButton": "Done",
     "aboutScreenTitle": "About PassKeeper",

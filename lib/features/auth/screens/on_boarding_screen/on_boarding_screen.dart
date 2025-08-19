@@ -47,6 +47,12 @@ class OnboardingScreen extends StatelessWidget {
             image: _buildImage(context, 'onboarding_access'),
             decoration: pageDecoration,
           ),
+          PageViewModel(
+            title: AppLocalizations.of(context)!.onboardingPage4Title,
+            body: AppLocalizations.of(context)!.onboardingPage4Body,
+            image: _buildImage(context, 'decoy'), // Use your new SVG base name
+            decoration: pageDecoration,
+          ),
         ],
         onDone: () => _onOnboardingDone(context),
         showSkipButton: true,
