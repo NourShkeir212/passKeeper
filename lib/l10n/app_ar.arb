@@ -1,20 +1,16 @@
 {
     "@@locale": "ar",
     "appTitle": "PassKeeper",
-
     "initialScreenLoading": "جار التحميل...",
-
     "lockScreenTitle": "مغلق",
     "lockScreenSubtitle": "استخدم بصمتك لفتح خزنتك",
     "unlockButton": "فتح باستخدام البصمة",
-
     "loginScreenWelcome": "أهلاً بعودتك",
     "loginScreenUsernameHint": "اسم المستخدم",
     "loginScreenPasswordHint": "كلمة المرور",
     "loginScreenLoginButton": "تسجيل الدخول",
     "loginScreenNoAccount": "ليس لديك حساب؟",
     "loginScreenSignUpLink": "أنشئ حساباً",
-
     "signUpScreenTitle": "إنشاء حساب",
     "signUpScreenUsernameHint": "اسم المستخدم",
     "signUpScreenPasswordHint": "كلمة المرور",
@@ -27,7 +23,7 @@
     "signUpScreenPasswordRuleSpecial": "تحتوي على رمز خاص (مثل !@#$)",
     "homeScreenTitle": "حساباتي",
     "homeScreenSearchHint": "بحث...",
-    "homeScreenAllChipTitle" : "الكل",
+    "homeScreenAllChipTitle": "الكل",
     "homeScreenEmptyTitle": "خزنتك فارغة",
     "homeScreenEmptySubtitle": "اضغط على زر '+' لإضافة أول حساب آمن لك.",
     "homeScreenFavoritesCategory": "المفضلة",
@@ -49,7 +45,6 @@
     },
     "accountCardEdit": "تعديل",
     "accountCardDelete": "حذف",
-
     "accountDetailsUsernameOrEmail": "اسم المستخدم / البريد",
     "accountDetailsPassword": "كلمة المرور",
     "accountDetailsRecoveryEmail": "البريد الإلكتروني للاسترداد",
@@ -62,7 +57,6 @@
             }
         }
     },
-
     "accountFormAddTitle": "إضافة حساب جديد",
     "accountFormEditTitle": "تعديل الحساب",
     "accountFormCategoryHint": "الفئة",
@@ -74,7 +68,6 @@
     "accountFormRecoveryHint": "حساب الاسترداد (اختياري)",
     "accountFormPhoneHint": "أرقام الهواتف (اختياري)",
     "accountFormSaveButton": "حفظ",
-
     "settingsScreenTitle": "الإعدادات",
     "settingsAppearance": "المظهر",
     "settingsThemeSystem": "افتراضي النظام",
@@ -152,21 +145,25 @@
     "dialogUnlockVaultSave": "الرجاء إدخال كلمة المرور الرئيسية لحفظ هذا الحساب.",
     "dialogUnlockVaultView": "أدخل كلمة المرور الرئيسية الخاصة بك للكشف عن حساباتك المحفوظة لهذه الجلسة.",
     "dialogUnlockToContinue": "الرجاء إدخال كلمة المرور الرئيسية للمتابعة.",
-
     "feedbackAccountCreated": "تم إنشاء الحساب بنجاح! الرجاء تسجيل الدخول.",
     "feedbackAccountSaved": "تم حفظ الحساب",
     "feedbackPasswordChanged": "تم تغيير كلمة المرور بنجاح!",
     "feedbackImportSuccess": "اكتمل الاستيراد. تمت الإضافة: {successCount}, تم التخطي (مكرر): {skippedCount}, فشل: {failCount}.",
     "@feedbackImportSuccess": {
         "placeholders": {
-            "successCount": {"type": "int"},
-            "skippedCount": {"type": "int"},
-            "failCount": {"type": "int"}
+            "successCount": {
+                "type": "int"
+            },
+            "skippedCount": {
+                "type": "int"
+            },
+            "failCount": {
+                "type": "int"
+            }
         }
     },
     "feedbackExporting": "جار التصدير...",
     "feedbackImporting": "جار الاستيراد...",
-
     "validationEnterUsername": "الرجاء إدخال اسم مستخدم",
     "validationEnterPassword": "الرجاء إدخال كلمة مرور",
     "validationPasswordEmpty": "لا يمكن أن تكون كلمة المرور فارغة",
@@ -177,20 +174,23 @@
     "validationEnterServiceName": "الرجاء إدخال اسم",
     "validationSelectCategory": "الرجاء اختيار فئة",
     "validationCategoryNameEmpty": "لا يمكن أن يكون الاسم فارغًا",
-
     "errorIncorrectPassword": "كلمة المرور غير صحيحة",
     "errorInvalidCredentials": "اسم المستخدم أو كلمة المرور غير صالحة.",
     "errorUsernameExists": "اسم المستخدم موجود بالفعل. الرجاء اختيار اسم آخر.",
     "errorImportFailed": "فشل الاستيراد: {error}",
     "@errorImportFailed": {
         "placeholders": {
-            "error": {"type": "String"}
+            "error": {
+                "type": "String"
+            }
         }
     },
     "errorExportFailed": "فشل التصدير: {error}",
     "@errorExportFailed": {
         "placeholders": {
-            "error": {"type": "String"}
+            "error": {
+                "type": "String"
+            }
         }
     },
     "errorSheetNotFound": "لا يمكن العثور على صفحة باسم 'Accounts' في ملف Excel.",
@@ -220,7 +220,6 @@
     "onboardingPage4Body": "أنشئ خزنة ثانوية وهمية بكلمة مرور خاصة بها. في حالات الطوارئ، يمكنك إظهار الخزنة الوهمية بينما تبقى بياناتك الحقيقية مخفية تمامًا.",
     "onboardingSkipButton": "تخطي",
     "onboardingDoneButton": "تم",
-
     "aboutScreenTitle": "حول تطبيق PassKeeper",
     "aboutTitle": "حول عنا / تواصل معنا",
     "aboutScreenVersion": "الإصدار 1.0.0",
@@ -232,7 +231,7 @@
     "passwordStrengthWeak": "ضعيفة",
     "passwordStrengthGood": "جيدة",
     "passwordStrengthStrong": "قوية",
-    "passwordStrengthVeryStrong" : "قوية جدا",
+    "passwordStrengthVeryStrong": "قوية جدا",
     "passwordGeneratorTitle": "مولّد كلمات المرور",
     "passwordGeneratorLength": "الطول:",
     "passwordGeneratorUppercase": "أحرف كبيرة (A-Z)",
@@ -244,8 +243,8 @@
     "passwordGeneratorStrong": "قوية",
     "passwordGeneratorVeryStrong": "قوية جداً",
     "passwordGeneratorTooltip": "إنشاء كلمة مرور",
-    "expandedTextShowLess" : "إظهار أقل",
-    "expandedTextShowMore" : "إظهار اكثر",
+    "expandedTextShowLess": "إظهار أقل",
+    "expandedTextShowMore": "إظهار اكثر",
     "dialogConfirmLogoutTitle": "تأكيد تسجيل الخروج",
     "dialogConfirmLogoutContent": "هل أنت متأكد من رغبتك في تسجيل الخروج؟",
     "dialogLogoutButton": "تسجيل الخروج",
@@ -253,7 +252,6 @@
     "deleteAccountWarningTitle": "هل أنت متأكد تماماً؟",
     "deleteAccountWarningBody": "لا يمكن التراجع عن هذا الإجراء. سيتم حذف جميع حساباتك وفئاتك وإعداداتك المحفوظة بشكل دائم. لا يمكننا استعادة هذه البيانات لك.",
     "deleteAccountConfirmationPrompt": "للتأكيد، الرجاء إدخال كلمة المرور الرئيسية الخاصة بك.",
-
     "mirrorAccountTitle": "إنشاء حساب وهمي",
     "mirrorAccountSubtitle": "عيّن كلمة مرور وهمية",
     "mirrorAccountDescription": "هذه كلمة مرور ثانوية واختيارية. إذا أُجبرت على فتح خزنتك، يمكنك إدخال كلمة المرور هذه لإظهار مجموعة وهمية من الحسابات، مما يحافظ على أمان بياناتك الحقيقية.",
@@ -275,7 +273,7 @@
     "decoyAccountShopping": "تسوق",
     "decoyAccountServices": "حسابات الخدمات",
     "decoyAccountWork": "عمل",
-    "decoyAccountUserName" : "اسم المستخدم",
+    "decoyAccountUserName": "اسم المستخدم",
     "decoyCreateTitle": "تخصيص خزنتك الوهمية",
     "decoyCreateSubtitle": "عيّن اسم مستخدم وكلمة مرور فريدين، ثم اختر عدد الحسابات الوهمية التي تريد إنشاءها.",
     "decoyCreateGeneratedAccounts": "الحسابات المنشأة",
@@ -284,5 +282,11 @@
     "decoyCreateInstagram": "حسابات انستغرام",
     "decoyCreateShopping": "حسابات تسوق",
     "decoyCreateButton": "إنشاء الخزنة الوهمية",
-    "validationGmailRequired": "يجب إنشاء حساب بريد إلكتروني واحد على الأقل للخزنة الوهمية."
+    "validationGmailRequired": "يجب إنشاء حساب بريد إلكتروني واحد على الأقل للخزنة الوهمية.",
+    "lockScreenOr": "أو",
+    "lockScreenPasswordUnlock": "أدخل كلمة المرور الرئيسية",
+    "lockScreenUnlockButton": "فتح القفل",
+    "dialogDisableBiometricsContent": "إذا قمت بإيقاف المصادقة الحيوية ستفقد الوصول إلى الخزنة الوهمية من شاشة القفل.",
+    "dialogDisableButton": "إيقاف",
+    "dialogDisableBiometricsTitle" : "إيقاف المصادقة الحيوية ؟"
 }

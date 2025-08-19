@@ -91,7 +91,7 @@ class SettingsCubit extends Cubit<SettingsState> {
       }
 
       // 2. Get the ACTIVE PROFILE TAG for the current session
-      final profileTag = await SessionManager.getActiveProfile();
+      final profileTag = SessionManager.currentSessionProfileTag;
 
       // 3. Fetch ALL accounts.
       final allAccounts = await _databaseService.getAllAccountsForUser(userId,profileTag);

@@ -12,9 +12,12 @@ class AuthLoading extends AuthState {}
 class AuthSuccess extends AuthState {}
 class AuthSuccessSignUp extends AuthState {
   final String username;
-  const AuthSuccessSignUp(this.username);
+  final int userId;
+
+  const AuthSuccessSignUp({required this.username, required this.userId});
+
   @override
-  List<Object> get props => [username];
+  List<Object> get props => [username, userId];
 }
 class AuthLoggedOut extends AuthState {}
 class AuthFailure extends AuthState {

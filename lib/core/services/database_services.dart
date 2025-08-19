@@ -257,7 +257,7 @@ class DatabaseService {
 
   Future<List<Account>> getAccounts(int userId, String profileTag) async {
     final db = await database;
-    final List<Map<String, dynamic>> maps = await db.query(
+    final maps = await db.query(
       'accounts',
       where: 'userId = ? AND profileTag = ?',
       whereArgs: [userId, profileTag],
@@ -266,6 +266,7 @@ class DatabaseService {
     return List.generate(maps.length, (i) => Account.fromMap(maps[i]));
   }
 
+
   Future<int> deleteAccount(int id) async {
     final db = await database;
     return await db.delete('accounts', where: 'id = ?', whereArgs: [id]);
@@ -273,12 +274,7 @@ class DatabaseService {
 
   Future<User?> getUserById(int userId) async {
     final db = await database;
-    final List<Map<String, dynamic>> maps = await db.query(
-      'users',
-      where: 'id = ?',
-      whereArgs: [userId],
-    );
-
+    final List<Map<String, dynamic>> maps = await db.query('users', where: 'id = ?', whereArgs: [userId]);
     if (maps.isNotEmpty) {
       return User.fromMap(maps.first);
     }

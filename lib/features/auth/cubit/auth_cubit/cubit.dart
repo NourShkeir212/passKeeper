@@ -18,56 +18,75 @@ class AuthCubit extends Cubit<AuthState> {
   final EncryptionService _encryptionService = EncryptionService();
 
   Future<void> checkSession() async {
-    final userId = await SessionManager.getUserId();
+    final userId = await SessionManager.getRealUserId();
     if (userId != null) {
+      // If a real session exists, set the current vault to the real user
+      SessionManager.currentVaultUserId = userId;
       emit(AuthSuccess());
     } else {
       emit(AuthLoggedOut());
     }
   }
 
+  Future<void> loginToDecoyWithPassword(String decoyPassword,BuildContext context) async {
+    emit(AuthLoading());
+    try {
+      final realUserId = await SessionManager.getUserId();
+      if (realUserId == null) throw Exception("No active session found.");
+
+      final decoyUser = await _databaseService.getDecoyUserFor(realUserId);
+      if (decoyUser == null) throw Exception(AppLocalizations.of(context)!.errorIncorrectPassword);
+
+      final hashedDecoyPassword = _encryptionService.hashPassword(decoyPassword);
+      if (hashedDecoyPassword != decoyUser.password) {
+        throw Exception(AppLocalizations.of(context)!.errorIncorrectPassword);
+      }
+      SessionManager.currentVaultUserId = decoyUser.id!;
+      SessionManager.currentSessionProfileTag = 'decoy';
+      _encryptionService.init(decoyPassword);
+      emit(AuthSuccess());
+
+    } catch (e) {
+      emit(AuthFailure(e.toString().replaceFirst("Exception: ", "")));
+    }
+  }
 
   Future<void> signUp({required String username, required String password,required BuildContext context}) async {
     emit(AuthLoading());
     final hashedPassword = _encryptionService.hashPassword(password);
-
-    // Create the "real" user
     final newUser = User(username: username, password: hashedPassword, profileTag: 'real');
     final result = await _databaseService.insertUser(newUser);
 
     if (result != -1) {
-      // On success, navigate to the mirror setup screen, passing the username
-      emit(AuthSuccessSignUp(username));
+      emit(AuthSuccessSignUp(username: username,userId: result)); // Pass ID as well
     } else {
-      emit(const AuthFailure('Username already exists.'));
+      emit( AuthFailure(AppLocalizations.of(context)!.errorUsernameExists));
     }
   }
 
   Future<void> createMirrorAccount({
-    required int realUserId, 
+    required int realUserId,
     required String decoyUsername,
     required String decoyPassword,
     required Map<String, int> customization,
-  }) async {
+  }) async
+  {
     emit(AuthLoading());
     try {
       final hashedPassword = _encryptionService.hashPassword(decoyPassword);
       final decoyUser = User(
-        username: decoyUsername,
-        password: hashedPassword,
-        profileTag: 'decoy',
-        linkedRealUserId: realUserId, // Create the link here
-      );
+          username: decoyUsername,
+          password: hashedPassword,
+          profileTag: 'decoy',
+          linkedRealUserId: realUserId);
       final userId = await _databaseService.insertUser(decoyUser);
-
       if (userId == -1) throw Exception("Could not create decoy user.");
 
       await DataSeedingService().seedDecoyData(
-        userId: userId,
-        decoyUsername: decoyUsername,
-        decoyMasterPassword: decoyPassword,
-        customization: customization,
-      );
+          userId: userId,
+          decoyUsername: decoyUsername,
+          decoyMasterPassword: decoyPassword,
+          customization: customization);
 
       emit(AuthMirrorSuccess());
     } catch (e) {
@@ -79,26 +98,29 @@ class AuthCubit extends Cubit<AuthState> {
     emit(AuthLoading());
     try {
       final hashedPassword = _encryptionService.hashPassword(password);
+      String foundProfileTag = 'real'; // Assume real profile first
 
-      // First, try to log in to the "real" profile
+      // 1. Try to find a 'real' user with that username
       User? user = await _databaseService.getUserByUsername(username, 'real');
-      String profileTag = 'real';
 
-      // If real user doesn't exist or password doesn't match, try the "decoy" profile
-      if (user == null || user.password != hashedPassword) {
+      // 2. If a real user wasn't found, try to find a 'decoy' user
+      if (user == null) {
         user = await _databaseService.getUserByUsername(username, 'decoy');
-        profileTag = 'decoy';
+        foundProfileTag = 'decoy';
       }
 
+      SessionManager.currentVaultUserId = user?.id!;
+
+      // 3. Now, verify the password for whichever user was found (if any)
       if (user == null || user.password != hashedPassword) {
-        throw Exception('Invalid username or password.');
+        throw Exception(AppLocalizations.of(context)!.errorIncorrectPassword);
       }
 
-      // Save which profile is active in the session
-      await SessionManager.saveActiveProfile(profileTag);
-
+      // 4. On success, set the session state and save credentials
+      SessionManager.currentSessionProfileTag = foundProfileTag;
       _encryptionService.init(password);
       await SessionManager.saveSession(user.id!);
+
       emit(AuthSuccess());
 
     } catch (e) {
@@ -110,6 +132,8 @@ class AuthCubit extends Cubit<AuthState> {
     await SessionManager.clearSession();
     // Clear the encryption key from memory
     _encryptionService.clear();
+    SessionManager.currentSessionProfileTag = 'real';
+    SessionManager.currentVaultUserId = null;
     emit(AuthLoggedOut());
   }
 

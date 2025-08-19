@@ -13,8 +13,8 @@ class CategoryCubit extends Cubit<CategoryState> {
   Future<void> loadCategories() async {
     try {
       emit(CategoryLoading());
-      final userId = await SessionManager.getUserId();
-      final profileTag = await SessionManager.getActiveProfile();
+      final userId = SessionManager.currentVaultUserId;
+      final profileTag = SessionManager.currentSessionProfileTag;
       if (userId == null) throw Exception("User not logged in.");
       final categories = await _databaseService.getCategories(userId,profileTag);
       emit(CategoryLoaded(categories));
@@ -27,7 +27,7 @@ class CategoryCubit extends Cubit<CategoryState> {
     try {
       final userId = await SessionManager.getUserId();
       if (userId == null) throw Exception("User not logged in.");
-      final profileTag = await SessionManager.getActiveProfile();
+      final profileTag = await SessionManager.currentSessionProfileTag;
       final newCategory = Category(userId: userId, name: name,profileTag: profileTag);
       await _databaseService.insertCategory(newCategory);
       loadCategories();

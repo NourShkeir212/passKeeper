@@ -703,4 +703,23 @@ class AppLocalizationsAr extends AppLocalizations {
   @override
   String get validationGmailRequired =>
       'يجب إنشاء حساب بريد إلكتروني واحد على الأقل للخزنة الوهمية.';
+
+  @override
+  String get lockScreenOr => 'أو';
+
+  @override
+  String get lockScreenPasswordUnlock => 'أدخل كلمة المرور الرئيسية';
+
+  @override
+  String get lockScreenUnlockButton => 'فتح القفل';
+
+  @override
+  String get dialogDisableBiometricsContent =>
+      'إذا قمت بإيقاف المصادقة الحيوية ستفقد الوصول إلى الخزنة الوهمية من شاشة القفل.';
+
+  @override
+  String get dialogDisableButton => 'إيقاف';
+
+  @override
+  String get dialogDisableBiometricsTitle => 'إيقاف المصادقة الحيوية ؟';
 }

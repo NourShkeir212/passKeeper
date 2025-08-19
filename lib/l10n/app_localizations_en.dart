@@ -700,4 +700,23 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get validationGmailRequired =>
       'You must generate at least one email account for the decoy vault.';
+
+  @override
+  String get lockScreenOr => 'OR';
+
+  @override
+  String get lockScreenPasswordUnlock => 'Enter Master Password';
+
+  @override
+  String get lockScreenUnlockButton => 'Unlock';
+
+  @override
+  String get dialogDisableBiometricsContent =>
+      'Disabling biometrics means  you will lose access to your decoy vault from the lock screen.';
+
+  @override
+  String get dialogDisableButton => 'Disable';
+
+  @override
+  String get dialogDisableBiometricsTitle => 'Disable Biometrics?';
 }

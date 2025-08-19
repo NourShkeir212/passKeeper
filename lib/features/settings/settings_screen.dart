@@ -44,6 +44,7 @@ class SettingsView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
+    final activeProfile = SessionManager.currentSessionProfileTag;
     return MultiBlocListener(
       listeners: [
         BlocListener<AuthCubit, AuthState>(
@@ -105,39 +106,30 @@ class SettingsView extends StatelessWidget {
       ],
       child: Scaffold(
         appBar: AppBar(title: Text(l10n.settingsScreenTitle)),
-        body: FutureBuilder<String>(
-          future: SessionManager.getActiveProfile(),
-          builder: (context, snapshot) {
-            if (!snapshot.hasData) {
-              return const Center(child: CircularProgressIndicator());
+        body: BlocBuilder<SettingsCubit, SettingsState>(
+          builder: (context, settingsState) {
+            if (settingsState is SettingsInitial) {
+              return ListView(
+                children: [
+                  _buildAppearanceSection(context, l10n),
+                  _buildLanguageSection(context, l10n),
+                  _buildCustomizationSection(context, l10n),
+                  _buildSecuritySection(context, l10n, settingsState),
+                  _buildDataSection(context, l10n),
+                  _buildAboutSection(context, l10n),
+                  _buildDecoySection(
+                    context,
+                    l10n,
+                    settingsState,
+                    activeProfile,
+                  ),
+                  _buildAccountSection(context, l10n),
+                ],
+              );
             }
-            final activeProfile = snapshot.data!;
-            return BlocBuilder<SettingsCubit, SettingsState>(
-              builder: (context, settingsState) {
-                if (settingsState is SettingsInitial) {
-                  return ListView(
-                    children: [
-                      _buildAppearanceSection(context, l10n),
-                      _buildLanguageSection(context, l10n),
-                      _buildCustomizationSection(context, l10n),
-                      _buildSecuritySection(context, l10n, settingsState),
-                      _buildDataSection(context, l10n),
-                      _buildAboutSection(context, l10n),
-                      _buildDecoySection(
-                        context,
-                        l10n,
-                        settingsState,
-                        activeProfile,
-                      ),
-                      _buildAccountSection(context, l10n),
-                    ],
-                  );
-                }
-                return const Center(child: CircularProgressIndicator());
-              },
-            );
+            return const Center(child: CircularProgressIndicator());
           },
-        ),
+        )
       ),
     );
   }
@@ -286,8 +278,52 @@ class SettingsView extends StatelessWidget {
           title: Text(l10n.settingsBiometricTitle),
           subtitle: Text(l10n.settingsBiometricSubtitle),
           value: settingsState.isBiometricEnabled,
-          onChanged: (val) =>
-              context.read<SettingsCubit>().toggleBiometrics(val),
+          onChanged: (newValue) {
+            // If the user is turning biometrics ON, do it immediately without a dialog.
+            if (settingsState.decoyUser != null) {
+              if (newValue == true) {
+                context.read<SettingsCubit>().toggleBiometrics(true);
+                return;
+              }
+            }else{
+              context.read<SettingsCubit>().toggleBiometrics(newValue);
+            }
+            // If the user is turning biometrics OFF, show the warning dialog first.
+            if (settingsState.decoyUser != null) {
+              showDialog(
+                context: context,
+                builder: (dialogContext) => AlertDialog(
+                      title: Text(AppLocalizations.of(context)!
+                          .dialogDisableBiometricsTitle),
+                      content: Text(
+                          AppLocalizations.of(context)!
+                              .dialogDisableBiometricsContent
+                      ),
+                      actions: [
+                        TextButton(
+                          onPressed: () => Navigator.of(dialogContext).pop(),
+                          child: Text(l10n.dialogCancel),
+                        ),
+                        TextButton(
+                          onPressed: () {
+                            Navigator.of(dialogContext).pop();
+                            // If confirmed, then disable biometrics.
+                            context.read<SettingsCubit>().toggleBiometrics(
+                                false);
+                          },
+                          child: Text(
+                            AppLocalizations.of(context)!.dialogDisableButton,
+                            style: TextStyle(color: Theme
+                                .of(context)
+                                .colorScheme
+                                .error),
+                          ),
+                        ),
+                      ],
+                    ),
+              );
+            }
+          }
         ),
         ListTile(
           leading: const Icon(AppIcons.timer),

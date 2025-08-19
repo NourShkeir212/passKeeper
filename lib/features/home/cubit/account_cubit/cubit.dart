@@ -14,13 +14,13 @@ class AccountCubit extends Cubit<AccountState> {
       emit(AccountLoading());
 
       // 1. Get the current user's ID
-      final userId = await SessionManager.getUserId();
+      final userId = SessionManager.currentVaultUserId;
       if (userId == null) {
         throw Exception("User not logged in.");
       }
 
       // 2. Get the ACTIVE PROFILE TAG for the current session
-      final profileTag = await SessionManager.getActiveProfile();
+      final profileTag = SessionManager.currentSessionProfileTag;
 
       // 3. Pass the profileTag to the database query
       final accounts = await _databaseService.getAccounts(userId, profileTag);

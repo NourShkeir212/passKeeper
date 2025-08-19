@@ -278,6 +278,12 @@
     "decoyCreateInstagram": "Instagram Accounts",
     "decoyCreateShopping": "Shopping Accounts",
     "decoyCreateButton": "Create Decoy Vault",
-    "validationGmailRequired": "You must generate at least one email account for the decoy vault."
+    "validationGmailRequired": "You must generate at least one email account for the decoy vault.",
+    "lockScreenOr": "OR",
+    "lockScreenPasswordUnlock": "Enter Master Password",
+    "lockScreenUnlockButton": "Unlock",
+    "dialogDisableBiometricsContent":  "Disabling biometrics means  you will lose access to your decoy vault from the lock screen.",
+    "dialogDisableButton": "Disable",
+    "dialogDisableBiometricsTitle" : "Disable Biometrics?"
 
 }

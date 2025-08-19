@@ -1355,6 +1355,42 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'You must generate at least one email account for the decoy vault.'**
   String get validationGmailRequired;
+
+  /// No description provided for @lockScreenOr.
+  ///
+  /// In en, this message translates to:
+  /// **'OR'**
+  String get lockScreenOr;
+
+  /// No description provided for @lockScreenPasswordUnlock.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter Master Password'**
+  String get lockScreenPasswordUnlock;
+
+  /// No description provided for @lockScreenUnlockButton.
+  ///
+  /// In en, this message translates to:
+  /// **'Unlock'**
+  String get lockScreenUnlockButton;
+
+  /// No description provided for @dialogDisableBiometricsContent.
+  ///
+  /// In en, this message translates to:
+  /// **'Disabling biometrics means  you will lose access to your decoy vault from the lock screen.'**
+  String get dialogDisableBiometricsContent;
+
+  /// No description provided for @dialogDisableButton.
+  ///
+  /// In en, this message translates to:
+  /// **'Disable'**
+  String get dialogDisableButton;
+
+  /// No description provided for @dialogDisableBiometricsTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Disable Biometrics?'**
+  String get dialogDisableBiometricsTitle;
 }
 
 class _AppLocalizationsDelegate

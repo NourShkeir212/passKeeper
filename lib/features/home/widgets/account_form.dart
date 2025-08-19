@@ -174,7 +174,7 @@ class __AccountFormViewState extends State<_AccountFormView> {
       );
       context.read<AccountCubit>().updateAccount(updatedAccount);
     } else {
-      final profileTag = await SessionManager.getActiveProfile();
+      final profileTag = SessionManager.currentSessionProfileTag;
       final newAccount = Account(
         profileTag: profileTag,
         userId: userId,
