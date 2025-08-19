@@ -75,9 +75,9 @@ class ExcelService {
         return; // Stop on failure
       }
     }
-
-    final accounts = await _databaseService.getAccounts(userId);
-    final categories = await _databaseService.getCategories(userId);
+    final profileTag = await SessionManager.getActiveProfile();
+    final accounts = await _databaseService.getAccounts(userId,profileTag);
+    final categories = await _databaseService.getCategories(userId,profileTag);
     final categoryMap = {for (var cat in categories) cat.id: cat.name};
 
     final excel = Excel.createExcel();
@@ -131,7 +131,8 @@ class ExcelService {
   }
 
   Future<Map<String, int>> _getCategoryMap(int userId) async {
-    final existingCategories = await _databaseService.getCategories(userId);
+    final profileTag = await SessionManager.getActiveProfile();
+    final existingCategories = await _databaseService.getCategories(userId,profileTag);
     return { for (var cat in existingCategories) cat.name.toLowerCase(): cat.id! };
   }
 
@@ -174,8 +175,9 @@ class ExcelService {
     if (serviceName.isEmpty || username.isEmpty) {
       return _RowProcessResult.failed;
     }
-
+    final profileTag = await SessionManager.getActiveProfile();
     final bool alreadyExists = await _databaseService.accountExists(
+      profileTag: profileTag,
       userId: userId,
       serviceName: serviceName,
       username: username,
@@ -190,6 +192,7 @@ class ExcelService {
     final encryptedPassword = _encryptionService.encryptText(password);
 
     final newAccount = Account(
+      profileTag: profileTag,
       userId: userId,
       categoryId: categoryId,
       serviceName: serviceName,
@@ -206,11 +209,11 @@ class ExcelService {
   Future<int> _findOrCreateCategory(int userId, String categoryName, Map<String, int> categoryMap) async {
     final name = categoryName.isEmpty ? _l10n.categoryUncategorized : categoryName;
     final lowerCaseName = name.toLowerCase();
-
+    final profileTag = await SessionManager.getActiveProfile();
     if (categoryMap.containsKey(lowerCaseName)) {
       return categoryMap[lowerCaseName]!;
     } else {
-      final newCategory = Category(userId: userId, name: name);
+      final newCategory = Category(userId: userId, name: name,profileTag: profileTag);
       final categoryId = await _databaseService.insertCategory(newCategory);
       categoryMap[lowerCaseName] = categoryId;
       return categoryId;

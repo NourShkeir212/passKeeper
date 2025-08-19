@@ -24,9 +24,20 @@ class SettingsCubit extends Cubit<SettingsState> {
   Future<void> loadSettings() async {
     final isBiometricEnabled = await _settingsService.loadBiometricPreference();
     final autoLockMinutes = await _settingsService.loadAutoLockTime();
-    emit(SettingsInitial(isBiometricEnabled: isBiometricEnabled,autoLockMinutes: autoLockMinutes));
-  }
 
+    // NEW: Check if a decoy user exists
+    // The decoy username is always the real username + "1"
+    final realUserId = await SessionManager.getUserId();
+    final realUser = await _databaseService.getUserById(realUserId!);
+    final decoyUsername = '${realUser?.username}1';
+    final decoyUser = await _databaseService.getUserByUsername(decoyUsername, 'decoy');
+
+    emit(SettingsInitial(
+      isBiometricEnabled: isBiometricEnabled,
+      autoLockMinutes: autoLockMinutes,
+      decoyUser: decoyUser, // Pass the decoy user to the state
+    ));
+  }
   Future<void> toggleBiometrics(bool isEnabled) async {
     await _settingsService.saveBiometricPreference(isEnabled);
     loadSettings();
@@ -60,14 +71,17 @@ class SettingsCubit extends Cubit<SettingsState> {
         throw Exception(AppLocalizations.of(context)!.errorChangePasswordCurrent);
       }
 
-      // 2. Fetch ALL accounts.
-      final allAccounts = await _databaseService.getAllAccountsForUser(userId);
+      // 2. Get the ACTIVE PROFILE TAG for the current session
+      final profileTag = await SessionManager.getActiveProfile();
 
-      // 3. Create encrypters for both old and new passwords.
+      // 3. Fetch ALL accounts.
+      final allAccounts = await _databaseService.getAllAccountsForUser(userId,profileTag);
+
+      // 4. Create encrypters for both old and new passwords.
       final oldEncrypter = encryptionService.createEncrypter(oldPassword);
       final newEncrypter = encryptionService.createEncrypter(newPassword);
 
-      // 4. Decrypt with the old key and re-encrypt with the new key.
+      // 5. Decrypt with the old key and re-encrypt with the new key.
       final List<Account> reEncryptedAccounts = [];
       for (final account in allAccounts) {
         final parts = account.password.split(':');
@@ -83,12 +97,12 @@ class SettingsCubit extends Cubit<SettingsState> {
         reEncryptedAccounts.add(account.copyWith(password: combined));
       }
 
-      // 5. Save all the re-encrypted accounts back to the database in a batch.
+      // 6. Save all the re-encrypted accounts back to the database in a batch.
       if (reEncryptedAccounts.isNotEmpty) {
         await _databaseService.updateAccountsBatch(reEncryptedAccounts);
       }
 
-      // 6. Save the new HASHED master password to the database.
+      // 7. Save the new HASHED master password to the database.
       final hashedNewPassword = encryptionService.hashPassword(newPassword);
       await _databaseService.updatePassword(userId, hashedNewPassword);
 
@@ -165,6 +179,24 @@ class SettingsCubit extends Cubit<SettingsState> {
       emit(DeleteUserFailure(e.toString().replaceFirst("Exception: ", "")));
       // Revert to the previous state on failure
       emit(currentState);
+    }
+  }
+
+  /// Deletes the current decoy user and all their data.
+  Future<void> resetDecoyVault() async {
+    final currentState = state;
+    if (currentState is SettingsInitial && currentState.decoyUser != null) {
+      try {
+        await _databaseService.deleteUserByUsername(
+          currentState.decoyUser!.username,
+          'decoy',
+        );
+        // After deletion, reload the settings to update the UI
+        loadSettings();
+      } catch (e) {
+        // Handle potential errors
+        emit(DeleteUserFailure(e.toString()));
+      }
     }
   }
 }

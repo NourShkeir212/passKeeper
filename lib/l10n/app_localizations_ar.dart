@@ -599,4 +599,101 @@ class AppLocalizationsAr extends AppLocalizations {
   @override
   String get deleteAccountConfirmationPrompt =>
       'للتأكيد، الرجاء إدخال كلمة المرور الرئيسية الخاصة بك.';
+
+  @override
+  String get mirrorAccountTitle => 'إنشاء حساب وهمي';
+
+  @override
+  String get mirrorAccountSubtitle => 'عيّن كلمة مرور وهمية';
+
+  @override
+  String get mirrorAccountDescription =>
+      'هذه كلمة مرور ثانوية واختيارية. إذا أُجبرت على فتح خزنتك، يمكنك إدخال كلمة المرور هذه لإظهار مجموعة وهمية من الحسابات، مما يحافظ على أمان بياناتك الحقيقية.';
+
+  @override
+  String get mirrorAccountDecoyUsernameHint => 'اسم المستخدم الوهمي';
+
+  @override
+  String get mirrorAccountDecoyPasswordHint => 'كلمة المرور الوهمية';
+
+  @override
+  String get mirrorAccountCompleteButton => 'إكمال الإعداد';
+
+  @override
+  String get mirrorAccountSkipButton => 'تخطي الآن';
+
+  @override
+  String get mirrorAccountSuccess => 'تم إنشاء الحساب الوهمي بنجاح!';
+
+  @override
+  String get decoyVaultTitle => 'الخزنة الوهمية';
+
+  @override
+  String get decoyVaultActive => 'الحساب الوهمي مفعل';
+
+  @override
+  String get decoyVaultReset => 'إعادة تعيين الخزنة الوهمية';
+
+  @override
+  String get decoyVaultCreate => 'إنشاء خزنة وهمية';
+
+  @override
+  String get decoyVaultSubtitle => 'أضف طبقة إضافية من الأمان.';
+
+  @override
+  String get decoyResetConfirmTitle => 'إعادة تعيين الخزنة الوهمية';
+
+  @override
+  String get decoyResetConfirmContent =>
+      'هل أنت متأكد من رغبتك في إعادة تعيين خزنتك الوهمية؟ سيتم حذف جميع الحسابات الوهمية بشكل دائم.';
+
+  @override
+  String get decoyResetButton => 'إعادة تعيين';
+
+  @override
+  String get decoyAccountSocial => 'تواصل اجتماعي';
+
+  @override
+  String get decoyAccountEmail => 'بريد إلكتروني';
+
+  @override
+  String get decoyAccountShopping => 'تسوق';
+
+  @override
+  String get decoyAccountServices => 'حسابات الخدمات';
+
+  @override
+  String get decoyAccountWork => 'عمل';
+
+  @override
+  String get decoyAccountUserName => 'اسم المستخدم';
+
+  @override
+  String get decoyCreateTitle => 'تخصيص خزنتك الوهمية';
+
+  @override
+  String get decoyCreateSubtitle =>
+      'عيّن اسم مستخدم وكلمة مرور فريدين، ثم اختر عدد الحسابات الوهمية التي تريد إنشاءها.';
+
+  @override
+  String get decoyCreateGeneratedAccounts => 'الحسابات المنشأة';
+
+  @override
+  String get decoyCreateGmail => 'حسابات البريد';
+
+  @override
+  String get decoyCreateFacebook => 'حسابات فيسبوك';
+
+  @override
+  String get decoyCreateInstagram => 'حسابات انستغرام';
+
+  @override
+  String get decoyCreateShopping => 'حسابات تسوق';
+
+  @override
+  String get decoyCreateButton => 'إنشاء الخزنة الوهمية';
+
+  @override
+  String get validationGmailRequired =>
+      'يجب إنشاء حساب بريد إلكتروني واحد على الأقل للخزنة الوهمية.';
 }

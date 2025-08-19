@@ -14,8 +14,9 @@ class CategoryCubit extends Cubit<CategoryState> {
     try {
       emit(CategoryLoading());
       final userId = await SessionManager.getUserId();
+      final profileTag = await SessionManager.getActiveProfile();
       if (userId == null) throw Exception("User not logged in.");
-      final categories = await _databaseService.getCategories(userId);
+      final categories = await _databaseService.getCategories(userId,profileTag);
       emit(CategoryLoaded(categories));
     } catch (e) {
       emit(CategoryFailure(e.toString()));
@@ -26,7 +27,8 @@ class CategoryCubit extends Cubit<CategoryState> {
     try {
       final userId = await SessionManager.getUserId();
       if (userId == null) throw Exception("User not logged in.");
-      final newCategory = Category(userId: userId, name: name);
+      final profileTag = await SessionManager.getActiveProfile();
+      final newCategory = Category(userId: userId, name: name,profileTag: profileTag);
       await _databaseService.insertCategory(newCategory);
       loadCategories();
     } catch (e) {

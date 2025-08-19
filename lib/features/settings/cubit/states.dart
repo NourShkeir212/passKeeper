@@ -1,5 +1,7 @@
 import 'package:equatable/equatable.dart';
 
+import '../../../model/user_model.dart';
+
 abstract class SettingsState extends Equatable {
   const SettingsState();
   @override
@@ -9,14 +11,16 @@ abstract class SettingsState extends Equatable {
 class SettingsInitial extends SettingsState {
   final bool isBiometricEnabled;
   final int autoLockMinutes;
+  final User? decoyUser;
 
   const SettingsInitial({
     required this.isBiometricEnabled,
     required this.autoLockMinutes,
+    this.decoyUser,
   });
 
   @override
-  List<Object> get props => [isBiometricEnabled, autoLockMinutes];
+  List<Object> get props => [isBiometricEnabled, autoLockMinutes,?decoyUser];
 }
 
 class SettingsLoading extends SettingsState {}

@@ -5,12 +5,14 @@ class Category extends Equatable {
   final int userId;
   final String name;
   final int categoryOrder;
+  final String profileTag;
 
   const Category({
     this.id,
     required this.userId,
     required this.name,
     this.categoryOrder = 0,
+    required this.profileTag
   });
 
   // ADD THIS METHOD
@@ -21,6 +23,7 @@ class Category extends Equatable {
     int? categoryOrder,
   }) {
     return Category(
+      profileTag: this.profileTag,
       id: id ?? this.id,
       userId: userId ?? this.userId,
       name: name ?? this.name,
@@ -34,11 +37,13 @@ class Category extends Equatable {
       'userId': userId,
       'name': name,
       'categoryOrder': categoryOrder,
+      "profileTag" :profileTag
     };
   }
 
   factory Category.fromMap(Map<String, dynamic> map) {
     return Category(
+      profileTag: map["profileTag"],
       id: map['id'],
       userId: map['userId'],
       name: map['name'],
@@ -47,5 +52,5 @@ class Category extends Equatable {
   }
 
   @override
-  List<Object?> get props => [id, userId, name, categoryOrder];
+  List<Object?> get props => [id, userId, name, categoryOrder,profileTag];
 }

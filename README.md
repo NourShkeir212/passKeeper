@@ -14,17 +14,17 @@ A secure, offline-first password manager built with Flutter. PassKeeper allows y
 * **100% Offline:** All data is stored locally on your device in a secure SQLite database. Your data never leaves your phone.
 * **End-to-End Encryption:** All sensitive account information (especially passwords) is encrypted using the powerful **AES-256** algorithm.
 * **Zero Knowledge Model:** Your master password is **hashed** for verification and is **never stored**. It's the key to unlock your vault and exists only in your memory.
-* **Session-Based Security:** The encryption key is derived from your master password only when you need it and is cleared from memory when the app is closed.
+* **Decoy Vault (Plausible Deniability):** Create an optional, secondary "decoy" profile with its own unique password. If forced to open the app, you can enter the decoy password to reveal a separate vault filled with believable fake data, keeping your real accounts completely hidden and secure.
 * **Biometric App Lock:** Use your device's fingerprint or Face ID for quick and convenient access to the app.
 * **Customizable Auto-Lock Timer:** For added security, the app automatically locks the vault if left in the background. The timer duration is fully customizable by the user.
 * **Permanent Data Deletion:** Securely delete your entire user profile and all associated data with master password confirmation.
 
 ### 🗂️ Organization & Management
-* **Custom Categories:** Create, edit, and delete your own custom categories.
-* **Multi-Select & Batch Delete:** Easily select multiple categories at once to delete them in a single action.
-* **Drag & Drop Reordering:** Intuitively reorder accounts *within* their category and reorder entire categories on the management screen.
-* **Full Account CRUD:** Create, view, edit, and delete account credentials with an intuitive UI.
-* **Real-time Search:** Instantly find any account by searching for its service name or username.
+* **Modern Home Screen UI:** The main screen features an interactive, horizontal list of category filter chips. The main view is a grid of categories when "All" is selected, or a list of expandable service groups for a focused view.
+* **Custom Categories:** Create, edit, delete, and reorder your own custom categories to organize your accounts logically.
+* **Multi-Select & Batch Delete:** Easily select multiple categories at once to delete them in a single action from the management screen.
+* **Drag & Drop Reordering:** Intuitively reorder your accounts *within* their category group.
+* **Real-time Search:** A dedicated search bar on the home screen allows you to instantly find any account by its service name or username.
 * **Slidable Actions:** Quickly edit or delete accounts with modern swipe gestures.
 * **Password Generator:** Create strong, unique, and customizable passwords directly within the app.
 * **Password Strength Meter:** Get real-time feedback on the strength of your passwords as you type.
