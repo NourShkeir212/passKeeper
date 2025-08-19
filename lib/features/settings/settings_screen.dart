@@ -433,7 +433,8 @@ class SettingsView extends StatelessWidget {
   }
 
   Widget _buildDecoySection(BuildContext context, AppLocalizations l10n,
-      SettingsInitial settingsState, String activeProfile) {
+      SettingsInitial settingsState, String activeProfile)
+  {
     // Only show this section if the user is in their "real" account
     if (activeProfile != 'real') {
       return const SizedBox.shrink();

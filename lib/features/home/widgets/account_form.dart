@@ -356,13 +356,16 @@ class __AccountFormViewState extends State<_AccountFormView> {
                             labelText: l10n.accountFormPhoneHint,
                             prefixIcon: AppIcons.phone),
                         const SizedBox(height: 20),
-                        CustomElevatedButton(
-                            onPressed: () =>
-                                _onSave(
-                                    formState.selectedCategoryId,
-                                    formState.selectedService
-                                ),
-                            text: l10n.accountFormSaveButton
+                        SizedBox(
+                          width: double.infinity,
+                          child: CustomElevatedButton(
+                              onPressed: () =>
+                                  _onSave(
+                                      formState.selectedCategoryId,
+                                      formState.selectedService
+                                  ),
+                              text: l10n.accountFormSaveButton
+                          ),
                         ),
                       ],
                     ),
