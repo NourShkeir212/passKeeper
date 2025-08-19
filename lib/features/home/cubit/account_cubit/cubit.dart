@@ -12,11 +12,19 @@ class AccountCubit extends Cubit<AccountState> {
   Future<void> loadAccounts() async {
     try {
       emit(AccountLoading());
+
+      // 1. Get the current user's ID
       final userId = await SessionManager.getUserId();
       if (userId == null) {
         throw Exception("User not logged in.");
       }
-      final accounts = await _databaseService.getAccounts(userId);
+
+      // 2. Get the ACTIVE PROFILE TAG for the current session
+      final profileTag = await SessionManager.getActiveProfile();
+
+      // 3. Pass the profileTag to the database query
+      final accounts = await _databaseService.getAccounts(userId, profileTag);
+
       emit(AccountLoaded(accounts));
     } catch (e) {
       emit(AccountFailure(e.toString()));

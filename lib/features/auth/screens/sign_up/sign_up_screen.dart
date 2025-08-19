@@ -13,6 +13,7 @@ import '../../cubit/auth_cubit/cubit.dart';
 import '../../cubit/auth_cubit/states.dart';
 import '../../widgets/auth_link_text.dart';
 import '../sign_in/sign_in_screen.dart';
+import '../signup_mirror/signup_mirror_screen.dart';
 import 'cubit/cubit.dart';
 import 'cubit/states.dart';
 class SignUpScreen extends StatelessWidget {
@@ -93,7 +94,8 @@ class _SignUpViewState extends State<SignUpView> {
               ),
             );
           Navigator.of(context).pushReplacement(
-              MaterialPageRoute(builder: (_) => const SignInScreen()));
+            MaterialPageRoute(builder: (_) => const SignInScreen()),
+          );
         } else if (state is AuthFailure) {
           ScaffoldMessenger.of(context)
             ..hideCurrentSnackBar()

@@ -596,4 +596,101 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get deleteAccountConfirmationPrompt =>
       'To confirm, please enter your master password.';
+
+  @override
+  String get mirrorAccountTitle => 'Create Decoy Account';
+
+  @override
+  String get mirrorAccountSubtitle => 'Set a Decoy Password';
+
+  @override
+  String get mirrorAccountDescription =>
+      'This is an optional, second password. If you are ever forced to open your vault, you can enter this password to show a fake set of accounts, keeping your real data safe.';
+
+  @override
+  String get mirrorAccountDecoyUsernameHint => 'Decoy Username';
+
+  @override
+  String get mirrorAccountDecoyPasswordHint => 'Decoy Password';
+
+  @override
+  String get mirrorAccountCompleteButton => 'Complete Setup';
+
+  @override
+  String get mirrorAccountSkipButton => 'Skip for now';
+
+  @override
+  String get mirrorAccountSuccess => 'Decoy account created successfully!';
+
+  @override
+  String get decoyVaultTitle => 'Decoy Vault';
+
+  @override
+  String get decoyVaultActive => 'Decoy Account Active';
+
+  @override
+  String get decoyVaultReset => 'Reset Decoy Vault';
+
+  @override
+  String get decoyVaultCreate => 'Create a Decoy Vault';
+
+  @override
+  String get decoyVaultSubtitle => 'Add an extra layer of security.';
+
+  @override
+  String get decoyResetConfirmTitle => 'Reset Decoy Vault';
+
+  @override
+  String get decoyResetConfirmContent =>
+      'Are you sure you want to reset your decoy vault? All fake accounts will be permanently deleted.';
+
+  @override
+  String get decoyResetButton => 'Reset';
+
+  @override
+  String get decoyAccountSocial => 'Social';
+
+  @override
+  String get decoyAccountEmail => 'Email';
+
+  @override
+  String get decoyAccountShopping => 'Shopping';
+
+  @override
+  String get decoyAccountServices => 'Service Accounts';
+
+  @override
+  String get decoyAccountWork => 'Work';
+
+  @override
+  String get decoyAccountUserName => 'Username';
+
+  @override
+  String get decoyCreateTitle => 'Customize Your Decoy Vault';
+
+  @override
+  String get decoyCreateSubtitle =>
+      'Set a unique username and password, then choose how many fake accounts you want to generate.';
+
+  @override
+  String get decoyCreateGeneratedAccounts => 'Generated Accounts';
+
+  @override
+  String get decoyCreateGmail => 'Email Accounts';
+
+  @override
+  String get decoyCreateFacebook => 'Facebook Accounts';
+
+  @override
+  String get decoyCreateInstagram => 'Instagram Accounts';
+
+  @override
+  String get decoyCreateShopping => 'Shopping Accounts';
+
+  @override
+  String get decoyCreateButton => 'Create Decoy Vault';
+
+  @override
+  String get validationGmailRequired =>
+      'You must generate at least one email account for the decoy vault.';
 }

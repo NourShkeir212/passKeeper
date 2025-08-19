@@ -1157,6 +1157,192 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'To confirm, please enter your master password.'**
   String get deleteAccountConfirmationPrompt;
+
+  /// No description provided for @mirrorAccountTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Create Decoy Account'**
+  String get mirrorAccountTitle;
+
+  /// No description provided for @mirrorAccountSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Set a Decoy Password'**
+  String get mirrorAccountSubtitle;
+
+  /// No description provided for @mirrorAccountDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'This is an optional, second password. If you are ever forced to open your vault, you can enter this password to show a fake set of accounts, keeping your real data safe.'**
+  String get mirrorAccountDescription;
+
+  /// No description provided for @mirrorAccountDecoyUsernameHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Decoy Username'**
+  String get mirrorAccountDecoyUsernameHint;
+
+  /// No description provided for @mirrorAccountDecoyPasswordHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Decoy Password'**
+  String get mirrorAccountDecoyPasswordHint;
+
+  /// No description provided for @mirrorAccountCompleteButton.
+  ///
+  /// In en, this message translates to:
+  /// **'Complete Setup'**
+  String get mirrorAccountCompleteButton;
+
+  /// No description provided for @mirrorAccountSkipButton.
+  ///
+  /// In en, this message translates to:
+  /// **'Skip for now'**
+  String get mirrorAccountSkipButton;
+
+  /// No description provided for @mirrorAccountSuccess.
+  ///
+  /// In en, this message translates to:
+  /// **'Decoy account created successfully!'**
+  String get mirrorAccountSuccess;
+
+  /// No description provided for @decoyVaultTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Decoy Vault'**
+  String get decoyVaultTitle;
+
+  /// No description provided for @decoyVaultActive.
+  ///
+  /// In en, this message translates to:
+  /// **'Decoy Account Active'**
+  String get decoyVaultActive;
+
+  /// No description provided for @decoyVaultReset.
+  ///
+  /// In en, this message translates to:
+  /// **'Reset Decoy Vault'**
+  String get decoyVaultReset;
+
+  /// No description provided for @decoyVaultCreate.
+  ///
+  /// In en, this message translates to:
+  /// **'Create a Decoy Vault'**
+  String get decoyVaultCreate;
+
+  /// No description provided for @decoyVaultSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Add an extra layer of security.'**
+  String get decoyVaultSubtitle;
+
+  /// No description provided for @decoyResetConfirmTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Reset Decoy Vault'**
+  String get decoyResetConfirmTitle;
+
+  /// No description provided for @decoyResetConfirmContent.
+  ///
+  /// In en, this message translates to:
+  /// **'Are you sure you want to reset your decoy vault? All fake accounts will be permanently deleted.'**
+  String get decoyResetConfirmContent;
+
+  /// No description provided for @decoyResetButton.
+  ///
+  /// In en, this message translates to:
+  /// **'Reset'**
+  String get decoyResetButton;
+
+  /// No description provided for @decoyAccountSocial.
+  ///
+  /// In en, this message translates to:
+  /// **'Social'**
+  String get decoyAccountSocial;
+
+  /// No description provided for @decoyAccountEmail.
+  ///
+  /// In en, this message translates to:
+  /// **'Email'**
+  String get decoyAccountEmail;
+
+  /// No description provided for @decoyAccountShopping.
+  ///
+  /// In en, this message translates to:
+  /// **'Shopping'**
+  String get decoyAccountShopping;
+
+  /// No description provided for @decoyAccountServices.
+  ///
+  /// In en, this message translates to:
+  /// **'Service Accounts'**
+  String get decoyAccountServices;
+
+  /// No description provided for @decoyAccountWork.
+  ///
+  /// In en, this message translates to:
+  /// **'Work'**
+  String get decoyAccountWork;
+
+  /// No description provided for @decoyAccountUserName.
+  ///
+  /// In en, this message translates to:
+  /// **'Username'**
+  String get decoyAccountUserName;
+
+  /// No description provided for @decoyCreateTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Customize Your Decoy Vault'**
+  String get decoyCreateTitle;
+
+  /// No description provided for @decoyCreateSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Set a unique username and password, then choose how many fake accounts you want to generate.'**
+  String get decoyCreateSubtitle;
+
+  /// No description provided for @decoyCreateGeneratedAccounts.
+  ///
+  /// In en, this message translates to:
+  /// **'Generated Accounts'**
+  String get decoyCreateGeneratedAccounts;
+
+  /// No description provided for @decoyCreateGmail.
+  ///
+  /// In en, this message translates to:
+  /// **'Email Accounts'**
+  String get decoyCreateGmail;
+
+  /// No description provided for @decoyCreateFacebook.
+  ///
+  /// In en, this message translates to:
+  /// **'Facebook Accounts'**
+  String get decoyCreateFacebook;
+
+  /// No description provided for @decoyCreateInstagram.
+  ///
+  /// In en, this message translates to:
+  /// **'Instagram Accounts'**
+  String get decoyCreateInstagram;
+
+  /// No description provided for @decoyCreateShopping.
+  ///
+  /// In en, this message translates to:
+  /// **'Shopping Accounts'**
+  String get decoyCreateShopping;
+
+  /// No description provided for @decoyCreateButton.
+  ///
+  /// In en, this message translates to:
+  /// **'Create Decoy Vault'**
+  String get decoyCreateButton;
+
+  /// No description provided for @validationGmailRequired.
+  ///
+  /// In en, this message translates to:
+  /// **'You must generate at least one email account for the decoy vault.'**
+  String get validationGmailRequired;
 }
 
 class _AppLocalizationsDelegate

@@ -9,7 +9,9 @@ class Account extends Equatable {
   final String password;
   final String? recoveryAccount;
   final String? phoneNumbers;
+  final bool isFavorite;
   final int accountOrder;
+  final String profileTag; // ADD THIS
 
   const Account({
     this.id,
@@ -20,7 +22,9 @@ class Account extends Equatable {
     required this.password,
     this.recoveryAccount,
     this.phoneNumbers,
+    this.isFavorite = false,
     this.accountOrder = 0,
+    required this.profileTag, // ADD THIS
   });
 
   Account copyWith({
@@ -32,7 +36,9 @@ class Account extends Equatable {
     String? password,
     String? recoveryAccount,
     String? phoneNumbers,
+    bool? isFavorite,
     int? accountOrder,
+    String? profileTag,
   }) {
     return Account(
       id: id ?? this.id,
@@ -43,7 +49,9 @@ class Account extends Equatable {
       password: password ?? this.password,
       recoveryAccount: recoveryAccount ?? this.recoveryAccount,
       phoneNumbers: phoneNumbers ?? this.phoneNumbers,
+      isFavorite: isFavorite ?? this.isFavorite,
       accountOrder: accountOrder ?? this.accountOrder,
+      profileTag: profileTag ?? this.profileTag, // ADD THIS
     );
   }
 
@@ -57,7 +65,9 @@ class Account extends Equatable {
       'password': password,
       'recoveryAccount': recoveryAccount,
       'phoneNumbers': phoneNumbers,
+      'isFavorite': isFavorite ? 1 : 0,
       'accountOrder': accountOrder,
+      'profileTag': profileTag, // ADD THIS
     };
   }
 
@@ -71,14 +81,15 @@ class Account extends Equatable {
       password: map['password'],
       recoveryAccount: map['recoveryAccount'],
       phoneNumbers: map['phoneNumbers'],
+      isFavorite: map['isFavorite'] == 1,
       accountOrder: map['accountOrder'] ?? 0,
+      profileTag: map['profileTag'], // ADD THIS
     );
   }
 
   @override
-  List<Object?> get props =>
-      [
-        id, userId, categoryId, serviceName, username, password,
-        recoveryAccount, phoneNumbers, accountOrder
-      ];
+  List<Object?> get props => [
+    id, userId, categoryId, serviceName, username, password,
+    recoveryAccount, phoneNumbers, isFavorite, accountOrder, profileTag
+  ];
 }
