@@ -151,58 +151,35 @@ class SettingsView extends StatelessWidget {
         _SettingsGroupTitle(title: l10n.settingsAppearance),
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
-
           child: BlocBuilder<ThemeCubit, ThemeState>(
             builder: (context, themeState) {
-              return SegmentedButton<ThemeMode>(
-                segments: <ButtonSegment<ThemeMode>>[
-                  ButtonSegment<ThemeMode>(
-                    value: ThemeMode.light,
-
-                    icon: Icon(AppIcons.sun),
-
-                    label: Text(l10n.settingsThemeLight),
+              return SizedBox(
+                width: double.infinity,
+                child: SegmentedButton<ThemeMode>(
+                  segments: [
+                    ButtonSegment<ThemeMode>(value: ThemeMode.light, icon: const Icon(AppIcons.sun), label: Text(l10n.settingsThemeLight)),
+                    ButtonSegment<ThemeMode>(value: ThemeMode.dark, icon: const Icon(AppIcons.moon), label: Text(l10n.settingsThemeDark)),
+                    ButtonSegment<ThemeMode>(value: ThemeMode.system, icon: const Icon(AppIcons.auto), label: Text(l10n.settingsThemeSystem)),
+                  ],
+                  selected: {themeState.themeMode},
+                  onSelectionChanged: (newSelection) => context.read<ThemeCubit>().setTheme(newSelection.first),
+                  // --- THE FIX IS HERE ---
+                  style: ButtonStyle(
+                    // Color for the selected segment's icon and text
+                    foregroundColor: MaterialStateProperty.resolveWith<Color?>((states) {
+                      if (states.contains(MaterialState.selected)) {
+                        return Theme.of(context).colorScheme.onPrimary;
+                      }
+                      return null; // Use default color for unselected
+                    }),
+                    // Color for the selected segment's background
+                    backgroundColor: MaterialStateProperty.resolveWith<Color?>((states) {
+                      if (states.contains(MaterialState.selected)) {
+                        return Theme.of(context).colorScheme.primary;
+                      }
+                      return null; // Use default color for unselected
+                    }),
                   ),
-
-                  ButtonSegment<ThemeMode>(
-                    value: ThemeMode.dark,
-
-                    icon: Icon(AppIcons.moon),
-
-                    label: Text(l10n.settingsThemeDark),
-                  ),
-
-                  ButtonSegment<ThemeMode>(
-                    value: ThemeMode.system,
-
-                    icon: Icon(AppIcons.auto),
-
-                    label: Text(l10n.settingsThemeSystem),
-                  ),
-                ],
-
-                selected: <ThemeMode>{themeState.themeMode},
-
-                onSelectionChanged: (Set<ThemeMode> newSelection) {
-                  context.read<ThemeCubit>().setTheme(newSelection.first);
-                },
-
-                style: ButtonStyle(
-                  tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-
-                  visualDensity: VisualDensity.compact,
-
-                  backgroundColor: WidgetStateProperty.resolveWith<Color?>((
-                    Set<WidgetState> states,
-                  ) {
-                    if (states.contains(WidgetState.selected)) {
-                      return Theme.of(
-                        context,
-                      ).colorScheme.primary.withOpacity(0.2);
-                    }
-
-                    return null;
-                  }),
                 ),
               );
             },
@@ -221,41 +198,16 @@ class SettingsView extends StatelessWidget {
           padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
           child: BlocBuilder<LocaleCubit, LocaleState>(
             builder: (context, localeState) {
-              // --- FIX IS HERE: Wrap with SizedBox ---
               return SizedBox(
-                width: double.infinity, // This makes the child take the full width
+                width: double.infinity,
                 child: SegmentedButton<String>(
-                  segments: <ButtonSegment<String>>[
-                    ButtonSegment<String>(
-                      value: 'en',
-                      label: Text(l10n.settingsLangEnglish),
-                    ),
-                    ButtonSegment<String>(
-                      value: 'ar',
-                      label: Text(l10n.settingsLangArabic),
-                    ),
-                    ButtonSegment<String>(
-                      value: 'system',
-                      label: Text(l10n.settingsLangAuto),
-                    ),
+                  segments: [
+                    ButtonSegment<String>(value: 'en', label: Text(l10n.settingsLangEnglish)),
+                    ButtonSegment<String>(value: 'ar', label: Text(l10n.settingsLangArabic)),
+                    ButtonSegment<String>(value: 'system', label: Text(l10n.settingsLangAuto)),
                   ],
-                  selected: <String>{
-                    localeState.locale?.languageCode ?? 'system',
-                  },
-                  style: ButtonStyle(
-                    visualDensity: VisualDensity.compact,
-                    backgroundColor: WidgetStateProperty.resolveWith<Color?>(
-                          (Set<WidgetState> states) {
-                        if (states.contains(WidgetState.selected)) {
-                          return Theme.of(
-                            context,
-                          ).colorScheme.primary.withOpacity(0.2);
-                        }
-                        return null;
-                      },
-                    ),
-                  ),
-                  onSelectionChanged: (Set<String> newSelection) {
+                  selected: {localeState.locale?.languageCode ?? 'system'},
+                  onSelectionChanged: (newSelection) {
                     final selection = newSelection.first;
                     if (selection == 'system') {
                       context.read<LocaleCubit>().clearLocale();
@@ -263,6 +215,23 @@ class SettingsView extends StatelessWidget {
                       context.read<LocaleCubit>().setLocale(Locale(selection));
                     }
                   },
+                  // --- THE FIX IS HERE ---
+                  style: ButtonStyle(
+                    // Color for the selected segment's icon and text
+                    foregroundColor: MaterialStateProperty.resolveWith<Color?>((states) {
+                      if (states.contains(MaterialState.selected)) {
+                        return Theme.of(context).colorScheme.onPrimary;
+                      }
+                      return null; // Use default color for unselected
+                    }),
+                    // Color for the selected segment's background
+                    backgroundColor: MaterialStateProperty.resolveWith<Color?>((states) {
+                      if (states.contains(MaterialState.selected)) {
+                        return Theme.of(context).colorScheme.primary;
+                      }
+                      return null; // Use default color for unselected
+                    }),
+                  ),
                 ),
               );
             },
@@ -428,8 +397,7 @@ class SettingsView extends StatelessWidget {
   }
 
   Widget _buildDecoySection(BuildContext context, AppLocalizations l10n,
-      SettingsInitial settingsState, String activeProfile)
-  {
+      SettingsInitial settingsState, String activeProfile) {
     // Only show this section if the user is in their "real" account
     if (activeProfile != 'real') {
       return const SizedBox.shrink();
