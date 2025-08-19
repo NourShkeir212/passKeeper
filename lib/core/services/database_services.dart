@@ -22,7 +22,7 @@ class DatabaseService {
     String path = join(await getDatabasesPath(), 'passkeeper.db');
     return await openDatabase(
       path,
-      version: 4, // Updated version
+      version: 5, // Updated version
       onCreate: _onCreate,
       onUpgrade: _onUpgrade,
       onConfigure: (db) async {
@@ -39,7 +39,8 @@ class DatabaseService {
       id INTEGER PRIMARY KEY AUTOINCREMENT,
       username TEXT NOT NULL, 
       password TEXT NOT NULL,
-      profileTag TEXT NOT NULL
+      profileTag TEXT NOT NULL,
+      linkedRealUserId INTEGER NULL -- ADD THIS
     )
   ''');
     await db.execute('CREATE UNIQUE INDEX idx_user_profile ON users (username, profileTag)');
@@ -91,6 +92,9 @@ class DatabaseService {
       await db.execute('DROP INDEX IF EXISTS users.username'); // May not exist, that's okay
       await db.execute('CREATE UNIQUE INDEX IF NOT EXISTS idx_user_profile ON users (username, profileTag)');
     }
+    if (oldVersion < 5) {
+      await db.execute('ALTER TABLE users ADD COLUMN linkedRealUserId INTEGER NULL');
+    }
   }
 
   Future<void> deleteDatabaseFile() async {
@@ -129,7 +133,18 @@ class DatabaseService {
     }
     return null;
   }
-
+  Future<User?> getDecoyUserFor(int realUserId) async {
+    final db = await database;
+    final List<Map<String, dynamic>> maps = await db.query(
+      'users',
+      where: 'linkedRealUserId = ? AND profileTag = ?',
+      whereArgs: [realUserId, 'decoy'],
+    );
+    if (maps.isNotEmpty) {
+      return User.fromMap(maps.first);
+    }
+    return null;
+  }
   Future<bool> verifyPassword(int userId, String password) async {
     final db = await database;
     final List<Map<String, dynamic>> result = await db.query(

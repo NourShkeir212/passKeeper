@@ -13,7 +13,6 @@ import '../../cubit/auth_cubit/cubit.dart';
 import '../../cubit/auth_cubit/states.dart';
 import '../../widgets/auth_link_text.dart';
 import '../sign_in/sign_in_screen.dart';
-import '../signup_mirror/signup_mirror_screen.dart';
 import 'cubit/cubit.dart';
 import 'cubit/states.dart';
 class SignUpScreen extends StatelessWidget {

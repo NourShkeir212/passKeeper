@@ -44,27 +44,29 @@ class AuthCubit extends Cubit<AuthState> {
   }
 
   Future<void> createMirrorAccount({
+    required int realUserId, 
     required String decoyUsername,
     required String decoyPassword,
-    required Map<String, int> customization, // ADD THIS
+    required Map<String, int> customization,
   }) async {
     emit(AuthLoading());
     try {
       final hashedPassword = _encryptionService.hashPassword(decoyPassword);
       final decoyUser = User(
-          username: decoyUsername,
-          password: hashedPassword,
-          profileTag: 'decoy');
+        username: decoyUsername,
+        password: hashedPassword,
+        profileTag: 'decoy',
+        linkedRealUserId: realUserId, // Create the link here
+      );
       final userId = await _databaseService.insertUser(decoyUser);
 
       if (userId == -1) throw Exception("Could not create decoy user.");
 
-      // Pass all the required parameters to the seeding service
       await DataSeedingService().seedDecoyData(
         userId: userId,
         decoyUsername: decoyUsername,
         decoyMasterPassword: decoyPassword,
-        customization: customization, // PASS THE MAP
+        customization: customization,
       );
 
       emit(AuthMirrorSuccess());
@@ -73,7 +75,6 @@ class AuthCubit extends Cubit<AuthState> {
     }
   }
 
-  // --- UPDATED login METHOD ---
   Future<void> login({required String username, required String password,required BuildContext context}) async {
     emit(AuthLoading());
     try {

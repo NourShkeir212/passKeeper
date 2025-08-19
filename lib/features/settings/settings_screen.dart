@@ -456,19 +456,23 @@ class SettingsView extends StatelessWidget {
             title: Text(l10n.decoyVaultCreate),
             subtitle: Text(l10n.decoyVaultSubtitle),
             onTap: () {
-              Navigator.push(context, MaterialPageRoute(
-                builder: (_) => MultiBlocProvider(
-                  providers: [
-                    BlocProvider.value(
-                      value: context.read<AuthCubit>(),
-                    ),
-                    BlocProvider.value(
-                      value: context.read<SettingsCubit>(),
-                    ),
-                  ],
-                  child: const CreateDecoyScreen(),
-                ),
-              ));
+              // Add a null check to safely access the user's ID
+              if (settingsState.realUser != null) {
+                Navigator.push(context, MaterialPageRoute(
+                  builder: (_) => MultiBlocProvider(
+                    providers: [
+                      BlocProvider.value(value: context.read<AuthCubit>()),
+                      BlocProvider.value(value: context.read<SettingsCubit>()),
+                    ],
+                    child: CreateDecoyScreen(realUserId: settingsState.realUser!.id!),
+                  ),
+                ));
+              } else {
+                // Optional: Show an error if the user data is missing
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(content: Text("Could not load user data. Please try again.")),
+                );
+              }
             },
           )
         ],

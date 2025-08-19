@@ -11,7 +11,8 @@ import '../auth/cubit/auth_cubit/states.dart';
 import '../settings/cubit/cubit.dart';
 
 class CreateDecoyScreen extends StatefulWidget {
-  const CreateDecoyScreen({super.key});
+  final int realUserId;
+  const CreateDecoyScreen({super.key, required this.realUserId});
 
   @override
   State<CreateDecoyScreen> createState() => _CreateDecoyScreenState();
@@ -108,6 +109,7 @@ class _CreateDecoyScreenState extends State<CreateDecoyScreen> {
 
                           // If all checks pass, proceed to create the account
                           context.read<AuthCubit>().createMirrorAccount(
+                              realUserId: widget.realUserId, 
                               decoyUsername: _decoyUsernameController.text.trim(),
                               decoyPassword: _decoyPasswordController.text,
                               customization: {

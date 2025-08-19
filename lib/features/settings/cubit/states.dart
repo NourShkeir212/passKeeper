@@ -11,16 +11,18 @@ abstract class SettingsState extends Equatable {
 class SettingsInitial extends SettingsState {
   final bool isBiometricEnabled;
   final int autoLockMinutes;
+  final User? realUser;
   final User? decoyUser;
 
   const SettingsInitial({
     required this.isBiometricEnabled,
     required this.autoLockMinutes,
+    this.realUser,
     this.decoyUser,
   });
 
   @override
-  List<Object> get props => [isBiometricEnabled, autoLockMinutes,?decoyUser];
+  List<Object> get props => [isBiometricEnabled, autoLockMinutes,?decoyUser,?realUser];
 }
 
 class SettingsLoading extends SettingsState {}

@@ -22,21 +22,40 @@ class SettingsCubit extends Cubit<SettingsState> {
       : super(const SettingsInitial(isBiometricEnabled: true, autoLockMinutes: 5));
 
   Future<void> loadSettings() async {
-    final isBiometricEnabled = await _settingsService.loadBiometricPreference();
-    final autoLockMinutes = await _settingsService.loadAutoLockTime();
+    try {
+      // Load preferences from shared_preferences
+      final isBiometricEnabled = await _settingsService.loadBiometricPreference();
+      final autoLockMinutes = await _settingsService.loadAutoLockTime();
 
-    // NEW: Check if a decoy user exists
-    // The decoy username is always the real username + "1"
-    final realUserId = await SessionManager.getUserId();
-    final realUser = await _databaseService.getUserById(realUserId!);
-    final decoyUsername = '${realUser?.username}1';
-    final decoyUser = await _databaseService.getUserByUsername(decoyUsername, 'decoy');
+      // Get the active user's ID from the current session
+      final realUserId = await SessionManager.getUserId();
+      if (realUserId == null) {
+        throw Exception("Active user session not found.");
+      }
 
-    emit(SettingsInitial(
-      isBiometricEnabled: isBiometricEnabled,
-      autoLockMinutes: autoLockMinutes,
-      decoyUser: decoyUser, // Pass the decoy user to the state
-    ));
+      // Fetch the full "real" user object from the database
+      final realUser = await _databaseService.getUserById(realUserId);
+      if (realUser == null) {
+        throw Exception("Could not load user data from database.");
+      }
+
+      // Now, use the real user's ID to find their linked decoy account, if it exists
+      final decoyUser = await _databaseService.getDecoyUserFor(realUserId);
+
+      // Only emit the final state once all data has been successfully loaded
+      emit(SettingsInitial(
+        isBiometricEnabled: isBiometricEnabled,
+        autoLockMinutes: autoLockMinutes,
+        realUser: realUser, // This is now guaranteed to have a value
+        decoyUser: decoyUser, // This can be null if no decoy exists
+      ));
+
+    } catch (e) {
+      // If any step fails, you can emit a specific failure state
+      // to show an error message on the settings screen.
+      print("Failed to load settings: $e");
+      // For example: emit(SettingsLoadFailure(e.toString()));
+    }
   }
   Future<void> toggleBiometrics(bool isEnabled) async {
     await _settingsService.saveBiometricPreference(isEnabled);
@@ -184,19 +203,23 @@ class SettingsCubit extends Cubit<SettingsState> {
 
   /// Deletes the current decoy user and all their data.
   Future<void> resetDecoyVault() async {
-    final currentState = state;
-    if (currentState is SettingsInitial && currentState.decoyUser != null) {
-      try {
-        await _databaseService.deleteUserByUsername(
-          currentState.decoyUser!.username,
-          'decoy',
-        );
-        // After deletion, reload the settings to update the UI
-        loadSettings();
-      } catch (e) {
-        // Handle potential errors
-        emit(DeleteUserFailure(e.toString()));
+    try {
+      // Get the real user's ID to find the linked decoy account
+      final realUserId = await SessionManager.getUserId();
+      if (realUserId == null) return;
+
+      // Find the decoy user that is linked to the real user
+      final decoyUser = await _databaseService.getDecoyUserFor(realUserId);
+
+      if (decoyUser != null) {
+        // Delete the decoy user (ON DELETE CASCADE will handle their data)
+        await _databaseService.deleteUser(decoyUser.id!);
       }
+
+      // After deletion, reload the settings to update the UI
+      await loadSettings();
+    } catch (e) {
+      emit(DeleteUserFailure(e.toString()));
     }
   }
 }
