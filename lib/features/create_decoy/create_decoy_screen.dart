@@ -30,7 +30,7 @@ class _CreateDecoyScreenState extends State<CreateDecoyScreen> {
 
   int _gmailCount = 2;
   int _facebookCount = 1;
-  int _instagramCount = 2;
+  int _instagramCount = 1;
   int _shoppingCount = 1;
   int _servicesCount = 2;
 
@@ -160,6 +160,7 @@ class _CreateDecoyScreenState extends State<CreateDecoyScreen> {
                                   'facebook': _facebookCount,
                                   'instagram': _instagramCount,
                                   'shopping': _shoppingCount,
+                                  'services' :_servicesCount
                                 });
                           }
                         }

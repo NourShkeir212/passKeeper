@@ -68,7 +68,7 @@ class _ReorderAccountsScreenState extends State<ReorderAccountsScreen> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           CustomText(account.username,
-                              style: Theme.of(context).textTheme.titleMedium),
+                              style: Theme.of(context).textTheme.titleMedium,maxLines: 2,),
                           CustomText(account.serviceName,
                               style: Theme.of(context).textTheme.bodySmall),
                         ],
