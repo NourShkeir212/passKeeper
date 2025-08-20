@@ -1,6 +1,5 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:path/path.dart';
 import 'package:secure_accounts/l10n/app_localizations.dart';
 
 import '../../../../core/services/data_seeding_service.dart';

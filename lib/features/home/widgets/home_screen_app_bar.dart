@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:secure_accounts/core/widgets/app_title_name.dart';
 import '../../../core/theme/app_icons.dart';
-import '../../../core/widgets/custom_text.dart';
+
 import '../../../l10n/app_localizations.dart';
 import '../../settings/settings_screen.dart';
 import '../cubit/account_cubit/cubit.dart';

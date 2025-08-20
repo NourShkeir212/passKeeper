@@ -2,17 +2,20 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import '../../core/services/encryption_service.dart';
+import '../../core/theme/app_icons.dart';
 import '../../core/widgets/custom_elevated_button.dart';
 import '../../core/widgets/custom_text.dart';
 import '../../core/widgets/custom_text_field.dart';
 import '../../l10n/app_localizations.dart';
+import '../../model/user_model.dart';
 import '../auth/cubit/auth_cubit/cubit.dart';
 import '../auth/cubit/auth_cubit/states.dart';
 import '../settings/cubit/cubit.dart';
 
 class CreateDecoyScreen extends StatefulWidget {
-  final int realUserId;
-  const CreateDecoyScreen({super.key, required this.realUserId});
+  final User realUser;
+  const CreateDecoyScreen({super.key, required this.realUser});
 
   @override
   State<CreateDecoyScreen> createState() => _CreateDecoyScreenState();
@@ -22,6 +25,8 @@ class _CreateDecoyScreenState extends State<CreateDecoyScreen> {
   final _formKey = GlobalKey<FormState>();
   final _decoyUsernameController = TextEditingController();
   final _decoyPasswordController = TextEditingController();
+
+  bool _isPasswordVisible = false;
 
   int _gmailCount = 2;
   int _facebookCount = 1;
@@ -34,6 +39,22 @@ class _CreateDecoyScreenState extends State<CreateDecoyScreen> {
     _decoyUsernameController.dispose();
     _decoyPasswordController.dispose();
     super.dispose();
+  }
+  void _showPasswordMatchDialog() {
+    final l10n = AppLocalizations.of(context)!;
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: Text(l10n.decoyPasswordMatchDialogTitle),
+        content: Text(l10n.decoyPasswordMatchDialogContent),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.of(context).pop(),
+            child: Text(l10n.dialogOk),
+          ),
+        ],
+      ),
+    );
   }
 
   @override
@@ -64,12 +85,29 @@ class _CreateDecoyScreenState extends State<CreateDecoyScreen> {
                   validator: (value) => value!.isEmpty ? l10n.validationEnterUsername : null,
                 ),
                 const SizedBox(height: 16),
+                Padding(
+                  padding: const EdgeInsets.only(bottom: 8.0),
+                  child: CustomText(
+                    maxLines: 3,
+                    l10n.decoyCreatePasswordHint,
+                    style: Theme.of(context).textTheme.bodySmall,
+                    textAlign: TextAlign.center,
+                  ),
+                ),
                 CustomTextField(
                   controller: _decoyPasswordController,
                   labelText: l10n.mirrorAccountDecoyPasswordHint,
-                  prefixIcon: Icons.lock,
-                  isPassword: true,
+                  prefixIcon: AppIcons.lock,
+                  isPassword: !_isPasswordVisible,
                   validator: (value) => value!.isEmpty ? l10n.validationPasswordEmpty : null,
+                  suffixIcon: IconButton(
+                    icon: Icon(_isPasswordVisible ? AppIcons.eyeSlash : AppIcons.eye),
+                    onPressed: () {
+                      setState(() {
+                        _isPasswordVisible = !_isPasswordVisible;
+                      });
+                    },
+                  ),
                 ),
                 const SizedBox(height: 32),
       
@@ -96,7 +134,10 @@ class _CreateDecoyScreenState extends State<CreateDecoyScreen> {
                       onPressed: () {
                         // First, validate the text fields
                         if (_formKey.currentState!.validate()) {
-                        // --- Validate the account counts ---
+                          final decoyPassword = _decoyPasswordController.text;
+                          final hashedDecoyPassword = EncryptionService().hashPassword(decoyPassword);
+
+                          // --- Validate the account counts ---
                           if (_gmailCount == 0) {
                             ScaffoldMessenger.of(context).showSnackBar(
                               SnackBar(
@@ -106,20 +147,21 @@ class _CreateDecoyScreenState extends State<CreateDecoyScreen> {
                             );
                             return; // Stop the process if validation fails
                           }
-
                           // If all checks pass, proceed to create the account
-                          context.read<AuthCubit>().createMirrorAccount(
-                              realUserId: widget.realUserId, 
-                              decoyUsername: _decoyUsernameController.text.trim(),
-                              decoyPassword: _decoyPasswordController.text,
-                              customization: {
-                                'gmail': _gmailCount,
-                                'facebook': _facebookCount,
-                                'instagram': _instagramCount,
-                                'shopping': _shoppingCount,
-                                'services': _servicesCount,
-                              }
-                          );
+                          if (hashedDecoyPassword == widget.realUser.password) {
+                            _showPasswordMatchDialog();
+                          } else {
+                            context.read<AuthCubit>().createMirrorAccount(
+                                realUserId: widget.realUser.id!,
+                                decoyUsername: _decoyUsernameController.text.trim(),
+                                decoyPassword: decoyPassword,
+                                customization: {
+                                  'gmail': _gmailCount,
+                                  'facebook': _facebookCount,
+                                  'instagram': _instagramCount,
+                                  'shopping': _shoppingCount,
+                                });
+                          }
                         }
                       },
                       text: l10n.decoyCreateButton,

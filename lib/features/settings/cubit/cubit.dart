@@ -1,7 +1,6 @@
 import 'package:encrypt/encrypt.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:path/path.dart';
 import 'package:secure_accounts/l10n/app_localizations.dart';
 import '../../../core/services/database_services.dart';
 import '../../../core/services/encryption_service.dart';
@@ -70,31 +69,36 @@ class SettingsCubit extends Cubit<SettingsState> {
 
   Future<void> changeMasterPassword({
     required String oldPassword,
-    required BuildContext context,
     required String newPassword,
+    required BuildContext context
   }) async {
-    // Keep the last known value of settings to restore it later
+    // Keep the current state to restore it after the operation
     final currentState = state;
     emit(SettingsLoading());
     try {
-      final userId = await SessionManager.getUserId();
+      final userId = await SessionManager.getRealUserId();
       if (userId == null) throw Exception("User not found");
 
       // 1. Verify the user's OLD password.
       final encryptionService = EncryptionService();
       final hashedOldPassword = encryptionService.hashPassword(oldPassword);
-      final isVerified = await _databaseService.verifyPassword(
-          userId, hashedOldPassword);
+      final isVerified = await _databaseService.verifyPassword(userId, hashedOldPassword);
 
       if (!isVerified) {
-        throw Exception(AppLocalizations.of(context)!.errorChangePasswordCurrent);
+        throw Exception(AppLocalizations.of(context)!.errorIncorrectPassword);
       }
 
-      // 2. Get the ACTIVE PROFILE TAG for the current session
-      final profileTag = SessionManager.currentSessionProfileTag;
+      // 2. NEW: Check against the decoy password
+      final decoyUser = await _databaseService.getDecoyUserFor(userId);
+      if (decoyUser != null) {
+        final hashedNewPassword = encryptionService.hashPassword(newPassword);
+        if (hashedNewPassword == decoyUser.password) {
+          throw Exception(AppLocalizations.of(context)!.errorPasswordMatchesDecoy);
+        }
+      }
 
       // 3. Fetch ALL accounts.
-      final allAccounts = await _databaseService.getAllAccountsForUser(userId,profileTag);
+      final allAccounts = await _databaseService.getAllAccountsForUser(userId, 'real');
 
       // 4. Create encrypters for both old and new passwords.
       final oldEncrypter = encryptionService.createEncrypter(oldPassword);
@@ -109,8 +113,7 @@ class SettingsCubit extends Cubit<SettingsState> {
         final decryptedPassword = oldEncrypter.decrypt(encrypted, iv: iv);
 
         final newIv = IV.fromSecureRandom(16);
-        final reEncryptedPassword = newEncrypter.encrypt(
-            decryptedPassword, iv: newIv);
+        final reEncryptedPassword = newEncrypter.encrypt(decryptedPassword, iv: newIv);
         final combined = '${newIv.base64}:${reEncryptedPassword.base64}';
 
         reEncryptedAccounts.add(account.copyWith(password: combined));
@@ -129,9 +132,11 @@ class SettingsCubit extends Cubit<SettingsState> {
       encryptionService.init(newPassword);
 
       emit(ChangePasswordSuccess());
+
     } catch (e) {
       emit(ChangePasswordFailure(e.toString().replaceFirst("Exception: ", "")));
     } finally {
+      // Revert to a stable state so the previous screen doesn't show a spinner.
       if (currentState is SettingsInitial) {
         emit(currentState);
       } else {

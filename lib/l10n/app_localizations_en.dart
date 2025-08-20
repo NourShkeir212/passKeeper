@@ -725,4 +725,32 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get reorderScreenTitle => 'Reorder';
+
+  @override
+  String get decoyCreatePasswordHint =>
+      'For your security, please choose a password that is different from your master password.';
+
+  @override
+  String get decoyPasswordMatchDialogTitle => 'Password Match';
+
+  @override
+  String get decoyPasswordMatchDialogContent =>
+      'The decoy password cannot be the same as your real master password. Please choose a different one.';
+
+  @override
+  String get dialogOk => 'OK';
+
+  @override
+  String get errorPasswordMatchesDecoy =>
+      'New password cannot be the same as your decoy password.';
+
+  @override
+  String get dialogConfirmExitTitle => 'Exit App?';
+
+  @override
+  String get dialogConfirmExitContent =>
+      'Are you sure you want to close the app?';
+
+  @override
+  String get dialogExitButton => 'Exit';
 }

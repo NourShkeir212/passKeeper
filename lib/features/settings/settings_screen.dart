@@ -270,7 +270,6 @@ class SettingsView extends StatelessWidget {
     SettingsInitial settingsState,
       String activeProfile
   ) {
-
     // Only show this section if the user is in their "real" account
     if (activeProfile != 'real') {
       return Column(
@@ -319,7 +318,6 @@ class SettingsView extends StatelessWidget {
         ],
       );
     }
-
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -552,7 +550,7 @@ class SettingsView extends StatelessWidget {
                       BlocProvider.value(value: context.read<AuthCubit>()),
                       BlocProvider.value(value: context.read<SettingsCubit>()),
                     ],
-                    child: CreateDecoyScreen(realUserId: settingsState.realUser!.id!),
+                    child: CreateDecoyScreen(realUser: settingsState.realUser!),
                   ),
                 ));
               } else {

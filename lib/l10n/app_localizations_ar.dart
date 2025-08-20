@@ -728,4 +728,32 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get reorderScreenTitle => 'إعادة ترتيب';
+
+  @override
+  String get decoyCreatePasswordHint =>
+      'لأمانك، الرجاء اختيار كلمة مرور مختلفة عن كلمة المرور الرئيسية.';
+
+  @override
+  String get decoyPasswordMatchDialogTitle => 'تطابق في كلمة المرور';
+
+  @override
+  String get decoyPasswordMatchDialogContent =>
+      'لا يمكن أن تكون كلمة المرور الوهمية هي نفسها كلمة المرور الرئيسية الحقيقية. الرجاء اختيار كلمة مرور مختلفة.';
+
+  @override
+  String get dialogOk => 'حسناً';
+
+  @override
+  String get errorPasswordMatchesDecoy =>
+      'لا يمكن أن تكون كلمة المرور الجديدة هي نفسها كلمة مرور حسابك الوهمي.';
+
+  @override
+  String get dialogConfirmExitTitle => 'الخروج من التطبيق؟';
+
+  @override
+  String get dialogConfirmExitContent =>
+      'هل أنت متأكد من رغبتك في إغلاق التطبيق؟';
+
+  @override
+  String get dialogExitButton => 'خروج';
 }

@@ -286,6 +286,14 @@
     "dialogDisableButton": "Disable",
     "dialogDisableBiometricsTitle" : "Disable Biometrics?",
     "reorderToolTip" : "Reorder Accounts",
-    "reorderScreenTitle" : "Reorder"
+    "reorderScreenTitle" : "Reorder",
+    "decoyCreatePasswordHint": "For your security, please choose a password that is different from your master password.",
+    "decoyPasswordMatchDialogTitle": "Password Match",
+    "decoyPasswordMatchDialogContent": "The decoy password cannot be the same as your real master password. Please choose a different one.",
+    "dialogOk": "OK",
+    "errorPasswordMatchesDecoy": "New password cannot be the same as your decoy password.",
+    "dialogConfirmExitTitle": "Exit App?",
+    "dialogConfirmExitContent": "Are you sure you want to close the app?",
+    "dialogExitButton": "Exit"
 
 }

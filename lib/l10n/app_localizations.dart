@@ -1403,6 +1403,54 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Reorder'**
   String get reorderScreenTitle;
+
+  /// No description provided for @decoyCreatePasswordHint.
+  ///
+  /// In en, this message translates to:
+  /// **'For your security, please choose a password that is different from your master password.'**
+  String get decoyCreatePasswordHint;
+
+  /// No description provided for @decoyPasswordMatchDialogTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Password Match'**
+  String get decoyPasswordMatchDialogTitle;
+
+  /// No description provided for @decoyPasswordMatchDialogContent.
+  ///
+  /// In en, this message translates to:
+  /// **'The decoy password cannot be the same as your real master password. Please choose a different one.'**
+  String get decoyPasswordMatchDialogContent;
+
+  /// No description provided for @dialogOk.
+  ///
+  /// In en, this message translates to:
+  /// **'OK'**
+  String get dialogOk;
+
+  /// No description provided for @errorPasswordMatchesDecoy.
+  ///
+  /// In en, this message translates to:
+  /// **'New password cannot be the same as your decoy password.'**
+  String get errorPasswordMatchesDecoy;
+
+  /// No description provided for @dialogConfirmExitTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Exit App?'**
+  String get dialogConfirmExitTitle;
+
+  /// No description provided for @dialogConfirmExitContent.
+  ///
+  /// In en, this message translates to:
+  /// **'Are you sure you want to close the app?'**
+  String get dialogConfirmExitContent;
+
+  /// No description provided for @dialogExitButton.
+  ///
+  /// In en, this message translates to:
+  /// **'Exit'**
+  String get dialogExitButton;
 }
 
 class _AppLocalizationsDelegate

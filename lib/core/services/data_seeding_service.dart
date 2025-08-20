@@ -13,7 +13,8 @@ class DataSeedingService {
   static const List<String> _services = [
     'GitHub', 'Epic Games', 'Proton VPN', 'DeepL', 'Netflix',
     'Stack Overflow', 'Figma', 'Notion', 'ChatGPT', 'Spotify',
-    'Discord', 'Twitch', 'Steam', 'Adobe Creative Cloud'
+    'Discord', 'Twitch', 'Steam', 'Adobe Creative Cloud','UpWork'
+    ,'Binance'
   ];
 
   /// Generates a believable, human-like password.

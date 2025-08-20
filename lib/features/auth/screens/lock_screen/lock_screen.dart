@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:secure_accounts/core/theme/app_icons.dart';
 import 'package:secure_accounts/l10n/app_localizations.dart';
-
 import '../../../../core/services/biometric_service.dart';
 import '../../../../core/services/database_services.dart';
 import '../../../../core/services/navigation_service.dart';

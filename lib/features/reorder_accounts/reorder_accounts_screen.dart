@@ -1,9 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:secure_accounts/l10n/app_localizations.dart';
-
-import '../../core/theme/app_icons.dart';
 import '../../core/widgets/custom_text.dart';
 import '../../model/account_model.dart';
 import '../home/cubit/account_cubit/cubit.dart';
