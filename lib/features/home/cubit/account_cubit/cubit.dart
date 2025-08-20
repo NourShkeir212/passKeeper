@@ -10,76 +10,55 @@ class AccountCubit extends Cubit<AccountState> {
   AccountCubit(this._databaseService) : super(AccountInitial());
 
 
-  Future<void> reorderAccountsInService(
-      int oldIndex, int newIndex, int categoryId, String serviceName) async {
-    final currentState = state;
-    if (currentState is AccountLoaded) {
-      if (newIndex > oldIndex) {
-        newIndex -= 1;
+  Future<void> persistAccountReorder(List<Account> reorderedGroup) async {
+    try {
+      // Update the order index for the items
+      for (int i = 0; i < reorderedGroup.length; i++) {
+        reorderedGroup[i] = reorderedGroup[i].copyWith(accountOrder: i);
       }
-
-      // 1. Create a mutable copy of the full list of accounts.
-      final fullList = List<Account>.from(currentState.accounts);
-
-      // 2. Isolate the specific group being reordered.
-      final serviceGroupToReorder = fullList
-          .where((a) => a.categoryId == categoryId && a.serviceName == serviceName)
-          .toList();
-
-      // 3. Perform the reorder on the small list.
-      final item = serviceGroupToReorder.removeAt(oldIndex);
-      serviceGroupToReorder.insert(newIndex, item);
-
-      // 4. Update the order index for the items in this reordered group.
-      for (int i = 0; i < serviceGroupToReorder.length; i++) {
-        serviceGroupToReorder[i] = serviceGroupToReorder[i].copyWith(accountOrder: i);
-      }
-
-      // 5. Remove the old, unsorted items from the main list.
-      fullList.removeWhere((a) => a.categoryId == categoryId && a.serviceName == serviceName);
-
-      // 6. Add the newly reordered items back into the main list.
-      fullList.addAll(serviceGroupToReorder);
-
-      // 7. Re-apply the filter if one is active.
-      List<Account>? newFilteredList;
-      if (currentState.activeCategoryId != null) {
-        newFilteredList = fullList
-            .where((acc) => acc.categoryId == currentState.activeCategoryId)
-            .toList();
-      }
-
-      // 8. Emit this new, stable list IMMEDIATELY.
-      // This optimistic update matches the UI's animation, preventing the flicker.
-      emit(AccountLoaded(
-        fullList,
-        filteredAccounts: newFilteredList,
-        activeCategoryId: currentState.activeCategoryId,
-      ));
-
-      // 9. In the background, save the changes to the database.
-      try {
-        await _databaseService.updateAccountOrder(serviceGroupToReorder);
-      } catch (e) {
-        // If saving fails, reload from the DB to revert the change.
-        loadAccounts();
-      }
+      // Persist the changes to the database
+      await _databaseService.updateAccountOrder(reorderedGroup);
+    } catch (e) {
+      // If saving fails, we might want to reload to revert to the correct state from the DB
+      loadAccounts();
     }
   }
 
   Future<void> loadAccounts({bool showLoading = true}) async {
+    // --- THE FIX IS HERE ---
+    // 1. Remember the current state before loading.
+    final currentState = state;
+    final int? activeFilterId = (currentState is AccountLoaded) ? currentState.activeCategoryId : null;
+
     try {
       if (showLoading) {
         emit(AccountLoading());
       }
+
       final userId = SessionManager.currentVaultUserId;
       if (userId == null) {
         emit(const AccountLoaded([]));
         return;
       }
+
       final profileTag = SessionManager.currentSessionProfileTag;
-      final accounts = await _databaseService.getAccounts(userId, profileTag);
-      emit(AccountLoaded(accounts));
+      // 2. Fetch the complete, up-to-date list from the database.
+      final allAccounts = await _databaseService.getAccounts(userId, profileTag);
+
+      // 3. Re-apply the filter if one was active.
+      List<Account>? newFilteredList;
+      if (activeFilterId != null) {
+        newFilteredList = allAccounts
+            .where((acc) => acc.categoryId == activeFilterId)
+            .toList();
+      }
+
+      // 4. Emit the new state, preserving the filter.
+      emit(AccountLoaded(
+        allAccounts,
+        filteredAccounts: newFilteredList,
+        activeCategoryId: activeFilterId,
+      ));
     } catch (e) {
       emit(AccountFailure(e.toString()));
     }

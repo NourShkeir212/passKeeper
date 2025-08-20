@@ -119,8 +119,9 @@ class AccountList extends StatelessWidget {
                         ? IconButton(
                       icon: const Icon(Icons.sort),
                       tooltip: AppLocalizations.of(context)!.reorderToolTip,
-                      onPressed: () {
-                        Navigator.push(context, MaterialPageRoute(
+                      onPressed: () async { // 1. Make the function async
+                        // 2. Await the result of the navigation
+                        await Navigator.push(context, MaterialPageRoute(
                           builder: (_) => BlocProvider.value(
                             value: context.read<AccountCubit>(),
                             child: ReorderAccountsScreen(
@@ -129,6 +130,9 @@ class AccountList extends StatelessWidget {
                             ),
                           ),
                         ));
+                        // 3. This code will only run AFTER the user returns from the ReorderAccountsScreen
+                        //    Now, we silently refresh the list to show the new order.
+                        context.read<AccountCubit>().loadAccounts(showLoading: false);
                       },
                     )
                         : null,
