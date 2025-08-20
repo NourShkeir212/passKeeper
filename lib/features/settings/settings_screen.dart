@@ -114,7 +114,7 @@ class SettingsView extends StatelessWidget {
                   _buildAppearanceSection(context, l10n),
                   _buildLanguageSection(context, l10n),
                   _buildCustomizationSection(context, l10n),
-                  _buildSecuritySection(context, l10n, settingsState),
+                  _buildSecuritySection(context, l10n, settingsState,activeProfile),
                   _buildDataSection(context, l10n),
                   _buildAboutSection(context, l10n),
                   _buildDecoySection(
@@ -268,7 +268,58 @@ class SettingsView extends StatelessWidget {
     BuildContext context,
     AppLocalizations l10n,
     SettingsInitial settingsState,
+      String activeProfile
   ) {
+
+    // Only show this section if the user is in their "real" account
+    if (activeProfile != 'real') {
+      return Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          const Divider(),
+          _SettingsGroupTitle(title: l10n.settingsSecurity),
+          ListTile(
+            leading: const Icon(AppIcons.timer),
+            title: Text(l10n.settingsAutoLockTitle),
+            trailing: DropdownButton<int>(
+              value: settingsState.autoLockMinutes,
+              items: [1, 5, 15, 30]
+                  .map(
+                    (minutes) => DropdownMenuItem(
+                  value: minutes,
+                  child: Text(l10n.settingsAutoLockMinutes(minutes)),
+                ),
+              )
+                  .toList(),
+              onChanged: (value) {
+                if (value != null) {
+                  context.read<SettingsCubit>().changeAutoLockTime(value);
+                }
+              },
+            ),
+          ),
+          ListTile(
+            title: Text(l10n.changePasswordTitle),
+            leading: const Icon(AppIcons.password),
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (_) => MultiBlocProvider(
+                    providers: [
+                      BlocProvider.value(value: context.read<SettingsCubit>()),
+                      BlocProvider.value(value: context.read<AccountCubit>()),
+                    ],
+                    child: const ChangePasswordScreen(),
+                  ),
+                ),
+              );
+            },
+          ),
+        ],
+      );
+    }
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
