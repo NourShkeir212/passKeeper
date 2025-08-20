@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import '../../core/theme/app_icons.dart';
 import '../../core/widgets/custom_text.dart';
 import '../../model/account_model.dart';
 import '../home/cubit/account_cubit/cubit.dart';
@@ -47,11 +49,38 @@ class _ReorderAccountsScreenState extends State<ReorderAccountsScreen> {
         itemCount: _accountsForService.length,
         itemBuilder: (context, index) {
           final account = _accountsForService[index];
-          return ListTile(
-            key: ValueKey(account.id),
-            leading: const Icon(Icons.drag_handle),
-            title: CustomText(account.username),
-            subtitle: CustomText(account.serviceName),
+          return Animate(
+            key: ValueKey(account.id), // Key must be on the outer widget
+            effects: [FadeEffect(delay: (50 * index).ms)],
+            child: Card(
+              margin: const EdgeInsets.symmetric(vertical: 4.0),
+              child: Padding(
+                padding: const EdgeInsets.symmetric(vertical: 8.0),
+                child: Row(
+                  children: [
+                    const Padding(
+                      padding: EdgeInsets.symmetric(horizontal: 16.0),
+                      child: Icon(AppIcons.key),
+                    ),
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          CustomText(account.username,
+                              style: Theme.of(context).textTheme.titleMedium),
+                          CustomText(account.serviceName,
+                              style: Theme.of(context).textTheme.bodySmall),
+                        ],
+                      ),
+                    ),
+                    const Padding(
+                      padding: EdgeInsets.symmetric(horizontal: 16.0),
+                      child: Icon(Icons.drag_handle),
+                    ),
+                  ],
+                ),
+              ),
+            ),
           );
         },
         onReorder: (oldIndex, newIndex) {
