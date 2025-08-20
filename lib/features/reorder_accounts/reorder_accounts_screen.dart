@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:secure_accounts/l10n/app_localizations.dart';
 import '../../core/theme/app_icons.dart';
 import '../../core/widgets/custom_text.dart';
 import '../../model/account_model.dart';
@@ -43,7 +44,7 @@ class _ReorderAccountsScreenState extends State<ReorderAccountsScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Reorder ${widget.serviceName}"), // TODO: Localize
+        title: Text("${AppLocalizations.of(context)!.reorderScreenTitle} ${widget.serviceName}"),
       ),
       body: ReorderableListView.builder(
         itemCount: _accountsForService.length,
