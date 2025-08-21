@@ -44,7 +44,6 @@ class _LoginViewState extends State<LoginView> {
     FocusScope.of(context).unfocus();
     if (_formKey.currentState!.validate()) {
       context.read<AuthCubit>().login(
-        context: context,
         username: _usernameController.text.trim(),
         password: _passwordController.text,
       );

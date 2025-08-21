@@ -36,7 +36,6 @@ class SignUpView extends StatefulWidget {
 }
 
 class _SignUpViewState extends State<SignUpView> {
-  // --- THE FIX ---
   // Controllers and the key are now instance variables of the State class.
   // This means they will NOT be recreated on every build.
   final _formKey = GlobalKey<FormState>();
@@ -72,7 +71,6 @@ class _SignUpViewState extends State<SignUpView> {
     FocusScope.of(context).unfocus();
     if (_formKey.currentState!.validate()) {
       context.read<AuthCubit>().signUp(
-        context: context,
         username: _usernameController.text.trim(),
         password: _passwordController.text,
       );

@@ -27,7 +27,7 @@ class AuthCubit extends Cubit<AuthState> {
     }
   }
 
-  Future<void> unlockWithPassword(String password,context) async {
+  Future<void> unlockWithPassword(String password) async {
     emit(AuthLoading());
     try {
       final realUserId = await SessionManager.getRealUserId();
@@ -42,7 +42,7 @@ class AuthCubit extends Cubit<AuthState> {
       // 2. Check if the password matches the REAL account
       if (realUser.password == hashedPassword) {
         SessionManager.currentSessionProfileTag = 'real';
-        SessionManager.currentVaultUserId = realUser.id!; // Set vault to REAL user
+        SessionManager.currentVaultUserId = realUser.id!;
         _encryptionService.init(password);
         emit(AuthSuccess());
         return;
@@ -52,46 +52,22 @@ class AuthCubit extends Cubit<AuthState> {
       final decoyUser = await _databaseService.getDecoyUserFor(realUserId);
       if (decoyUser != null && decoyUser.password == hashedPassword) {
         SessionManager.currentSessionProfileTag = 'decoy';
-        // --- THE FIX IS HERE ---
-        // Set the vault to the DECOY user's ID for this session
         SessionManager.currentVaultUserId = decoyUser.id!;
-
         _encryptionService.init(password);
         emit(AuthSuccess());
         return;
       }
 
       // 4. If it matches neither, the password is wrong
-      throw Exception(AppLocalizations.of(context)!.errorIncorrectPassword);
+      throw Exception("Incorrect password.");
     } catch (e) {
       emit(AuthFailure(e.toString().replaceFirst("Exception: ", "")));
     }
   }
 
-  Future<void> loginToDecoyWithPassword(String decoyPassword,BuildContext context) async {
-    emit(AuthLoading());
-    try {
-      final realUserId = await SessionManager.getUserId();
-      if (realUserId == null) throw Exception("No active session found.");
 
-      final decoyUser = await _databaseService.getDecoyUserFor(realUserId);
-      if (decoyUser == null) throw Exception(AppLocalizations.of(context)!.errorIncorrectPassword);
 
-      final hashedDecoyPassword = _encryptionService.hashPassword(decoyPassword);
-      if (hashedDecoyPassword != decoyUser.password) {
-        throw Exception(AppLocalizations.of(context)!.errorIncorrectPassword);
-      }
-      SessionManager.currentVaultUserId = decoyUser.id!;
-      SessionManager.currentSessionProfileTag = 'decoy';
-      _encryptionService.init(decoyPassword);
-      emit(AuthSuccess());
-
-    } catch (e) {
-      emit(AuthFailure(e.toString().replaceFirst("Exception: ", "")));
-    }
-  }
-
-  Future<void> signUp({required String username, required String password,required BuildContext context}) async {
+  Future<void> signUp({required String username, required String password}) async {
     emit(AuthLoading());
     final hashedPassword = _encryptionService.hashPassword(password);
     final newUser = User(username: username, password: hashedPassword, profileTag: 'real');
@@ -100,7 +76,7 @@ class AuthCubit extends Cubit<AuthState> {
     if (result != -1) {
       emit(AuthSuccessSignUp(username: username,userId: result)); // Pass ID as well
     } else {
-      emit( AuthFailure(AppLocalizations.of(context)!.errorUsernameExists));
+      emit( AuthFailure("User name already exists"));
     }
   }
 
@@ -134,32 +110,34 @@ class AuthCubit extends Cubit<AuthState> {
     }
   }
 
-  Future<void> login({required String username, required String password,required BuildContext context}) async {
+  Future<void> login({required String username, required String password}) async {
     emit(AuthLoading());
     try {
       final hashedPassword = _encryptionService.hashPassword(password);
-      String foundProfileTag = 'real'; // Assume real profile first
+      User? user;
+      String profileTag = 'real';
 
-      // 1. Try to find a 'real' user with that username
-      User? user = await _databaseService.getUserByUsername(username, 'real');
+      // Try to find a 'real' user first
+      user = await _databaseService.getUserByUsername(username, 'real');
 
-      // 2. If a real user wasn't found, try to find a 'decoy' user
+      // If no real user, try to find a 'decoy' user
       if (user == null) {
         user = await _databaseService.getUserByUsername(username, 'decoy');
-        foundProfileTag = 'decoy';
+        profileTag = 'decoy';
       }
 
-      SessionManager.currentVaultUserId = user?.id!;
-
-      // 3. Now, verify the password for whichever user was found (if any)
       if (user == null || user.password != hashedPassword) {
-        throw Exception(AppLocalizations.of(context)!.errorIncorrectPassword);
+        throw Exception('Invalid username or password.');
       }
 
-      // 4. On success, set the session state and save credentials
-      SessionManager.currentSessionProfileTag = foundProfileTag;
+      // Only save the session and password to secure storage if it's a REAL login
+      if (profileTag == 'real') {
+        await SessionManager.saveSession(user.id!);
+      }
+
+      SessionManager.currentSessionProfileTag = profileTag;
+      SessionManager.currentVaultUserId = user.id!;
       _encryptionService.init(password);
-      await SessionManager.saveSession(user.id!);
 
       emit(AuthSuccess());
 

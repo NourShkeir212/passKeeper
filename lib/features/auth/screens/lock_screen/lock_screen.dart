@@ -73,7 +73,7 @@ class _LockScreenState extends State<LockScreen> {
     FocusScope.of(context).unfocus();
     if (_passwordController.text.isEmpty) return;
 
-    context.read<AuthCubit>().unlockWithPassword(_passwordController.text,context);
+    context.read<AuthCubit>().unlockWithPassword(_passwordController.text);
   }
 
   @override
