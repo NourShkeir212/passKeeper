@@ -66,10 +66,8 @@ class CategoryFilterChipsState extends State<CategoryFilterChips> {
       builder: (context, accountState) {
         return BlocBuilder<CategoryCubit, CategoryState>(
           builder: (context, categoryState) {
-            // --- THE FIX IS HERE ---
             // First, check that BOTH states are the correct "Loaded" type.
-            if (categoryState is CategoryLoaded &&
-                accountState is AccountLoaded) {
+            if (categoryState is CategoryLoaded && accountState is AccountLoaded) {
               // Now that we've checked, we can safely access `accountState.accounts`.
               final categoriesWithAccounts = categoryState.categories.where((
                   category) {
@@ -80,15 +78,13 @@ class CategoryFilterChipsState extends State<CategoryFilterChips> {
               if (categoriesWithAccounts.isEmpty) {
                 return const SizedBox.shrink();
               }
-
-              // The rest of the widget builds correctly using the filtered list.
               return SizedBox(
                 height: 50,
                 child: ListView.separated(
                   controller: _scrollController,
                   padding: const EdgeInsets.symmetric(horizontal: 16.0),
                   scrollDirection: Axis.horizontal,
-                  itemCount: categoriesWithAccounts.length,
+                  itemCount: categoriesWithAccounts.length + 1,
                   separatorBuilder: (context, index) => const SizedBox(width: 8),
                   itemBuilder: (context, index) {
                     // --- "All" Chip ---

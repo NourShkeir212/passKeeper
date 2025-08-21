@@ -99,23 +99,24 @@ class HomeScreenView extends StatelessWidget {
                       appBar: HomeScreenAppBar(searchController: searchController,isSearching: isSearching,),
                       body: GestureDetector(
                         onHorizontalDragEnd: (details) {
-                          final categoryCubit = context.read<CategoryCubit>();
-                          final categoryState = categoryCubit.state;
+                          final accountState = context.read<AccountCubit>().state;
+                          final categoryState = context.read<CategoryCubit>().state;
 
-                          if (categoryState is CategoryLoaded) {
-                            final categories = categoryState.categories;
-                            final currentSelection = (chipsKey.currentState?.selectedCategoryId);
+                          if (categoryState is CategoryLoaded && accountState is AccountLoaded) {
+                            // --- filtered list of categories with accounts ---
+                            final categories = categoryState.categories.where((category) {
+                              return accountState.accounts.any((account) => account.categoryId == category.id);
+                            }).toList();
+
+                            final currentSelection = chipsKey.currentState?.selectedCategoryId;
                             int currentIndex = 0;
                             if (currentSelection != null) {
                               currentIndex = categories.indexWhere((c) => c.id == currentSelection) + 1;
                             }
 
-                            // Swipe Left (Go to next chip)
                             if (details.primaryVelocity! < 0 && currentIndex < categories.length) {
                               chipsKey.currentState?.selectCategoryByIndex(currentIndex + 1, categories);
-                            }
-                            // Swipe Right (Go to previous chip)
-                            else if (details.primaryVelocity! > 0 && currentIndex > 0) {
+                            } else if (details.primaryVelocity! > 0 && currentIndex > 0) {
                               chipsKey.currentState?.selectCategoryByIndex(currentIndex - 1, categories);
                             }
                           }
@@ -130,26 +131,33 @@ class HomeScreenView extends StatelessWidget {
                           ],
                         ),
                       ),
-                      floatingActionButton: homeState.isSearching
-                          ? null
-                          : FloatingActionButton(
-                        onPressed: () {
-                          showModalBottomSheet(
-                            context: context,
-                            isScrollControlled: true,
-                            shape: const RoundedRectangleBorder(borderRadius: BorderRadius.vertical(top: Radius.circular(25.0))),
-                            builder: (_) {
-                              return MultiBlocProvider(
-                                providers: [
-                                  BlocProvider.value(value: context.read<AccountCubit>()),
-                                  BlocProvider.value(value: context.read<CategoryCubit>()),
-                                ],
-                                child: const AccountForm(),
-                              );
-                            },
-                          );
-                        },
-                        child: const Icon(AppIcons.add),
+                        floatingActionButton: homeState.isSearching
+                            ? null
+                            : FloatingActionButton(
+                          onPressed: () async { // the function async
+                            await showModalBottomSheet(
+                              context: context,
+                              isScrollControlled: true,
+                              shape: const RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.vertical(top: Radius.circular(25.0))),
+                              builder: (_) {
+                                return MultiBlocProvider(
+                                  providers: [
+                                    BlocProvider.value(value: context.read<AccountCubit>()),
+                                    BlocProvider.value(value: context.read<CategoryCubit>()),
+                                    BlocProvider.value(value: context.read<AuthCubit>()),
+                                  ],
+                                  child: const AccountForm(),
+                                );
+                              },
+                            );
+
+                            // 2. After the form is closed,we reload BOTH cubits
+                            //    to ensure all parts of the UI are in sync.
+                            context.read<AccountCubit>().loadAccounts(showLoading: false);
+                            context.read<CategoryCubit>().loadCategories();
+                          },
+                          child: const Icon(AppIcons.add),
                       ),
                     );
                   }
