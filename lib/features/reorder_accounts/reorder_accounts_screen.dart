@@ -59,9 +59,9 @@ class _ReorderAccountsScreenState extends State<ReorderAccountsScreen> {
                 padding: const EdgeInsets.symmetric(vertical: 8.0),
                 child: Row(
                   children: [
-                    const Padding(
+                     Padding(
                       padding: EdgeInsets.symmetric(horizontal: 16.0),
-                      child: Icon(AppIcons.key),
+                      child: Icon(AppIcons.key,color:Theme.of(context).colorScheme.primary),
                     ),
                     Expanded(
                       child: Column(
