@@ -164,7 +164,7 @@
     },
     "feedbackExporting": "جار التصدير...",
     "feedbackImporting": "جار الاستيراد...",
-    "validationEnterUsername": "الرجاء إدخال اسم مستخدم",
+    "validationEnterUsername": "الرجاء إدخال اسم مستخدم / البريد",
     "validationEnterPassword": "الرجاء إدخال كلمة مرور",
     "validationPasswordEmpty": "لا يمكن أن تكون كلمة المرور فارغة",
     "validationPasswordTooShort": "يجب أن تكون كلمة المرور 8 أحرف على الأقل",

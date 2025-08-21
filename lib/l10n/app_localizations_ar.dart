@@ -380,7 +380,7 @@ class AppLocalizationsAr extends AppLocalizations {
   String get feedbackImporting => 'جار الاستيراد...';
 
   @override
-  String get validationEnterUsername => 'الرجاء إدخال اسم مستخدم';
+  String get validationEnterUsername => 'الرجاء إدخال اسم مستخدم / البريد';
 
   @override
   String get validationEnterPassword => 'الرجاء إدخال كلمة مرور';

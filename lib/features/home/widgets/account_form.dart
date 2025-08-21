@@ -295,6 +295,12 @@ class __AccountFormViewState extends State<_AccountFormView> {
                           ),
                         const SizedBox(height: 10),
                         CustomTextField(
+                            validator: (value) {
+                              if (value == null || value.isEmpty) {
+                                return l10n.validationEnterUsername;
+                              }
+                              return null;
+                            },
                             controller: _usernameController,
                             labelText: l10n.accountFormUsernameHint,
                             prefixIcon: AppIcons.user),
@@ -304,6 +310,12 @@ class __AccountFormViewState extends State<_AccountFormView> {
                           children: [
                             Expanded(
                               child: CustomTextField(
+                                validator: (value) {
+                                  if (value == null || value.isEmpty) {
+                                    return l10n.validationEnterPassword;
+                                  }
+                                  return null;
+                                },
                                 controller: _passwordController,
                                 labelText: l10n.accountDetailsPassword,
                                 prefixIcon: AppIcons.lock,

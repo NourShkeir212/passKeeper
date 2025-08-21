@@ -91,6 +91,10 @@ class _AccountCardState extends State<AccountCard> {
         Expanded(
           child: CustomText(text,maxLines: 2,),
         ),
+        IconButton(
+          icon: const Icon(AppIcons.copy, size: 20),
+          onPressed: () => Clipboard.setData(ClipboardData(text: text))
+        ),
       ],
     );
   }

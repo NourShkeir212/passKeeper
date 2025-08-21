@@ -753,7 +753,7 @@ abstract class AppLocalizations {
   /// No description provided for @validationEnterUsername.
   ///
   /// In en, this message translates to:
-  /// **'Please enter a username'**
+  /// **'Please enter a username / email'**
   String get validationEnterUsername;
 
   /// No description provided for @validationEnterPassword.

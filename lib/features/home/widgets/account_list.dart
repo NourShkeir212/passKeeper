@@ -338,13 +338,6 @@ class AccountList extends StatelessWidget {
             ),
           ),
           if (trailing != null) trailing,
-          Visibility(
-            visible: isPassword,
-            child: IconButton(
-              icon: const Icon(AppIcons.copy, size: 20),
-              onPressed:onCopy,
-            ),
-          )
         ],
       ),
     );

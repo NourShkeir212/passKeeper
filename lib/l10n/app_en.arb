@@ -163,7 +163,7 @@
     },
     "feedbackExporting": "Exporting...",
     "feedbackImporting": "Importing...",
-    "validationEnterUsername": "Please enter a username",
+    "validationEnterUsername": "Please enter a username / email",
     "validationEnterPassword": "Please enter a password",
     "validationPasswordEmpty": "Password cannot be empty",
     "validationPasswordTooShort": "Password must be at least 8 characters",

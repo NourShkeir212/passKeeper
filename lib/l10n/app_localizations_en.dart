@@ -377,7 +377,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get feedbackImporting => 'Importing...';
 
   @override
-  String get validationEnterUsername => 'Please enter a username';
+  String get validationEnterUsername => 'Please enter a username / email';
 
   @override
   String get validationEnterPassword => 'Please enter a password';
