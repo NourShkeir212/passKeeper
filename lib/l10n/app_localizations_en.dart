@@ -753,4 +753,10 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get dialogExitButton => 'Exit';
+
+  @override
+  String get accountFormSelectEmailTitle => 'Select from';
+
+  @override
+  String get accountFormSelectCategoryTitle => 'Select a category';
 }

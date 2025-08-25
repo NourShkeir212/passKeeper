@@ -13,6 +13,7 @@ import '../../../model/account_model.dart';
 import '../../../model/category_model.dart';
 import '../../auth/cubit/auth_cubit/cubit.dart';
 import '../cubit/account_cubit/cubit.dart';
+import '../cubit/account_cubit/states.dart';
 import '../cubit/account_form/account_form_cubit.dart';
 import '../cubit/account_form/account_form_state.dart';
 import '../cubit/category_cubit/cubit.dart';
@@ -55,7 +56,7 @@ class __AccountFormViewState extends State<_AccountFormView> {
   bool _isLoading = true;
 
   static const List<String> _services = [
-    'Gmail', 'Outlook', 'Hotmail', 'Facebook',
+    'Gmail', 'Outlook', 'Hotmail', 'MSN',
     'Instagram', 'X', 'WhatsApp', 'Telegram', 'Other...'
   ];
 
@@ -191,6 +192,138 @@ class __AccountFormViewState extends State<_AccountFormView> {
     if (mounted) Navigator.of(context).pop();
   }
 
+
+  Future<void> _showUsernameSuggestionDialog(BuildContext context) async {
+    final l10n = AppLocalizations.of(context)!;
+    final categoryState = context
+        .read<CategoryCubit>()
+        .state;
+    final accountState = context
+        .read<AccountCubit>()
+        .state;
+
+    if (categoryState is! CategoryLoaded || accountState is! AccountLoaded)
+      return;
+
+    Category? selectedCategory;
+    List<String> suggestions = [];
+
+    final selectedUsername = await showModalBottomSheet<String>(
+      context: context,
+      isScrollControlled: true,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(25.0)),
+      ),
+      builder: (ctx) {
+        //StatefulBuilder to manage the state inside the modal
+        return StatefulBuilder(
+          builder: (BuildContext context, StateSetter setModalState) {
+            final String title = selectedCategory == null
+                ? l10n.accountFormSelectCategoryTitle
+                : "${l10n.accountFormSelectEmailTitle} '${selectedCategory!
+                .name}'";
+
+            return DraggableScrollableSheet(
+              expand: false,
+              initialChildSize: 0.5,
+              maxChildSize: 0.8,
+              builder: (BuildContext context,
+                  ScrollController scrollController) {
+                return Container(
+                  padding: const EdgeInsets.all(16),
+                  child: Column(
+                    children: [
+                      // --- Header with Drag Handle and Title ---
+                      Container(width: 40, height: 5, decoration: BoxDecoration(
+                          color: Colors.grey[400],
+                          borderRadius: BorderRadius.circular(10))),
+                      const SizedBox(height: 16),
+                      Row(
+                        children: [
+                          // Show a back button if a category is selected
+                          if (selectedCategory != null)
+                            IconButton(
+                              icon: const Icon(Icons.arrow_back_ios_new),
+                              onPressed: () =>
+                                  setModalState(() => selectedCategory = null),
+                            ),
+                          Expanded(
+                            child: CustomText(title, style: Theme
+                                .of(context)
+                                .textTheme
+                                .titleLarge),
+                          ),
+                        ],
+                      ),
+                      const Divider(height: 24),
+
+                      // --- Body with AnimatedSwitcher ---
+                      Expanded(
+                        child: AnimatedSwitcher(
+                          duration: const Duration(milliseconds: 300),
+                          child: selectedCategory == null
+                          // Show Category List
+                              ? ListView.builder(
+                            key: const ValueKey('category_list'),
+                            controller: scrollController,
+                            itemCount: categoryState.categories.length,
+                            itemBuilder: (context, index) {
+                              final category = categoryState.categories[index];
+                              return ListTile(
+                                leading: const Icon(AppIcons.category),
+                                title: Text(category.name),
+                                onTap: () {
+                                  suggestions = accountState.accounts
+                                      .where((acc) =>
+                                  acc.categoryId == category.id)
+                                      .map((acc) => acc.username)
+                                      .toSet().toList();
+
+                                  if (suggestions.isEmpty) {
+                                    ScaffoldMessenger.of(context).showSnackBar(
+                                        const SnackBar(content: Text(
+                                            "No usernames found in that category.")));
+                                    return;
+                                  }
+
+                                  setModalState(() =>
+                                  selectedCategory = category);
+                                },
+                              );
+                            },
+                          )
+                          // Show Username List
+                              : ListView.builder(
+                            key: const ValueKey('username_list'),
+                            controller: scrollController,
+                            itemCount: suggestions.length,
+                            itemBuilder: (context, index) {
+                              final username = suggestions[index];
+                              return ListTile(
+                                leading: const Icon(AppIcons.user),
+                                title: Text(username, maxLines: 1),
+                                onTap: () => Navigator.of(ctx).pop(username),
+                              );
+                            },
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                );
+              },
+            );
+          },
+        );
+      },
+    );
+
+    // If a username was selected, update the text field
+    if (selectedUsername != null) {
+      _usernameController.text = selectedUsername;
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
@@ -294,16 +427,31 @@ class __AccountFormViewState extends State<_AccountFormView> {
                                     : null),
                           ),
                         const SizedBox(height: 10),
-                        CustomTextField(
-                            validator: (value) {
-                              if (value == null || value.isEmpty) {
-                                return l10n.validationEnterUsername;
-                              }
-                              return null;
-                            },
-                            controller: _usernameController,
-                            labelText: l10n.accountFormUsernameHint,
-                            prefixIcon: AppIcons.user),
+                        Row(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Expanded(
+                              child: CustomTextField(
+                                validator: (value) {
+                                  if (value == "") {
+                                    return AppLocalizations.of(context)!
+                                        .validationEnterUsername;
+                                  }
+                                  return null;
+                                },
+                                controller: _usernameController,
+                                labelText: l10n.accountFormUsernameHint,
+                                prefixIcon: AppIcons.user,
+                              ),
+                            ),
+                            const SizedBox(width: 8),
+                            IconButton(
+                              icon: const Icon(Iconsax.magicpen),
+                              onPressed: () =>
+                                  _showUsernameSuggestionDialog(context),
+                            ),
+                          ],
+                        ),
                         const SizedBox(height: 10),
                         Row(
                           crossAxisAlignment: CrossAxisAlignment.start,
@@ -423,7 +571,6 @@ class __AccountFormViewState extends State<_AccountFormView> {
   }
 }
 
-// --- HELPER WIDGETS AND FUNCTIONS for Password Strength ---
 class _PasswordStrengthIndicator extends StatelessWidget {
   final double strength;
   final String strengthText;
@@ -463,7 +610,6 @@ class _PasswordStrengthIndicator extends StatelessWidget {
 }
 
 String _getStrengthText(BuildContext context, double strength) {
-  // TODO: Localize these strings
   if (strength < 0.5) return AppLocalizations.of(context)!.passwordGeneratorWeak;
   if (strength < 0.75) return AppLocalizations.of(context)!.passwordGeneratorMedium;
   if (strength < 1.0) return AppLocalizations.of(context)!.passwordGeneratorStrong;

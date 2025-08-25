@@ -1451,6 +1451,18 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Exit'**
   String get dialogExitButton;
+
+  /// No description provided for @accountFormSelectEmailTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Select from'**
+  String get accountFormSelectEmailTitle;
+
+  /// No description provided for @accountFormSelectCategoryTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Select a category'**
+  String get accountFormSelectCategoryTitle;
 }
 
 class _AppLocalizationsDelegate

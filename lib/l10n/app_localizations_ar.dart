@@ -756,4 +756,10 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get dialogExitButton => 'خروج';
+
+  @override
+  String get accountFormSelectEmailTitle => 'اختار من';
+
+  @override
+  String get accountFormSelectCategoryTitle => 'اختار فئة';
 }

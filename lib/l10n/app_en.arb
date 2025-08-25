@@ -294,6 +294,8 @@
     "errorPasswordMatchesDecoy": "New password cannot be the same as your decoy password.",
     "dialogConfirmExitTitle": "Exit App?",
     "dialogConfirmExitContent": "Are you sure you want to close the app?",
-    "dialogExitButton": "Exit"
+    "dialogExitButton": "Exit",
+    "accountFormSelectEmailTitle" : "Select from",
+    "accountFormSelectCategoryTitle" : "Select a category"
 
 }

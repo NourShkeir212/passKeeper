@@ -298,5 +298,7 @@
     "errorPasswordMatchesDecoy": "لا يمكن أن تكون كلمة المرور الجديدة هي نفسها كلمة مرور حسابك الوهمي.",
     "dialogConfirmExitTitle": "الخروج من التطبيق؟",
     "dialogConfirmExitContent": "هل أنت متأكد من رغبتك في إغلاق التطبيق؟",
-    "dialogExitButton": "خروج"
+    "dialogExitButton": "خروج",
+    "accountFormSelectEmailTitle" : "اختار من",
+    "accountFormSelectCategoryTitle" : "اختار فئة"
 }
