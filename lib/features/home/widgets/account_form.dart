@@ -324,6 +324,37 @@ class __AccountFormViewState extends State<_AccountFormView> {
     }
   }
 
+  void _showCreateCategoryDialog() {
+    final l10n = AppLocalizations.of(context)!;
+    final categoryNameController = TextEditingController();
+    showDialog(
+      context: context,
+      builder: (dialogContext) =>
+          AlertDialog(
+            title: Text(l10n.manageCategoriesAddDialogTitle),
+            content: CustomTextField(
+                controller: categoryNameController,
+                labelText: l10n.manageCategoriesNameHint,
+                prefixIcon: AppIcons.createFolder),
+            actions: [
+              TextButton(
+                  onPressed: () => Navigator.pop(dialogContext),
+                  child: Text(l10n.dialogCancel)),
+              TextButton(
+                onPressed: () {
+                  if (categoryNameController.text.isNotEmpty) {
+                    context
+                        .read<CategoryCubit>()
+                        .addCategory(categoryNameController.text);
+                    Navigator.pop(dialogContext);
+                  }
+                },
+                child: Text(l10n.dialogCreate),
+              ),
+            ],
+          ),
+    );
+  }
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
@@ -333,6 +364,7 @@ class __AccountFormViewState extends State<_AccountFormView> {
 
     return BlocBuilder<AccountFormCubit, AccountFormState>(
       builder: (context, formState) {
+        final categoryState = context.watch<CategoryCubit>().state;
         return BlocBuilder<CategoryCubit, CategoryState>(
           builder: (context, categoryState) {
             return SafeArea(
@@ -433,9 +465,8 @@ class __AccountFormViewState extends State<_AccountFormView> {
                             Expanded(
                               child: CustomTextField(
                                 validator: (value) {
-                                  if (value == "") {
-                                    return AppLocalizations.of(context)!
-                                        .validationEnterUsername;
+                                  if (value == null || value.isEmpty) {
+                                    return AppLocalizations.of(context)!.validationEnterUsername;
                                   }
                                   return null;
                                 },
@@ -444,12 +475,15 @@ class __AccountFormViewState extends State<_AccountFormView> {
                                 prefixIcon: AppIcons.user,
                               ),
                             ),
-                            const SizedBox(width: 8),
-                            IconButton(
-                              icon: const Icon(Iconsax.magicpen),
-                              onPressed: () =>
-                                  _showUsernameSuggestionDialog(context),
-                            ),
+
+                            // Only show the button if the category state is loaded and not empty
+                            if (categoryState is CategoryLoaded && categoryState.categories.isNotEmpty) ...[
+                              const SizedBox(width: 8),
+                              IconButton(
+                                icon: const Icon(Iconsax.magicpen),
+                                onPressed: () => _showUsernameSuggestionDialog(context),
+                              ),
+                            ]
                           ],
                         ),
                         const SizedBox(height: 10),
@@ -538,37 +572,7 @@ class __AccountFormViewState extends State<_AccountFormView> {
       },
     );
   }
-  void _showCreateCategoryDialog() {
-    final l10n = AppLocalizations.of(context)!;
-    final categoryNameController = TextEditingController();
-    showDialog(
-      context: context,
-      builder: (dialogContext) =>
-          AlertDialog(
-            title: Text(l10n.manageCategoriesAddDialogTitle),
-            content: CustomTextField(
-                controller: categoryNameController,
-                labelText: l10n.manageCategoriesNameHint,
-                prefixIcon: AppIcons.createFolder),
-            actions: [
-              TextButton(
-                  onPressed: () => Navigator.pop(dialogContext),
-                  child: Text(l10n.dialogCancel)),
-              TextButton(
-                onPressed: () {
-                  if (categoryNameController.text.isNotEmpty) {
-                    context
-                        .read<CategoryCubit>()
-                        .addCategory(categoryNameController.text);
-                    Navigator.pop(dialogContext);
-                  }
-                },
-                child: Text(l10n.dialogCreate),
-              ),
-            ],
-          ),
-    );
-  }
+
 }
 
 class _PasswordStrengthIndicator extends StatelessWidget {

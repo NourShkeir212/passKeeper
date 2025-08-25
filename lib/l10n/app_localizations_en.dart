@@ -156,7 +156,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get accountFormRecoveryHint => 'Recovery Account (Optional)';
 
   @override
-  String get accountFormPhoneHint => 'Phone Numbers (Optional)';
+  String get accountFormPhoneHint => 'Phone Number (Optional)';
 
   @override
   String get accountFormSaveButton => 'Save';

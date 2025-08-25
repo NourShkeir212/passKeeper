@@ -65,7 +65,7 @@
     "accountFormUsernameHint": "Username or Email",
     "accountFormPasswordHint": "Password",
     "accountFormRecoveryHint": "Recovery Account (Optional)",
-    "accountFormPhoneHint": "Phone Numbers (Optional)",
+    "accountFormPhoneHint": "Phone Number (Optional)",
     "accountFormSaveButton": "Save",
     "settingsScreenTitle": "Settings",
     "settingsAppearance": "Appearance",

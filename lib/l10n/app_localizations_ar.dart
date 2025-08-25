@@ -158,7 +158,7 @@ class AppLocalizationsAr extends AppLocalizations {
   String get accountFormRecoveryHint => 'حساب الاسترداد (اختياري)';
 
   @override
-  String get accountFormPhoneHint => 'أرقام الهواتف (اختياري)';
+  String get accountFormPhoneHint => 'رقم الهاتف (اختياري)';
 
   @override
   String get accountFormSaveButton => 'حفظ';

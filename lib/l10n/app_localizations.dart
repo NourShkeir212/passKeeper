@@ -365,7 +365,7 @@ abstract class AppLocalizations {
   /// No description provided for @accountFormPhoneHint.
   ///
   /// In en, this message translates to:
-  /// **'Phone Numbers (Optional)'**
+  /// **'Phone Number (Optional)'**
   String get accountFormPhoneHint;
 
   /// No description provided for @accountFormSaveButton.
