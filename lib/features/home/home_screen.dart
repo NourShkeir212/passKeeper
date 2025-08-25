@@ -86,7 +86,6 @@ class HomeScreenView extends StatelessWidget {
                 final isSearching = homeState.isSearching;
                 return BlocBuilder<AccountCubit, AccountState>(
                     builder: (context, accountState) {
-
                       int numberOfNonEmptyCategories = 0;
                       if (categoryState is CategoryLoaded && accountState is AccountLoaded) {
                         // Calculate how many categories actually have accounts in them

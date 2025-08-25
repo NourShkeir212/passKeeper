@@ -27,6 +27,7 @@ class AccountCard extends StatefulWidget {
 
 class _AccountCardState extends State<AccountCard> {
   bool _isPasswordVisible = false;
+
   Future<void> _handlePasswordVisibility() async {
     final encryptionService = EncryptionService();
     final authCubit = context.read<AuthCubit>();
@@ -47,17 +48,22 @@ class _AccountCardState extends State<AccountCard> {
         });
       } else if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-           SnackBar(content: Text(AppLocalizations.of(context)!.errorIncorrectPassword), backgroundColor: Colors.red),
+          SnackBar(content: Text(
+              AppLocalizations.of(context)!.errorIncorrectPassword),
+              backgroundColor: Colors.red),
         );
       }
     }
   }
+
   @override
   Widget build(BuildContext context) {
     return Card(
-      color: Theme.of(context).cardColor,
+      color: Theme
+          .of(context)
+          .cardColor,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15.0)),
-      margin: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+      margin: const EdgeInsets.symmetric(horizontal: 12, vertical: 8.0),
       elevation: 4,
       shadowColor: Colors.black.withOpacity(0.2),
       child: InkWell(
@@ -86,14 +92,24 @@ class _AccountCardState extends State<AccountCard> {
       {required IconData icon, required String text}) {
     return Row(
       children: [
-        Icon(icon, size: 20, color: Theme.of(context).textTheme.bodySmall?.color),
+        Icon(icon, size: 20, color: Theme
+            .of(context)
+            .textTheme
+            .bodySmall
+            ?.color),
         const SizedBox(width: 12),
         Expanded(
-          child: CustomText(text,maxLines: 2,),
+          child: CustomText(
+            text,
+            maxLines: 1,
+            style: TextStyle(
+                fontSize: 14
+            ),
+          ),
         ),
         IconButton(
-          icon: const Icon(AppIcons.copy, size: 20),
-          onPressed: () => Clipboard.setData(ClipboardData(text: text))
+            icon: const Icon(AppIcons.copy, size: 20),
+            onPressed: () => Clipboard.setData(ClipboardData(text: text))
         ),
       ],
     );
@@ -162,6 +178,4 @@ class _AccountCardState extends State<AccountCard> {
       ],
     );
   }
-
-
 }
