@@ -5,7 +5,7 @@ import 'package:secure_accounts/l10n/app_localizations.dart';
 import '../../../../core/services/biometric_service.dart';
 import '../../../../core/services/database_services.dart';
 import '../../../../core/services/encryption_service.dart';
-import '../../../../core/services/flutter_secure_storage.dart';
+import '../../../../core/services/secure_storage_service.dart';
 import '../../../../core/services/navigation_service.dart';
 import '../../../../core/services/session_manager.dart';
 import '../../../../core/widgets/app_title_name.dart';
