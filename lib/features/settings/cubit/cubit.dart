@@ -5,6 +5,7 @@ import 'package:secure_accounts/l10n/app_localizations.dart';
 import '../../../core/services/database_services.dart';
 import '../../../core/services/encryption_service.dart';
 import '../../../core/services/excel_service.dart';
+import '../../../core/services/flutter_secure_storage.dart';
 import '../../../core/services/session_manager.dart';
 import '../../../core/services/settings_service.dart';
 import '../../../model/account_model.dart';
@@ -82,7 +83,8 @@ class SettingsCubit extends Cubit<SettingsState> {
       // 1. Verify the user's OLD password.
       final encryptionService = EncryptionService();
       final hashedOldPassword = encryptionService.hashPassword(oldPassword);
-      final isVerified = await _databaseService.verifyPassword(userId, hashedOldPassword);
+      final isVerified = await _databaseService.verifyPassword(
+          userId, hashedOldPassword);
 
       if (!isVerified) {
         throw Exception(AppLocalizations.of(context)!.errorIncorrectPassword);
@@ -93,12 +95,14 @@ class SettingsCubit extends Cubit<SettingsState> {
       if (decoyUser != null) {
         final hashedNewPassword = encryptionService.hashPassword(newPassword);
         if (hashedNewPassword == decoyUser.password) {
-          throw Exception(AppLocalizations.of(context)!.errorPasswordMatchesDecoy);
+          throw Exception(
+              AppLocalizations.of(context)!.errorPasswordMatchesDecoy);
         }
       }
 
       // 3. Fetch ALL accounts.
-      final allAccounts = await _databaseService.getAllAccountsForUser(userId, 'real');
+      final allAccounts = await _databaseService.getAllAccountsForUser(
+          userId, 'real');
 
       // 4. Create encrypters for both old and new passwords.
       final oldEncrypter = encryptionService.createEncrypter(oldPassword);
@@ -113,7 +117,8 @@ class SettingsCubit extends Cubit<SettingsState> {
         final decryptedPassword = oldEncrypter.decrypt(encrypted, iv: iv);
 
         final newIv = IV.fromSecureRandom(16);
-        final reEncryptedPassword = newEncrypter.encrypt(decryptedPassword, iv: newIv);
+        final reEncryptedPassword = newEncrypter.encrypt(
+            decryptedPassword, iv: newIv);
         final combined = '${newIv.base64}:${reEncryptedPassword.base64}';
 
         reEncryptedAccounts.add(account.copyWith(password: combined));
@@ -130,9 +135,8 @@ class SettingsCubit extends Cubit<SettingsState> {
 
       // 8. Re-initialize the encryption service with the new password for the current session.
       encryptionService.init(newPassword);
-
+      await SecureStorageService.saveMasterPassword(newPassword);
       emit(ChangePasswordSuccess());
-
     } catch (e) {
       emit(ChangePasswordFailure(e.toString().replaceFirst("Exception: ", "")));
     } finally {

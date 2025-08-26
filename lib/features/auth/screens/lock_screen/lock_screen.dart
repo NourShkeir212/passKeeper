@@ -4,6 +4,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:secure_accounts/l10n/app_localizations.dart';
 import '../../../../core/services/biometric_service.dart';
 import '../../../../core/services/database_services.dart';
+import '../../../../core/services/encryption_service.dart';
+import '../../../../core/services/flutter_secure_storage.dart';
 import '../../../../core/services/navigation_service.dart';
 import '../../../../core/services/session_manager.dart';
 import '../../../../core/widgets/app_title_name.dart';
@@ -54,17 +56,26 @@ class _LockScreenState extends State<LockScreen> {
   /// Unlocks the app with biometrics and goes to the REAL vault.
   Future<void> _unlockWithBiometrics() async {
     final l10n = AppLocalizations.of(context)!;
-    final isAuthenticated = await BiometricService.authenticate(l10n.biometricPromptReason);
+    final isAuthenticated = await BiometricService.authenticate(
+        l10n.biometricPromptReason
+    );
 
     if (isAuthenticated && mounted) {
-      // This flow is only for the REAL vault, so we set the profile to 'real'
-      SessionManager.currentSessionProfileTag = 'real';
+      final masterPassword = await SecureStorageService.getMasterPassword();
 
-        // Reload data for the real profile
-        context.read<AccountCubit>().loadAccounts();
-        context.read<CategoryCubit>().loadCategories();
 
+      if (masterPassword != null) {
+        // 2. Set the session to 'real' and initialize the vault
+        SessionManager.currentSessionProfileTag = 'real';
+        EncryptionService().init(masterPassword);
+
+        // 3. Navigate home
         NavigationService.pushAndRemoveUntil(const HomeScreen());
+      } else {
+        // Handle case where password isn't found (should be rare)
+        ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text(l10n.errorGeneric)));
+      }
     }
   }
 
@@ -88,10 +99,8 @@ class _LockScreenState extends State<LockScreen> {
     return BlocListener<AuthCubit, AuthState>(
       listener: (context, state) {
         if (state is AuthSuccess) {
-
           context.read<AccountCubit>().loadAccounts();
           context.read<CategoryCubit>().loadCategories();
-
           NavigationService.pushAndRemoveUntil(const HomeScreen());
         } else if (state is AuthFailure) {
           ScaffoldMessenger.of(context).showSnackBar(

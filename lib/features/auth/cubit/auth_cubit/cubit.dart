@@ -5,6 +5,7 @@ import 'package:secure_accounts/l10n/app_localizations.dart';
 import '../../../../core/services/data_seeding_service.dart';
 import '../../../../core/services/database_services.dart';
 import '../../../../core/services/encryption_service.dart';
+import '../../../../core/services/flutter_secure_storage.dart';
 import '../../../../core/services/session_manager.dart';
 import '../../../../model/user_model.dart';
 import 'states.dart';
@@ -135,6 +136,7 @@ class AuthCubit extends Cubit<AuthState> {
         await SessionManager.saveSession(user.id!);
       }
 
+      await SecureStorageService.saveMasterPassword(password);
       SessionManager.currentSessionProfileTag = profileTag;
       SessionManager.currentVaultUserId = user.id!;
       _encryptionService.init(password);
@@ -152,6 +154,7 @@ class AuthCubit extends Cubit<AuthState> {
     _encryptionService.clear();
     SessionManager.currentSessionProfileTag = 'real';
     SessionManager.currentVaultUserId = null;
+    await SecureStorageService.deleteMasterPassword();
     emit(AuthLoggedOut());
   }
 
