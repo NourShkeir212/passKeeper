@@ -5,6 +5,7 @@ class SettingsService {
   static const _themeKey = 'themeMode';
   static const _biometricKey = 'biometricEnabled';
   static const _autoLockKey = 'autoLockMinutes';
+
   // --- Theme ---
   Future<void> saveThemeMode(ThemeMode mode) async {
     final prefs = await SharedPreferences.getInstance();

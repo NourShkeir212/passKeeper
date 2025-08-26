@@ -266,61 +266,63 @@ class AccountList extends StatelessWidget {
               }
             }
 
-            return Container(
-              padding: const EdgeInsets.all(24),
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Center(
-                      child: Container(
-                          width: 40,
-                          height: 5,
-                          decoration: BoxDecoration(color: Colors.grey[400], borderRadius: BorderRadius.circular(10)))),
-                  const SizedBox(height: 24),
-                  CustomText(account.serviceName, style: Theme.of(context).textTheme.headlineSmall),
-                  const Divider(height: 32),
-                  _buildDetailRow(
-                      context, AppIcons.user, AppLocalizations.of(context)!.accountDetailsUsernameOrEmail, account.username),
-                  _buildDetailRow(
-                    context,
-                    AppIcons.lock,
-                    AppLocalizations.of(context)!.accountDetailsPassword,
-                    isPasswordVisible && EncryptionService().isInitialized
-                        ? EncryptionService().decryptText(account.password)
-                        : '••••••••••',
-                    trailing: IconButton(
-                      icon: Icon(isPasswordVisible
-                          ? AppIcons.eyeSlash
-                          : AppIcons.eye),
-                      onPressed:
-                      handleDetailsPasswordVisibility,
+            return SafeArea(
+              child: Container(
+                padding: const EdgeInsets.all(24),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Center(
+                        child: Container(
+                            width: 40,
+                            height: 5,
+                            decoration: BoxDecoration(color: Colors.grey[400], borderRadius: BorderRadius.circular(10)))),
+                    const SizedBox(height: 24),
+                    CustomText(account.serviceName, style: Theme.of(context).textTheme.headlineSmall),
+                    const Divider(height: 32),
+                    _buildDetailRow(
+                        context, AppIcons.user, AppLocalizations.of(context)!.accountDetailsUsernameOrEmail, account.username),
+                    _buildDetailRow(
+                      context,
+                      AppIcons.lock,
+                      AppLocalizations.of(context)!.accountDetailsPassword,
+                      isPasswordVisible && EncryptionService().isInitialized
+                          ? EncryptionService().decryptText(account.password)
+                          : '••••••••••',
+                      trailing: IconButton(
+                        icon: Icon(isPasswordVisible
+                            ? AppIcons.eyeSlash
+                            : AppIcons.eye),
+                        onPressed:
+                        handleDetailsPasswordVisibility,
+                      ),
+                      onCopy: () => handleCopyAction("Password", account.password),
+                      isPassword: true
                     ),
-                    onCopy: () => handleCopyAction("Password", account.password),
-                    isPassword: true
-                  ),
-                  if (account.recoveryAccount != null &&
-                      account.recoveryAccount!.isNotEmpty)
-                    _buildDetailRow(context, AppIcons.email,  AppLocalizations.of(context)!.accountDetailsRecoveryEmail,
-                        account.recoveryAccount!),
-                  if (account.phoneNumbers != null &&
-                      account.phoneNumbers!.isNotEmpty)
-                    _buildDetailRow(context, AppIcons.phone,  AppLocalizations.of(context)!.accountDetailsPhone,
-                        account.phoneNumbers!),
-                  if (account.customFields.isNotEmpty) ...[
-                    // Iterate through the map and build a row for each custom field
-                    ...account.customFields.entries.map((entry) {
-                      return _buildDetailRow(
-                        context,
-                        Iconsax.note_1, // A generic icon for custom fields
-                        entry.key,      // The custom field's name
-                        entry.value,    // The custom field's value
-                        onCopy: () => handleCopyAction(entry.key, entry.value),
-                      );
-                    }),
-                    const SizedBox(height: 20,)
+                    if (account.recoveryAccount != null &&
+                        account.recoveryAccount!.isNotEmpty)
+                      _buildDetailRow(context, AppIcons.email,  AppLocalizations.of(context)!.accountDetailsRecoveryEmail,
+                          account.recoveryAccount!),
+                    if (account.phoneNumbers != null &&
+                        account.phoneNumbers!.isNotEmpty)
+                      _buildDetailRow(context, AppIcons.phone,  AppLocalizations.of(context)!.accountDetailsPhone,
+                          account.phoneNumbers!),
+                    if (account.customFields.isNotEmpty) ...[
+                      // Iterate through the map and build a row for each custom field
+                      ...account.customFields.entries.map((entry) {
+                        return _buildDetailRow(
+                          context,
+                          Iconsax.note_1, // A generic icon for custom fields
+                          entry.key,      // The custom field's name
+                          entry.value,    // The custom field's value
+                          onCopy: () => handleCopyAction(entry.key, entry.value),
+                        );
+                      }),
+                      const SizedBox(height: 20,)
+                    ],
                   ],
-                ],
+                ),
               ),
             );
           },
