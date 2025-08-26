@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
+import 'package:iconsax_flutter/iconsax_flutter.dart';
 import '../../../core/services/encryption_service.dart';
 import '../../../core/theme/app_icons.dart';
 import '../../../core/widgets/custom_text.dart';
@@ -18,7 +19,7 @@ import '../cubit/account_cubit/states.dart';
 import '../cubit/category_cubit/cubit.dart';
 import '../cubit/category_cubit/states.dart';
 import 'account_card.dart';
-import 'account_form.dart';
+import 'account_form/account_form.dart';
 
 class AccountList extends StatelessWidget {
   const AccountList({super.key});
@@ -307,6 +308,25 @@ class AccountList extends StatelessWidget {
                     _buildDetailRow(context, AppIcons.phone,  AppLocalizations.of(context)!.accountDetailsPhone,
                         account.phoneNumbers!),
                   const SizedBox(height: 20),
+                  if (account.customFields.isNotEmpty) ...[
+                    const Divider(height: 32),
+                    CustomText(
+                      "Custom Fields", // TODO: Localize
+                      style: Theme.of(context).textTheme.titleMedium,
+                    ),
+                    const SizedBox(height: 8),
+                    // Iterate through the map and build a row for each custom field
+                    ...account.customFields.entries.map((entry) {
+                      return _buildDetailRow(
+                        context,
+                        Iconsax.note_1, // A generic icon for custom fields
+                        entry.key,      // The custom field's name
+                        entry.value,    // The custom field's value
+                        onCopy: () => handleCopyAction(entry.key, entry.value),
+                      );
+                    }),
+                    const SizedBox(height: 20,)
+                  ],
                 ],
               ),
             );

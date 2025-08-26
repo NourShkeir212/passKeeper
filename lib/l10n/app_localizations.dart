@@ -1463,6 +1463,36 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Select a category'**
   String get accountFormSelectCategoryTitle;
+
+  /// No description provided for @customFieldsTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Custom Fields'**
+  String get customFieldsTitle;
+
+  /// No description provided for @customFieldsLeft.
+  ///
+  /// In en, this message translates to:
+  /// **'{count,plural, =0{No fields left} =1{1 field left} other{{count} fields left}}'**
+  String customFieldsLeft(int count);
+
+  /// No description provided for @customFieldsFieldName.
+  ///
+  /// In en, this message translates to:
+  /// **'Field Name'**
+  String get customFieldsFieldName;
+
+  /// No description provided for @customFieldsValue.
+  ///
+  /// In en, this message translates to:
+  /// **'Value'**
+  String get customFieldsValue;
+
+  /// No description provided for @customFieldsAddButton.
+  ///
+  /// In en, this message translates to:
+  /// **'Add Custom Field'**
+  String get customFieldsAddButton;
 }
 
 class _AppLocalizationsDelegate

@@ -762,4 +762,30 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get accountFormSelectCategoryTitle => 'اختار فئة';
+
+  @override
+  String get customFieldsTitle => 'حقول مخصصة';
+
+  @override
+  String customFieldsLeft(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count حقلًا متبقيًا',
+      few: '$count حقول متبقية',
+      two: 'متبقي حقلان',
+      one: 'متبقي حقل واحد',
+      zero: 'لم يتبق حقول',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get customFieldsFieldName => 'اسم الحقل';
+
+  @override
+  String get customFieldsValue => 'القيمة';
+
+  @override
+  String get customFieldsAddButton => 'إضافة حقل مخصص';
 }

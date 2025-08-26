@@ -296,6 +296,18 @@
     "dialogConfirmExitContent": "Are you sure you want to close the app?",
     "dialogExitButton": "Exit",
     "accountFormSelectEmailTitle" : "Select from",
-    "accountFormSelectCategoryTitle" : "Select a category"
+    "accountFormSelectCategoryTitle" : "Select a category",
+    "customFieldsTitle": "Custom Fields",
+    "customFieldsLeft": "{count,plural, =0{No fields left} =1{1 field left} other{{count} fields left}}",
+    "@customFieldsLeft": {
+        "placeholders": {
+            "count": {
+                "type": "int"
+            }
+        }
+    },
+    "customFieldsFieldName": "Field Name",
+    "customFieldsValue": "Value",
+    "customFieldsAddButton": "Add Custom Field"
 
 }

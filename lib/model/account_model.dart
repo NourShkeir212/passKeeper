@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:equatable/equatable.dart';
 
 class Account extends Equatable {
@@ -10,8 +12,9 @@ class Account extends Equatable {
   final String? recoveryAccount;
   final String? phoneNumbers;
   final bool isFavorite;
+  final Map<String, String> customFields;
   final int accountOrder;
-  final String profileTag; // ADD THIS
+  final String profileTag;
 
   const Account({
     this.id,
@@ -23,6 +26,7 @@ class Account extends Equatable {
     this.recoveryAccount,
     this.phoneNumbers,
     this.isFavorite = false,
+    this.customFields = const {},
     this.accountOrder = 0,
     required this.profileTag, // ADD THIS
   });
@@ -39,6 +43,7 @@ class Account extends Equatable {
     bool? isFavorite,
     int? accountOrder,
     String? profileTag,
+    Map<String, String>? customFields,
   }) {
     return Account(
       id: id ?? this.id,
@@ -51,7 +56,8 @@ class Account extends Equatable {
       phoneNumbers: phoneNumbers ?? this.phoneNumbers,
       isFavorite: isFavorite ?? this.isFavorite,
       accountOrder: accountOrder ?? this.accountOrder,
-      profileTag: profileTag ?? this.profileTag, // ADD THIS
+      profileTag: profileTag ?? this.profileTag,
+      customFields: customFields ?? this.customFields,
     );
   }
 
@@ -66,6 +72,7 @@ class Account extends Equatable {
       'recoveryAccount': recoveryAccount,
       'phoneNumbers': phoneNumbers,
       'isFavorite': isFavorite ? 1 : 0,
+      'customFields': jsonEncode(customFields),
       'accountOrder': accountOrder,
       'profileTag': profileTag, // ADD THIS
     };
@@ -83,7 +90,10 @@ class Account extends Equatable {
       phoneNumbers: map['phoneNumbers'],
       isFavorite: map['isFavorite'] == 1,
       accountOrder: map['accountOrder'] ?? 0,
-      profileTag: map['profileTag'], // ADD THIS
+      profileTag: map['profileTag'],
+      customFields: map['customFields'] != null
+          ? Map<String, String>.from(jsonDecode(map['customFields']))
+          : {}, // Convert JSON String back to Map
     );
   }
 

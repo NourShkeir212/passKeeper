@@ -300,5 +300,17 @@
     "dialogConfirmExitContent": "هل أنت متأكد من رغبتك في إغلاق التطبيق؟",
     "dialogExitButton": "خروج",
     "accountFormSelectEmailTitle" : "اختار من",
-    "accountFormSelectCategoryTitle" : "اختار فئة"
+    "accountFormSelectCategoryTitle" : "اختار فئة",
+    "customFieldsTitle": "حقول مخصصة",
+    "customFieldsLeft": "{count,plural, =0{لم يتبق حقول} =1{متبقي حقل واحد} =2{متبقي حقلان} few{{count} حقول متبقية} other{{count} حقلًا متبقيًا}}",
+    "@customFieldsLeft": {
+        "placeholders": {
+            "count": {
+                "type": "int"
+            }
+        }
+    },
+    "customFieldsFieldName": "اسم الحقل",
+    "customFieldsValue": "القيمة",
+    "customFieldsAddButton": "إضافة حقل مخصص"
 }

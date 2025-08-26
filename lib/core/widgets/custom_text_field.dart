@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 class CustomTextField extends StatelessWidget {
   final TextEditingController controller;
   final String labelText;
-  final IconData prefixIcon;
+  final IconData? prefixIcon;
   final String? Function(String?)? validator;
   final bool isPassword;
   final Widget? suffixIcon;
@@ -14,7 +14,7 @@ class CustomTextField extends StatelessWidget {
     super.key,
     required this.controller,
     required this.labelText,
-    required this.prefixIcon,
+    this.prefixIcon,
     this.validator,
     this.isPassword = false,
     this.suffixIcon,
@@ -66,7 +66,7 @@ class CustomTextField extends StatelessWidget {
         ),
         fillColor: Theme.of(context).colorScheme.background,
         labelText: labelText,
-        prefixIcon: Icon(prefixIcon, color: Theme.of(context).colorScheme.primary),
+        prefixIcon: prefixIcon !=null ? Icon(prefixIcon!, color: Theme.of(context).colorScheme.primary) :null,
         suffixIcon: suffixIcon,
       ),
       validator: validator,

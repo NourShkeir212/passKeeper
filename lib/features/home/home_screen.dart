@@ -14,7 +14,7 @@ import 'cubit/category_cubit/cubit.dart';
 import 'cubit/category_cubit/states.dart';
 import 'cubit/home_cubit/cubit.dart';
 import 'cubit/home_cubit/states.dart';
-import 'widgets/account_form.dart';
+import 'widgets/account_form/account_form.dart';
 import 'widgets/account_list.dart';
 import 'widgets/category_filter_chips.dart';
 import 'widgets/home_screen_app_bar.dart';

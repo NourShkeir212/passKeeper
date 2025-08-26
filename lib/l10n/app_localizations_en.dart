@@ -759,4 +759,28 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get accountFormSelectCategoryTitle => 'Select a category';
+
+  @override
+  String get customFieldsTitle => 'Custom Fields';
+
+  @override
+  String customFieldsLeft(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count fields left',
+      one: '1 field left',
+      zero: 'No fields left',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get customFieldsFieldName => 'Field Name';
+
+  @override
+  String get customFieldsValue => 'Value';
+
+  @override
+  String get customFieldsAddButton => 'Add Custom Field';
 }
