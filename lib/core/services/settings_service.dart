@@ -5,6 +5,36 @@ class SettingsService {
   static const _themeKey = 'themeMode';
   static const _biometricKey = 'biometricEnabled';
   static const _autoLockKey = 'autoLockMinutes';
+  static const _passwordReminderKey = 'passwordReminderFrequency';
+  static const _biometricUnlockCountKey = 'biometricUnlockCount';
+
+  Future<void> savePasswordReminderFrequency(int count) async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setInt(_passwordReminderKey, count);
+  }
+
+  Future<int> loadPasswordReminderFrequency() async {
+    final prefs = await SharedPreferences.getInstance();
+    // Default to 5 times. 0 means never ask.
+    return prefs.getInt(_passwordReminderKey) ?? 5;
+  }
+
+  // --- NEW: Biometric Unlock Counter ---
+  Future<void> incrementBiometricUnlockCount() async {
+    final prefs = await SharedPreferences.getInstance();
+    int currentCount = await loadBiometricUnlockCount();
+    await prefs.setInt(_biometricUnlockCountKey, currentCount + 1);
+  }
+
+  Future<int> loadBiometricUnlockCount() async {
+    final prefs = await SharedPreferences.getInstance();
+    return prefs.getInt(_biometricUnlockCountKey) ?? 0;
+  }
+
+  Future<void> resetBiometricUnlockCount() async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setInt(_biometricUnlockCountKey, 0);
+  }
 
   // --- Theme ---
   Future<void> saveThemeMode(ThemeMode mode) async {

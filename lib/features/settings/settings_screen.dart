@@ -277,6 +277,7 @@ class SettingsView extends StatelessWidget {
 
         // Only show the biometric switch if the device hardware supports it.
         if (settingsState.canCheckBiometrics)
+          //biometrics
           SwitchListTile(
             title: Text(l10n.settingsBiometricTitle),
             subtitle: Text(l10n.settingsBiometricSubtitle),
@@ -339,7 +340,26 @@ class SettingsView extends StatelessWidget {
               }
             },
           ),
-
+        //change password
+        ListTile(
+          title: Text(l10n.changePasswordTitle),
+          leading: const Icon(AppIcons.password),
+          onTap: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (_) => MultiBlocProvider(
+                  providers: [
+                    BlocProvider.value(value: context.read<SettingsCubit>()),
+                    BlocProvider.value(value: context.read<AccountCubit>()),
+                  ],
+                  child: const ChangePasswordScreen(),
+                ),
+              ),
+            );
+          },
+        ),
+        // Auto look
         ListTile(
           leading: const Icon(AppIcons.timer),
           title: Text(l10n.settingsAutoLockTitle),
@@ -360,23 +380,25 @@ class SettingsView extends StatelessWidget {
             },
           ),
         ),
+        // password Reminder
         ListTile(
-          title: Text(l10n.changePasswordTitle),
-          leading: const Icon(AppIcons.password),
-          onTap: () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (_) => MultiBlocProvider(
-                  providers: [
-                    BlocProvider.value(value: context.read<SettingsCubit>()),
-                    BlocProvider.value(value: context.read<AccountCubit>()),
-                  ],
-                  child: const ChangePasswordScreen(),
-                ),
-              ),
-            );
-          },
+          leading: const Icon(Iconsax.lock_copy),
+          title:  Text(AppLocalizations.of(context)!.settingsPasswordReminderTitle),
+          subtitle:  Text(AppLocalizations.of(context)!.settingsPasswordReminderSubtitle),
+          trailing: DropdownButton<int>(
+            value: settingsState.passwordReminderFrequency,
+            items:  [
+              DropdownMenuItem(value: 0, child: Text(AppLocalizations.of(context)!.settingsPasswordReminderNever)),
+              DropdownMenuItem(value: 5, child: Text(AppLocalizations.of(context)!.settingsPasswordReminderUnlocks(5))),
+              DropdownMenuItem(value: 10, child: Text(AppLocalizations.of(context)!.settingsPasswordReminderUnlocks(10))),
+              DropdownMenuItem(value: 20, child: Text(AppLocalizations.of(context)!.settingsPasswordReminderUnlocks(20))),
+            ],
+            onChanged: (value) {
+              if (value != null) {
+                context.read<SettingsCubit>().changePasswordReminderFrequency(value);
+              }
+            },
+          ),
         ),
       ],
     );

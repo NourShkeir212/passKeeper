@@ -9,6 +9,7 @@ import '../../../../core/services/secure_storage_service.dart';
 import '../../../../core/services/navigation_service.dart';
 import '../../../../core/services/session_manager.dart';
 import '../../../../core/services/settings_service.dart';
+import '../../../../core/theme/app_icons.dart';
 import '../../../../core/widgets/app_title_name.dart';
 import '../../../../core/widgets/custom_elevated_button.dart';
 import '../../../../core/widgets/custom_text.dart';
@@ -28,11 +29,11 @@ class LockScreen extends StatefulWidget {
 
 class _LockScreenState extends State<LockScreen> {
   final _passwordController = TextEditingController();
-
+  bool _isPasswordVisible = false;
   bool _isLoading = true;
-  bool _decoyAccountExists = false;
   bool _canUseBiometrics = false;
-
+  bool _forcePasswordUnlock = false;
+  bool _decoyAccountExists = false;
   @override
   void initState() {
     super.initState();
@@ -41,27 +42,37 @@ class _LockScreenState extends State<LockScreen> {
 
   /// Runs all necessary checks when the screen first loads.
   Future<void> _initializeScreen() async {
-    // Run both checks in parallel for efficiency
+    final settingsService = SettingsService();
     final results = await Future.wait([
       BiometricService.canCheckBiometrics(),
       _checkDecoyStatus(),
-      SettingsService().loadBiometricPreference(),
+      settingsService.loadBiometricPreference(),
+      settingsService.loadPasswordReminderFrequency(),
+      settingsService.loadBiometricUnlockCount(),
     ]);
 
-    final canUseBiometrics = results[0];
-    final decoyAccountExists = results[1];
-    final biometricsEnabled = results[2];
+    // --- THE FIX IS HERE: Cast the results to bool ---
+    final canUseBiometrics = results[0] as bool;
+    final decoyAccountExists = results[1] as bool;
+    final biometricsEnabled = results[2] as bool;
+    final reminderFrequency = results[3] as int;
+    final unlockCount = results[4] as int;
+
+    bool forcePassword = false;
+    if (reminderFrequency > 0 && unlockCount >= reminderFrequency) {
+      forcePassword = true;
+    }
 
     if (mounted) {
       setState(() {
-        // We can only use biometrics if the hardware exists AND the user enabled it in settings
+        // Now this '&&' operation is safe because both operands are bools
         _canUseBiometrics = canUseBiometrics && biometricsEnabled;
         _decoyAccountExists = decoyAccountExists;
+        _forcePasswordUnlock = forcePassword;
         _isLoading = false;
       });
 
-      // Attempt to auto-unlock with biometrics if available
-      if (_canUseBiometrics) {
+      if (_canUseBiometrics && !_forcePasswordUnlock) {
         _unlockWithBiometrics();
       }
     }
@@ -82,6 +93,7 @@ class _LockScreenState extends State<LockScreen> {
     final l10n = AppLocalizations.of(context)!;
     final isAuthenticated = await BiometricService.authenticate(l10n.biometricPromptReason);
     if (isAuthenticated && mounted) {
+      await SettingsService().incrementBiometricUnlockCount();
       SessionManager.currentSessionProfileTag = 'real';
       final masterPassword = await SecureStorageService.getMasterPassword();
       if (masterPassword != null) {
@@ -97,6 +109,7 @@ class _LockScreenState extends State<LockScreen> {
   void _unlockWithPassword() {
     FocusScope.of(context).unfocus();
     if (_passwordController.text.isEmpty) return;
+    SettingsService().resetBiometricUnlockCount();
     context.read<AuthCubit>().unlockWithPassword(_passwordController.text);
   }
 
@@ -136,7 +149,7 @@ class _LockScreenState extends State<LockScreen> {
                 const SizedBox(height: 48),
 
                 // Conditionally show the biometric button
-                if (_canUseBiometrics) ...[
+                if (_canUseBiometrics && !_forcePasswordUnlock) ...[
                   OutlinedButton.icon(
                     onPressed: _unlockWithBiometrics,
                     icon: const Icon(Icons.fingerprint),
@@ -147,21 +160,27 @@ class _LockScreenState extends State<LockScreen> {
                     ),
                   ),
                 ],
-
-                // Show the divider ONLY if both options are visible
-                if (_canUseBiometrics && _decoyAccountExists) ...[
+                  if(!_forcePasswordUnlock)...[
                   const SizedBox(height: 24),
                   CustomText(l10n.lockScreenOr),
                   const SizedBox(height: 24),
-                ],
-
-                // Show the password field if a decoy exists OR if biometrics are disabled
-                if (_decoyAccountExists || !_canUseBiometrics) ...[
+                  ],
                   CustomTextField(
                     controller: _passwordController,
                     labelText: l10n.lockScreenPasswordUnlock,
                     prefixIcon: Icons.lock_outline,
-                    isPassword: true,
+                    isPassword: _isPasswordVisible,
+                    suffixIcon: IconButton(
+                      icon: Icon(
+                        _isPasswordVisible ? AppIcons.eyeSlash : AppIcons.eye,
+                      ),
+                      onPressed: () {
+                        // Update the state to toggle visibility
+                        setState(() {
+                          _isPasswordVisible = !_isPasswordVisible;
+                        });
+                      },
+                    ),
                   ),
                   const SizedBox(height: 16),
                   SizedBox(
@@ -171,7 +190,6 @@ class _LockScreenState extends State<LockScreen> {
                       text: l10n.lockScreenUnlockButton,
                     ),
                   ),
-                ]
               ],
             ).animate().fadeIn(),
           ),

@@ -241,7 +241,19 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
-  String get settingsAutoLockGroupTitle => 'Auto-Lock';
+  String get settingsPasswordReminderTitle => 'Reminder';
+
+  @override
+  String get settingsPasswordReminderSubtitle =>
+      'Ask for master password periodically.';
+
+  @override
+  String get settingsPasswordReminderNever => 'Never';
+
+  @override
+  String settingsPasswordReminderUnlocks(int count) {
+    return '$count Unlocks';
+  }
 
   @override
   String get changePasswordTitle => 'Update your App password';

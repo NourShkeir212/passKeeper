@@ -97,7 +97,17 @@
             }
         }
     },
-    "settingsAutoLockGroupTitle": "Auto-Lock",
+    "settingsPasswordReminderTitle": "Reminder",
+    "settingsPasswordReminderSubtitle": "Ask for master password periodically.",
+    "settingsPasswordReminderNever": "Never",
+    "settingsPasswordReminderUnlocks": "{count} Unlocks",
+    "@settingsPasswordReminderUnlocks": {
+        "placeholders": {
+            "count": {
+                "type": "int"
+            }
+        }
+    },
     "changePasswordTitle": "Update your App password",
     "changePasswordSubHeader" : "Your new password must be secure and different from the old one.",
     "changePasswordCurrent": "Current Password",

@@ -18,23 +18,25 @@ import 'states.dart';
 class SettingsCubit extends Cubit<SettingsState> {
   final SettingsService _settingsService;
   final DatabaseService _databaseService;
-  final ExcelService _excelService = ExcelService();
 
   SettingsCubit(this._settingsService, this._databaseService)
       : super(const SettingsInitial(
       isBiometricEnabled: true,
       autoLockMinutes: 5,
+      passwordReminderFrequency: 5,
       canCheckBiometrics: false,
       hasBiometricsEnrolled: false));
 
   Future<void> loadSettings() async {
     try {
+     final passwordReminderFrequency = await _settingsService.loadPasswordReminderFrequency();
       final results = await Future.wait([
         _settingsService.loadBiometricPreference(),
         _settingsService.loadAutoLockTime(),
         SessionManager.getRealUserId(),
         BiometricService.canCheckBiometrics(),
         BiometricService.hasEnrolledBiometrics(),
+
       ]);
 
       final isBiometricEnabled = results[0] as bool;
@@ -56,12 +58,19 @@ class SettingsCubit extends Cubit<SettingsState> {
         realUser: realUser,
         decoyUser: decoyUser,
         canCheckBiometrics: canCheckBiometrics,
+        passwordReminderFrequency: passwordReminderFrequency,
         hasBiometricsEnrolled: hasBiometricsEnrolled,
       ));
     } catch (e) {
       print("Failed to load settings: $e");
       // emit(SettingsLoadFailure(e.toString()));
     }
+  }
+
+  Future<void> changePasswordReminderFrequency(int count) async {
+    await _settingsService.savePasswordReminderFrequency(count);
+    await _settingsService.resetBiometricUnlockCount(); // Reset counter when frequency changes
+    loadSettings();
   }
 
   Future<void> toggleBiometrics(bool isEnabled) async {

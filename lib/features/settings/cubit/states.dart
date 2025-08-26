@@ -15,6 +15,7 @@ class SettingsInitial extends SettingsState {
   final User? decoyUser;
   final bool canCheckBiometrics;
   final bool hasBiometricsEnrolled;
+  final int passwordReminderFrequency;
 
   const SettingsInitial({
     required this.isBiometricEnabled,
@@ -23,6 +24,7 @@ class SettingsInitial extends SettingsState {
     this.decoyUser,
     required this.canCheckBiometrics,
     required this.hasBiometricsEnrolled,
+    required this.passwordReminderFrequency,
   });
 
   @override
@@ -32,7 +34,8 @@ class SettingsInitial extends SettingsState {
     realUser,
     decoyUser,
     canCheckBiometrics,
-    hasBiometricsEnrolled
+    hasBiometricsEnrolled,
+    passwordReminderFrequency
   ];
 }
 

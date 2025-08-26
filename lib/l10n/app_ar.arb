@@ -98,7 +98,17 @@
             }
         }
     },
-    "settingsAutoLockGroupTitle": "القفل التلقائي",
+    "settingsPasswordReminderTitle": "تذكير",
+    "settingsPasswordReminderSubtitle": "اطلب كلمة المرور الرئيسية بشكل دوري.",
+    "settingsPasswordReminderNever": "أبداً",
+    "settingsPasswordReminderUnlocks": "{count,plural, =1{فتح واحد} =2{فتحان} few{{count} عمليات فتح} many{{count} عملية فتح} other{{count} فتح}}",
+    "@settingsPasswordReminderUnlocks": {
+        "placeholders": {
+            "count": {
+                "type": "int"
+            }
+        }
+    },
     "changePasswordTitle": "تحديث كلمة المرور التطبيق",
     "changePasswordSubHeader": "كلمة السر الجديدة يجب أن تكون مختلفة و أقوى من القديمة",
     "changePasswordCurrent": "كلمة المرور الحالية",

@@ -512,11 +512,29 @@ abstract class AppLocalizations {
   /// **'{count,plural, =1{1 Minute}other{{count} Minutes}}'**
   String settingsAutoLockMinutes(int count);
 
-  /// No description provided for @settingsAutoLockGroupTitle.
+  /// No description provided for @settingsPasswordReminderTitle.
   ///
   /// In en, this message translates to:
-  /// **'Auto-Lock'**
-  String get settingsAutoLockGroupTitle;
+  /// **'Reminder'**
+  String get settingsPasswordReminderTitle;
+
+  /// No description provided for @settingsPasswordReminderSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Ask for master password periodically.'**
+  String get settingsPasswordReminderSubtitle;
+
+  /// No description provided for @settingsPasswordReminderNever.
+  ///
+  /// In en, this message translates to:
+  /// **'Never'**
+  String get settingsPasswordReminderNever;
+
+  /// No description provided for @settingsPasswordReminderUnlocks.
+  ///
+  /// In en, this message translates to:
+  /// **'{count} Unlocks'**
+  String settingsPasswordReminderUnlocks(int count);
 
   /// No description provided for @changePasswordTitle.
   ///
