@@ -2,6 +2,7 @@ import 'package:encrypt/encrypt.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:secure_accounts/l10n/app_localizations.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import '../../../core/services/biometric_service.dart';
 import '../../../core/services/database_services.dart';
 import '../../../core/services/encryption_service.dart';
@@ -217,6 +218,7 @@ class SettingsCubit extends Cubit<SettingsState> {
 
       // 2. If verified, delete the user from the database
       await _databaseService.deleteUser(userId);
+      await SecureStorageService.deleteMasterPassword();
       emit(DeleteUserSuccess());
 
     } catch (e) {

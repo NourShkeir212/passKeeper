@@ -17,6 +17,7 @@ A secure, offline-first password manager built with Flutter. PassKeeper allows y
 * **Decoy Vault (Plausible Deniability):** Create an optional, secondary "decoy" profile with its own unique password. If forced to open the app, you can enter the decoy password to reveal a separate vault filled with believable fake data, keeping your real accounts completely hidden and secure.
 * **Secure Biometric Unlock:** Uses the device's Keychain (iOS) or Keystore (Android) via `flutter_secure_storage` to securely store the master password, allowing for a seamless and safe unlock with fingerprint or Face ID.
 * **Customizable Auto-Lock Timer:** For added security, the app automatically locks the vault if left in the background. The timer duration is fully customizable by the user.
+* **Unlock History:** Keep a log of recent vault unlock times for security auditing.
 * **Permanent Data Deletion:** Securely delete your entire user profile and all associated data with master password confirmation.
 
 ### 🗂️ Organization & Management
@@ -29,6 +30,7 @@ A secure, offline-first password manager built with Flutter. PassKeeper allows y
 * **Slidable Actions:** Quickly edit or delete accounts with modern swipe gestures.
 * **Password Generator:** Create strong, unique, and customizable passwords directly within the app.
 * **Password Strength Meter:** Get real-time feedback on the strength of your passwords as you type.
+* **Password Change Reminders:** Set optional, timed reminders on any account to notify you when it's time to change your password.
 
 ### 🎨 Personalization & Accessibility
 * **Adaptive Theming:** The entire app is beautifully themed. Users can manually switch between **Light**, **Dark**, and **System default** themes from the settings screen for a personalized visual experience.
