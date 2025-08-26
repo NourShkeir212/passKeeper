@@ -307,7 +307,6 @@ class AccountList extends StatelessWidget {
                       account.phoneNumbers!.isNotEmpty)
                     _buildDetailRow(context, AppIcons.phone,  AppLocalizations.of(context)!.accountDetailsPhone,
                         account.phoneNumbers!),
-                  const SizedBox(height: 20),
                   if (account.customFields.isNotEmpty) ...[
                     // Iterate through the map and build a row for each custom field
                     ...account.customFields.entries.map((entry) {
