@@ -309,12 +309,6 @@ class AccountList extends StatelessWidget {
                         account.phoneNumbers!),
                   const SizedBox(height: 20),
                   if (account.customFields.isNotEmpty) ...[
-                    const Divider(height: 32),
-                    CustomText(
-                      "Custom Fields", // TODO: Localize
-                      style: Theme.of(context).textTheme.titleMedium,
-                    ),
-                    const SizedBox(height: 8),
                     // Iterate through the map and build a row for each custom field
                     ...account.customFields.entries.map((entry) {
                       return _buildDetailRow(

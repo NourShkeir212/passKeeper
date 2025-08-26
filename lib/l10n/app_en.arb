@@ -308,6 +308,7 @@
     },
     "customFieldsFieldName": "Field Name",
     "customFieldsValue": "Value",
-    "customFieldsAddButton": "Add Custom Field"
+    "customFieldsAddButton": "Add Custom Field",
+    "excelHeaderCustomFields": "Custom Fields (JSON)"
 
 }

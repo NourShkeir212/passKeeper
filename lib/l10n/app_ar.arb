@@ -312,5 +312,6 @@
     },
     "customFieldsFieldName": "اسم الحقل",
     "customFieldsValue": "القيمة",
-    "customFieldsAddButton": "إضافة حقل مخصص"
+    "customFieldsAddButton": "إضافة حقل مخصص",
+    "excelHeaderCustomFields": "الحقول المخصصة (JSON)"
 }

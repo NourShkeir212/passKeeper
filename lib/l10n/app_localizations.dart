@@ -1493,6 +1493,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Add Custom Field'**
   String get customFieldsAddButton;
+
+  /// No description provided for @excelHeaderCustomFields.
+  ///
+  /// In en, this message translates to:
+  /// **'Custom Fields (JSON)'**
+  String get excelHeaderCustomFields;
 }
 
 class _AppLocalizationsDelegate

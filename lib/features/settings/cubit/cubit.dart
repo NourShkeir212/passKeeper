@@ -177,7 +177,7 @@ class SettingsCubit extends Cubit<SettingsState> {
   }) async {
     emit(SettingsImporting());
     try {
-      final message = await _exportService.importAccountsFromExcel(context);
+      final message = await _exportService.importAccountsFromExcel();
 
       accountCubit.loadAccounts();
       categoryCubit.loadCategories();

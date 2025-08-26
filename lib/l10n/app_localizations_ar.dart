@@ -788,4 +788,7 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get customFieldsAddButton => 'إضافة حقل مخصص';
+
+  @override
+  String get excelHeaderCustomFields => 'الحقول المخصصة (JSON)';
 }

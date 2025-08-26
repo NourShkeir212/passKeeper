@@ -783,4 +783,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get customFieldsAddButton => 'Add Custom Field';
+
+  @override
+  String get excelHeaderCustomFields => 'Custom Fields (JSON)';
 }
