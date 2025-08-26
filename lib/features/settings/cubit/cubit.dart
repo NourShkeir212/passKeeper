@@ -2,6 +2,7 @@ import 'package:encrypt/encrypt.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:secure_accounts/l10n/app_localizations.dart';
+import '../../../core/services/biometric_service.dart';
 import '../../../core/services/database_services.dart';
 import '../../../core/services/encryption_service.dart';
 import '../../../core/services/excel_service.dart';
@@ -17,46 +18,52 @@ import 'states.dart';
 class SettingsCubit extends Cubit<SettingsState> {
   final SettingsService _settingsService;
   final DatabaseService _databaseService;
+  final ExcelService _excelService = ExcelService();
 
   SettingsCubit(this._settingsService, this._databaseService)
-      : super(const SettingsInitial(isBiometricEnabled: true, autoLockMinutes: 5));
+      : super(const SettingsInitial(
+      isBiometricEnabled: true,
+      autoLockMinutes: 5,
+      canCheckBiometrics: false,
+      hasBiometricsEnrolled: false));
 
   Future<void> loadSettings() async {
     try {
-      // Load preferences from shared_preferences
-      final isBiometricEnabled = await _settingsService.loadBiometricPreference();
-      final autoLockMinutes = await _settingsService.loadAutoLockTime();
+      final results = await Future.wait([
+        _settingsService.loadBiometricPreference(),
+        _settingsService.loadAutoLockTime(),
+        SessionManager.getRealUserId(),
+        BiometricService.canCheckBiometrics(),
+        BiometricService.hasEnrolledBiometrics(),
+      ]);
 
-      // Get the active user's ID from the current session
-      final realUserId = await SessionManager.getUserId();
-      if (realUserId == null) {
-        throw Exception("Active user session not found.");
-      }
+      final isBiometricEnabled = results[0] as bool;
+      final autoLockMinutes = results[1] as int;
+      final realUserId = results[2] as int?;
+      final canCheckBiometrics = results[3] as bool;
+      final hasBiometricsEnrolled = results[4] as bool;
 
-      // Fetch the full "real" user object from the database
+      if (realUserId == null) throw Exception("Active user session not found.");
+
       final realUser = await _databaseService.getUserById(realUserId);
-      if (realUser == null) {
-        throw Exception("Could not load user data from database.");
-      }
+      if (realUser == null) throw Exception("Could not load user data from database.");
 
-      // Now, use the real user's ID to find their linked decoy account, if it exists
       final decoyUser = await _databaseService.getDecoyUserFor(realUserId);
 
-      // Only emit the final state once all data has been successfully loaded
       emit(SettingsInitial(
         isBiometricEnabled: isBiometricEnabled,
         autoLockMinutes: autoLockMinutes,
-        realUser: realUser, // This is now guaranteed to have a value
-        decoyUser: decoyUser, // This can be null if no decoy exists
+        realUser: realUser,
+        decoyUser: decoyUser,
+        canCheckBiometrics: canCheckBiometrics,
+        hasBiometricsEnrolled: hasBiometricsEnrolled,
       ));
-
     } catch (e) {
-      // If any step fails, you can emit a specific failure state
-      // to show an error message on the settings screen.
       print("Failed to load settings: $e");
-      // For example: emit(SettingsLoadFailure(e.toString()));
+      // emit(SettingsLoadFailure(e.toString()));
     }
   }
+
   Future<void> toggleBiometrics(bool isEnabled) async {
     await _settingsService.saveBiometricPreference(isEnabled);
     loadSettings();

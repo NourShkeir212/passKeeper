@@ -15,13 +15,14 @@ A secure, offline-first password manager built with Flutter. PassKeeper allows y
 * **End-to-End Encryption:** All sensitive account information (especially passwords) is encrypted using the powerful **AES-256** algorithm.
 * **Zero Knowledge Model:** Your master password is **hashed** for verification and is **never stored**. It's the key to unlock your vault and exists only in your memory.
 * **Decoy Vault (Plausible Deniability):** Create an optional, secondary "decoy" profile with its own unique password. If forced to open the app, you can enter the decoy password to reveal a separate vault filled with believable fake data, keeping your real accounts completely hidden and secure.
-* **Biometric App Lock:** Use your device's fingerprint or Face ID for quick and convenient access to the app.
+* **Secure Biometric Unlock:** Uses the device's Keychain (iOS) or Keystore (Android) via `flutter_secure_storage` to securely store the master password, allowing for a seamless and safe unlock with fingerprint or Face ID.
 * **Customizable Auto-Lock Timer:** For added security, the app automatically locks the vault if left in the background. The timer duration is fully customizable by the user.
 * **Permanent Data Deletion:** Securely delete your entire user profile and all associated data with master password confirmation.
 
 ### 🗂️ Organization & Management
-* **Modern Home Screen UI:** The main screen features an interactive, horizontal list of category filter chips. The main view is a grid of categories when "All" is selected, or a list of expandable service groups for a focused view.
-* **Custom Categories:** Create, edit, delete, and reorder your own custom categories to organize your accounts logically.
+* **Modern Home Screen UI:** The main screen features an interactive, horizontal list of category filter chips and a clean, expandable list of service groups.
+* **Smart Username Suggestions:** When adding a new account, the app can suggest usernames based on other accounts you've saved in a chosen category, speeding up data entry.
+* **Custom Categories:** Create, edit, delete, and reorder your own custom categories.
 * **Multi-Select & Batch Delete:** Easily select multiple categories at once to delete them in a single action from the management screen.
 * **Drag & Drop Reordering:** Intuitively reorder your accounts *within* their category group.
 * **Real-time Search:** A dedicated search bar on the home screen allows you to instantly find any account by its service name or username.
@@ -44,12 +45,13 @@ A secure, offline-first password manager built with Flutter. PassKeeper allows y
 * **Framework:** Flutter
 * **State Management:** BLoC / Cubit (`flutter_bloc`)
 * **Database:** SQLite (`sqflite`)
+* **Secure Storage:** Keychain (iOS) & Keystore (Android) via `flutter_secure_storage`.
 * **Local Storage:** `shared_preferences` for session and settings.
 * **Cryptography:** `encrypt` & `crypto` for AES encryption and SHA-256 hashing.
 * **Key Packages:**
-    * `local_auth` for biometric authentication.
+    * `local_auth` & `flutter_secure_storage` for biometric authentication.
     * `flutter_slidable` for swipe actions.
-    * `excel`, `file_picker`, `share_plus` for data import/export.
+    * `excel`, `file_picker`, `file_saver` for data import/export.
     * `flutter_animate` & `animated_text_kit` for animations.
     * `google_fonts` for typography.
     * `flutter_svg` for scalable illustrations.

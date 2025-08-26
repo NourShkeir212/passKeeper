@@ -5,7 +5,7 @@ import '../../../model/user_model.dart';
 abstract class SettingsState extends Equatable {
   const SettingsState();
   @override
-  List<Object> get props => [];
+  List<Object?> get props => [];
 }
 
 class SettingsInitial extends SettingsState {
@@ -13,16 +13,27 @@ class SettingsInitial extends SettingsState {
   final int autoLockMinutes;
   final User? realUser;
   final User? decoyUser;
+  final bool canCheckBiometrics;
+  final bool hasBiometricsEnrolled;
 
   const SettingsInitial({
     required this.isBiometricEnabled,
     required this.autoLockMinutes,
     this.realUser,
     this.decoyUser,
+    required this.canCheckBiometrics,
+    required this.hasBiometricsEnrolled,
   });
 
   @override
-  List<Object> get props => [isBiometricEnabled, autoLockMinutes,?decoyUser,?realUser];
+  List<Object?> get props => [
+    isBiometricEnabled,
+    autoLockMinutes,
+    realUser,
+    decoyUser,
+    canCheckBiometrics,
+    hasBiometricsEnrolled
+  ];
 }
 
 class SettingsLoading extends SettingsState {}

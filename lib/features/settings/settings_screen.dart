@@ -114,7 +114,7 @@ class SettingsView extends StatelessWidget {
                   _buildAppearanceSection(context, l10n),
                   _buildLanguageSection(context, l10n),
                   _buildCustomizationSection(context, l10n),
-                  _buildSecuritySection(context, l10n, settingsState,activeProfile),
+                  _buildSecuritySection(context, l10n,settingsState),
                   _buildDataSection(context, l10n),
                   _buildAboutSection(context, l10n),
                   _buildDecoySection(
@@ -265,115 +265,81 @@ class SettingsView extends StatelessWidget {
   }
 
   Widget _buildSecuritySection(
-    BuildContext context,
-    AppLocalizations l10n,
-    SettingsInitial settingsState,
-      String activeProfile
-  ) {
-    // Only show this section if the user is in their "real" account
-    if (activeProfile != 'real') {
-      return Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          const Divider(),
-          _SettingsGroupTitle(title: l10n.settingsSecurity),
-          ListTile(
-            leading: const Icon(AppIcons.timer),
-            title: Text(l10n.settingsAutoLockTitle),
-            trailing: DropdownButton<int>(
-              value: settingsState.autoLockMinutes,
-              items: [1, 5, 15, 30]
-                  .map(
-                    (minutes) => DropdownMenuItem(
-                  value: minutes,
-                  child: Text(l10n.settingsAutoLockMinutes(minutes)),
-                ),
-              )
-                  .toList(),
-              onChanged: (value) {
-                if (value != null) {
-                  context.read<SettingsCubit>().changeAutoLockTime(value);
-                }
-              },
-            ),
-          ),
-          ListTile(
-            title: Text(l10n.changePasswordTitle),
-            leading: const Icon(AppIcons.password),
-            onTap: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (_) => MultiBlocProvider(
-                    providers: [
-                      BlocProvider.value(value: context.read<SettingsCubit>()),
-                      BlocProvider.value(value: context.read<AccountCubit>()),
-                    ],
-                    child: const ChangePasswordScreen(),
-                  ),
-                ),
-              );
-            },
-          ),
-        ],
-      );
-    }
+      BuildContext context,
+      AppLocalizations l10n,
+      SettingsInitial settingsState,
+      ) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         const Divider(),
         _SettingsGroupTitle(title: l10n.settingsSecurity),
-        SwitchListTile(
-          title: Text(l10n.settingsBiometricTitle),
-          subtitle: Text(l10n.settingsBiometricSubtitle),
-          value: settingsState.isBiometricEnabled,
-          onChanged: (newValue) {
-            // If the user is turning biometrics ON, do it immediately without a dialog.
-            if (settingsState.decoyUser != null) {
+
+        // Only show the biometric switch if the device hardware supports it.
+        if (settingsState.canCheckBiometrics)
+          SwitchListTile(
+            title: Text(l10n.settingsBiometricTitle),
+            subtitle: Text(l10n.settingsBiometricSubtitle),
+            value: settingsState.isBiometricEnabled,
+            onChanged: (newValue) {
+              // First, check if biometrics are actually set up on the device.
+              if (!settingsState.hasBiometricsEnrolled) {
+                showDialog(
+                  context: context,
+                  builder: (dialogContext) => AlertDialog(
+                    title: const Text("Biometrics Not Set Up"), // TODO: Localize
+                    content: const Text(
+                        "To use this feature, you first need to set up a fingerprint or Face ID in your phone's settings."), // TODO: Localize
+                    actions: [
+                      TextButton(
+                        onPressed: () => Navigator.of(dialogContext).pop(),
+                        child: const Text("OK"), // TODO: Localize
+                      ),
+                    ],
+                  ),
+                );
+                return; // Stop the function here.
+              }
+
+              // If the user is turning biometrics ON, do it immediately.
               if (newValue == true) {
                 context.read<SettingsCubit>().toggleBiometrics(true);
                 return;
               }
-            }else{
-              context.read<SettingsCubit>().toggleBiometrics(newValue);
-            }
-            // If the user is turning biometrics OFF, show the warning dialog first.
-            if (settingsState.decoyUser != null) {
-              showDialog(
-                context: context,
-                builder: (dialogContext) => AlertDialog(
-                      title: Text(AppLocalizations.of(context)!
-                          .dialogDisableBiometricsTitle),
-                      content: Text(
-                          AppLocalizations.of(context)!
-                              .dialogDisableBiometricsContent
+
+              // If the user is turning biometrics OFF, and a decoy exists, show the warning.
+              if (settingsState.decoyUser != null) {
+                showDialog(
+                  context: context,
+                  builder: (dialogContext) => AlertDialog(
+                    title: Text(l10n.dialogDisableBiometricsTitle),
+                    content: Text(l10n.dialogDisableBiometricsContent),
+                    actions: [
+                      TextButton(
+                        onPressed: () => Navigator.of(dialogContext).pop(),
+                        child: Text(l10n.dialogCancel),
                       ),
-                      actions: [
-                        TextButton(
-                          onPressed: () => Navigator.of(dialogContext).pop(),
-                          child: Text(l10n.dialogCancel),
+                      TextButton(
+                        onPressed: () {
+                          Navigator.of(dialogContext).pop();
+                          context.read<SettingsCubit>().toggleBiometrics(false);
+                        },
+                        child: Text(
+                          l10n.dialogDisableButton,
+                          style: TextStyle(
+                              color: Theme.of(context).colorScheme.error),
                         ),
-                        TextButton(
-                          onPressed: () {
-                            Navigator.of(dialogContext).pop();
-                            // If confirmed, then disable biometrics.
-                            context.read<SettingsCubit>().toggleBiometrics(
-                                false);
-                          },
-                          child: Text(
-                            AppLocalizations.of(context)!.dialogDisableButton,
-                            style: TextStyle(color: Theme
-                                .of(context)
-                                .colorScheme
-                                .error),
-                          ),
-                        ),
-                      ],
-                    ),
-              );
-            }
-          }
-        ),
+                      ),
+                    ],
+                  ),
+                );
+              } else {
+                // If no decoy exists, just disable it immediately.
+                context.read<SettingsCubit>().toggleBiometrics(false);
+              }
+            },
+          ),
+
         ListTile(
           leading: const Icon(AppIcons.timer),
           title: Text(l10n.settingsAutoLockTitle),
@@ -382,10 +348,10 @@ class SettingsView extends StatelessWidget {
             items: [1, 5, 15, 30]
                 .map(
                   (minutes) => DropdownMenuItem(
-                    value: minutes,
-                    child: Text(l10n.settingsAutoLockMinutes(minutes)),
-                  ),
-                )
+                value: minutes,
+                child: Text(l10n.settingsAutoLockMinutes(minutes)),
+              ),
+            )
                 .toList(),
             onChanged: (value) {
               if (value != null) {

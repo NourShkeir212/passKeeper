@@ -8,6 +8,7 @@ import '../../../../core/services/encryption_service.dart';
 import '../../../../core/services/secure_storage_service.dart';
 import '../../../../core/services/navigation_service.dart';
 import '../../../../core/services/session_manager.dart';
+import '../../../../core/services/settings_service.dart';
 import '../../../../core/widgets/app_title_name.dart';
 import '../../../../core/widgets/custom_elevated_button.dart';
 import '../../../../core/widgets/custom_text.dart';
@@ -30,60 +31,72 @@ class _LockScreenState extends State<LockScreen> {
 
   bool _isLoading = true;
   bool _decoyAccountExists = false;
+  bool _canUseBiometrics = false;
 
   @override
   void initState() {
     super.initState();
-    _checkDecoyStatus();
+    _initializeScreen();
+  }
+
+  /// Runs all necessary checks when the screen first loads.
+  Future<void> _initializeScreen() async {
+    // Run both checks in parallel for efficiency
+    final results = await Future.wait([
+      BiometricService.canCheckBiometrics(),
+      _checkDecoyStatus(),
+      SettingsService().loadBiometricPreference(),
+    ]);
+
+    final canUseBiometrics = results[0];
+    final decoyAccountExists = results[1];
+    final biometricsEnabled = results[2];
+
+    if (mounted) {
+      setState(() {
+        // We can only use biometrics if the hardware exists AND the user enabled it in settings
+        _canUseBiometrics = canUseBiometrics && biometricsEnabled;
+        _decoyAccountExists = decoyAccountExists;
+        _isLoading = false;
+      });
+
+      // Attempt to auto-unlock with biometrics if available
+      if (_canUseBiometrics) {
+        _unlockWithBiometrics();
+      }
+    }
   }
 
   /// Checks the database to see if a decoy account is linked to the real one.
-  Future<void> _checkDecoyStatus() async {
+  Future<bool> _checkDecoyStatus() async {
     final realUserId = await SessionManager.getRealUserId();
     if (realUserId != null) {
       final decoyUser = await DatabaseService().getDecoyUserFor(realUserId);
-      if (mounted) {
-        setState(() {
-          _decoyAccountExists = (decoyUser != null);
-          _isLoading = false;
-        });
-      }
-    } else {
-      // Should not happen, but handle it gracefully
-      if (mounted) setState(() => _isLoading = false);
+      return decoyUser != null;
     }
+    return false;
   }
+
   /// Unlocks the app with biometrics and goes to the REAL vault.
   Future<void> _unlockWithBiometrics() async {
     final l10n = AppLocalizations.of(context)!;
-    final isAuthenticated = await BiometricService.authenticate(
-        l10n.biometricPromptReason
-    );
-
+    final isAuthenticated = await BiometricService.authenticate(l10n.biometricPromptReason);
     if (isAuthenticated && mounted) {
+      SessionManager.currentSessionProfileTag = 'real';
       final masterPassword = await SecureStorageService.getMasterPassword();
-
-
       if (masterPassword != null) {
-        // 2. Set the session to 'real' and initialize the vault
-        SessionManager.currentSessionProfileTag = 'real';
         EncryptionService().init(masterPassword);
-
-        // 3. Navigate home
+        context.read<AccountCubit>().loadAccounts();
+        context.read<CategoryCubit>().loadCategories();
         NavigationService.pushAndRemoveUntil(const HomeScreen());
-      } else {
-        // Handle case where password isn't found (should be rare)
-        ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text(l10n.errorGeneric)));
       }
     }
   }
 
-  /// Attempts to unlock the DECOY vault with the entered password.
-  void _unlockWithDecoyPassword() {
+  /// Attempts to unlock with the entered password (could be real or decoy).
+  void _unlockWithPassword() {
     FocusScope.of(context).unfocus();
     if (_passwordController.text.isEmpty) return;
-
     context.read<AuthCubit>().unlockWithPassword(_passwordController.text);
   }
 
@@ -122,25 +135,31 @@ class _LockScreenState extends State<LockScreen> {
                 CustomText(l10n.lockScreenTitle, style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
                 const SizedBox(height: 48),
 
-                OutlinedButton.icon(
-                  onPressed: _unlockWithBiometrics,
-                  icon: const Icon(Icons.fingerprint),
-                  label: Text(l10n.unlockButton),
-                  style: OutlinedButton.styleFrom(
-                    padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
-                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
+                // Conditionally show the biometric button
+                if (_canUseBiometrics) ...[
+                  OutlinedButton.icon(
+                    onPressed: _unlockWithBiometrics,
+                    icon: const Icon(Icons.fingerprint),
+                    label: Text(l10n.unlockButton),
+                    style: OutlinedButton.styleFrom(
+                      padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
+                    ),
                   ),
-                ),
+                ],
 
-                // --- THE FIX IS HERE ---
-                // Only show the password option if a decoy account exists
-                if (_decoyAccountExists) ...[
+                // Show the divider ONLY if both options are visible
+                if (_canUseBiometrics && _decoyAccountExists) ...[
                   const SizedBox(height: 24),
                   CustomText(l10n.lockScreenOr),
                   const SizedBox(height: 24),
+                ],
+
+                // Show the password field if a decoy exists OR if biometrics are disabled
+                if (_decoyAccountExists || !_canUseBiometrics) ...[
                   CustomTextField(
                     controller: _passwordController,
-                    labelText: l10n.loginScreenPasswordHint,
+                    labelText: l10n.lockScreenPasswordUnlock,
                     prefixIcon: Icons.lock_outline,
                     isPassword: true,
                   ),
@@ -148,7 +167,7 @@ class _LockScreenState extends State<LockScreen> {
                   SizedBox(
                     width: double.infinity,
                     child: CustomElevatedButton(
-                      onPressed: _unlockWithDecoyPassword,
+                      onPressed: _unlockWithPassword,
                       text: l10n.lockScreenUnlockButton,
                     ),
                   ),
