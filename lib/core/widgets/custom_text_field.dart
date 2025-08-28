@@ -8,6 +8,7 @@ class CustomTextField extends StatelessWidget {
   final bool isPassword;
   final Widget? suffixIcon;
   final TextInputType keyboardType;
+  final int? maxLines;
   final void Function(String)? onChanged;
 
   const CustomTextField({
@@ -20,11 +21,13 @@ class CustomTextField extends StatelessWidget {
     this.suffixIcon,
     this.keyboardType = TextInputType.text,
     this.onChanged,
+    this.maxLines=1,
   });
 
   @override
   Widget build(BuildContext context) {
     return TextFormField(
+      maxLines: maxLines,
       controller: controller,
       style: Theme
           .of(context)

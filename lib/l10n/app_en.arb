@@ -319,6 +319,26 @@
     "customFieldsFieldName": "Field Name",
     "customFieldsValue": "Value",
     "customFieldsAddButton": "Add Custom Field",
-    "excelHeaderCustomFields": "Custom Fields (JSON)"
-
+    "excelHeaderCustomFields": "Custom Fields (JSON)",
+    "secretVaultTitle": "Secret Vault",
+    "secretVaultPinScreenSetupTitle": "Create Secret PIN",
+    "secretVaultPinScreenEnterTitle": "Enter Secret PIN",
+    "secretVaultPinScreenSetPinHeader": "Set a PIN for your Secret Vault",
+    "secretVaultPinScreenUnlockHeader": "Unlock Your Secret Vault",
+    "secretVaultPinScreenInstruction": "Enter a 4-digit PIN.",
+    "secretVaultEmptyTitle": "Your Secret Vault is Empty",
+    "secretVaultEmptySubtitle": "Tap the '+' button to add your first secret note or key.",
+    "secretVaultAddItemTitle": "Add Secret Item",
+    "secretVaultEditItemTitle": "Edit Secret Item",
+    "secretVaultTitleHint": "Title",
+    "secretVaultContentHint": "Secret Content",
+    "secretVaultConfirmDelete": "Are you sure you want to delete this secret item?",
+    "feedbackSecretItemContentCopied": "Content copied to clipboard!",
+    "validationTitleEmpty": "Title cannot be empty",
+    "validationContentEmpty": "Content cannot be empty",
+    "errorIncorrectPin": "Incorrect PIN",
+    "dialogDeleteVaultTitle": "Delete Secret Vault?",
+    "dialogDeleteVaultContent": "Are you sure? All secret items will be permanently deleted. This action cannot be undone.",
+    "exportSuccess": "Export successful!",
+    "exportCancelled": "Export cancelled."
 }

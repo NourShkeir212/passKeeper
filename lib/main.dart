@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:secure_accounts/features/home/cubit/account_cubit/cubit.dart';
+import 'package:secure_accounts/features/secret_vault/cubits/secret_vault_cubit.dart';
 import 'core/localization/locale_cubit.dart';
 import 'core/services/database_services.dart';
 import 'core/services/navigation_service.dart';

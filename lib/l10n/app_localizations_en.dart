@@ -798,4 +798,71 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get excelHeaderCustomFields => 'Custom Fields (JSON)';
+
+  @override
+  String get secretVaultTitle => 'Secret Vault';
+
+  @override
+  String get secretVaultPinScreenSetupTitle => 'Create Secret PIN';
+
+  @override
+  String get secretVaultPinScreenEnterTitle => 'Enter Secret PIN';
+
+  @override
+  String get secretVaultPinScreenSetPinHeader =>
+      'Set a PIN for your Secret Vault';
+
+  @override
+  String get secretVaultPinScreenUnlockHeader => 'Unlock Your Secret Vault';
+
+  @override
+  String get secretVaultPinScreenInstruction => 'Enter a 4-digit PIN.';
+
+  @override
+  String get secretVaultEmptyTitle => 'Your Secret Vault is Empty';
+
+  @override
+  String get secretVaultEmptySubtitle =>
+      'Tap the \'+\' button to add your first secret note or key.';
+
+  @override
+  String get secretVaultAddItemTitle => 'Add Secret Item';
+
+  @override
+  String get secretVaultEditItemTitle => 'Edit Secret Item';
+
+  @override
+  String get secretVaultTitleHint => 'Title';
+
+  @override
+  String get secretVaultContentHint => 'Secret Content';
+
+  @override
+  String get secretVaultConfirmDelete =>
+      'Are you sure you want to delete this secret item?';
+
+  @override
+  String get feedbackSecretItemContentCopied => 'Content copied to clipboard!';
+
+  @override
+  String get validationTitleEmpty => 'Title cannot be empty';
+
+  @override
+  String get validationContentEmpty => 'Content cannot be empty';
+
+  @override
+  String get errorIncorrectPin => 'Incorrect PIN';
+
+  @override
+  String get dialogDeleteVaultTitle => 'Delete Secret Vault?';
+
+  @override
+  String get dialogDeleteVaultContent =>
+      'Are you sure? All secret items will be permanently deleted. This action cannot be undone.';
+
+  @override
+  String get exportSuccess => 'Export successful!';
+
+  @override
+  String get exportCancelled => 'Export cancelled.';
 }

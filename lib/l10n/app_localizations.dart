@@ -1517,6 +1517,132 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Custom Fields (JSON)'**
   String get excelHeaderCustomFields;
+
+  /// No description provided for @secretVaultTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Secret Vault'**
+  String get secretVaultTitle;
+
+  /// No description provided for @secretVaultPinScreenSetupTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Create Secret PIN'**
+  String get secretVaultPinScreenSetupTitle;
+
+  /// No description provided for @secretVaultPinScreenEnterTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter Secret PIN'**
+  String get secretVaultPinScreenEnterTitle;
+
+  /// No description provided for @secretVaultPinScreenSetPinHeader.
+  ///
+  /// In en, this message translates to:
+  /// **'Set a PIN for your Secret Vault'**
+  String get secretVaultPinScreenSetPinHeader;
+
+  /// No description provided for @secretVaultPinScreenUnlockHeader.
+  ///
+  /// In en, this message translates to:
+  /// **'Unlock Your Secret Vault'**
+  String get secretVaultPinScreenUnlockHeader;
+
+  /// No description provided for @secretVaultPinScreenInstruction.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter a 4-digit PIN.'**
+  String get secretVaultPinScreenInstruction;
+
+  /// No description provided for @secretVaultEmptyTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Your Secret Vault is Empty'**
+  String get secretVaultEmptyTitle;
+
+  /// No description provided for @secretVaultEmptySubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Tap the \'+\' button to add your first secret note or key.'**
+  String get secretVaultEmptySubtitle;
+
+  /// No description provided for @secretVaultAddItemTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Add Secret Item'**
+  String get secretVaultAddItemTitle;
+
+  /// No description provided for @secretVaultEditItemTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Edit Secret Item'**
+  String get secretVaultEditItemTitle;
+
+  /// No description provided for @secretVaultTitleHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Title'**
+  String get secretVaultTitleHint;
+
+  /// No description provided for @secretVaultContentHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Secret Content'**
+  String get secretVaultContentHint;
+
+  /// No description provided for @secretVaultConfirmDelete.
+  ///
+  /// In en, this message translates to:
+  /// **'Are you sure you want to delete this secret item?'**
+  String get secretVaultConfirmDelete;
+
+  /// No description provided for @feedbackSecretItemContentCopied.
+  ///
+  /// In en, this message translates to:
+  /// **'Content copied to clipboard!'**
+  String get feedbackSecretItemContentCopied;
+
+  /// No description provided for @validationTitleEmpty.
+  ///
+  /// In en, this message translates to:
+  /// **'Title cannot be empty'**
+  String get validationTitleEmpty;
+
+  /// No description provided for @validationContentEmpty.
+  ///
+  /// In en, this message translates to:
+  /// **'Content cannot be empty'**
+  String get validationContentEmpty;
+
+  /// No description provided for @errorIncorrectPin.
+  ///
+  /// In en, this message translates to:
+  /// **'Incorrect PIN'**
+  String get errorIncorrectPin;
+
+  /// No description provided for @dialogDeleteVaultTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete Secret Vault?'**
+  String get dialogDeleteVaultTitle;
+
+  /// No description provided for @dialogDeleteVaultContent.
+  ///
+  /// In en, this message translates to:
+  /// **'Are you sure? All secret items will be permanently deleted. This action cannot be undone.'**
+  String get dialogDeleteVaultContent;
+
+  /// No description provided for @exportSuccess.
+  ///
+  /// In en, this message translates to:
+  /// **'Export successful!'**
+  String get exportSuccess;
+
+  /// No description provided for @exportCancelled.
+  ///
+  /// In en, this message translates to:
+  /// **'Export cancelled.'**
+  String get exportCancelled;
 }
 
 class _AppLocalizationsDelegate

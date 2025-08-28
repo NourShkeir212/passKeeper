@@ -4,6 +4,8 @@ import 'package:secure_accounts/core/widgets/app_title_name.dart';
 import '../../../core/theme/app_icons.dart';
 
 import '../../../l10n/app_localizations.dart';
+import '../../secret_vault/cubits/secret_vault_cubit.dart';
+import '../../secret_vault/screens/secret_vault_wrapper.dart';
 import '../../settings/settings_screen.dart';
 import '../cubit/account_cubit/cubit.dart';
 import '../cubit/category_cubit/cubit.dart';
@@ -49,34 +51,45 @@ class HomeScreenAppBar extends StatelessWidget implements PreferredSizeWidget {
             ],
           );
         } else {
-          return AppBar(
-            elevation: 2,
-            title: AppTitleNameWidget(),
-            automaticallyImplyLeading: false,
-            actions: [
-              IconButton(icon: const Icon(AppIcons.search),
-                  onPressed: () =>
-                      context.read<HomeScreenCubit>().toggleSearch()),
-              IconButton(
-                icon: const Icon(AppIcons.settings),
-                tooltip: AppLocalizations.of(context)!.settingsAccount,
-                onPressed: () {
-                  Navigator.push(context, MaterialPageRoute(
-                    builder: (_) =>
-                        MultiBlocProvider(
-                          providers: [
-                            // Provide the existing cubits to the settings page
-                            BlocProvider.value(
-                                value: context.read<AccountCubit>()),
-                            BlocProvider.value(
-                                value: context.read<CategoryCubit>()),
-                          ],
-                          child: const SettingsScreen(),
-                        ),
-                  ));
-                },
-              ),
-            ],
+          return GestureDetector(
+            onLongPress: (){
+              Navigator.push(context, MaterialPageRoute(
+                builder: (_) => BlocProvider(
+                  create: (context) => SecretVaultCubit(),
+                  child: const SecretVaultWrapper(),
+                ),
+              ));
+            },
+            child: AppBar(
+              elevation: 2,
+              title: AppTitleNameWidget(),
+              automaticallyImplyLeading: false,
+              actions: [
+                IconButton(icon: const Icon(AppIcons.search),
+                    onPressed: () =>
+                        context.read<HomeScreenCubit>().toggleSearch()),
+                IconButton(
+                  icon: const Icon(AppIcons.settings),
+                  tooltip: AppLocalizations.of(context)!.settingsAccount,
+                  onPressed: () {
+                    Navigator.push(
+                        context, MaterialPageRoute(
+                      builder: (_) =>
+                          MultiBlocProvider(
+                            providers: [
+                              // Provide the existing cubits to the settings page
+                              BlocProvider.value(
+                                  value: context.read<AccountCubit>()),
+                              BlocProvider.value(
+                                  value: context.read<CategoryCubit>()),
+                            ],
+                            child: const SettingsScreen(),
+                          ),
+                    ));
+                  },
+                ),
+              ],
+            ),
           );
         }
       },

@@ -2,6 +2,7 @@ import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
 import '../../model/account_model.dart';
 import '../../model/category_model.dart';
+import '../../model/secret_item_model.dart';
 import '../../model/user_model.dart';
 
 
@@ -22,7 +23,7 @@ class DatabaseService {
     String path = join(await getDatabasesPath(), 'passkeeper.db');
     return await openDatabase(
       path,
-      version: 6, // Updated version
+      version: 7, // Updated version
       onCreate: _onCreate,
       onUpgrade: _onUpgrade,
       onConfigure: (db) async {
@@ -74,6 +75,16 @@ class DatabaseService {
         FOREIGN KEY (categoryId) REFERENCES categories (id) ON DELETE CASCADE
       )
     ''');
+
+    await db.execute('''
+    CREATE TABLE secret_items(
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      userId INTEGER NOT NULL,
+      title TEXT NOT NULL,
+      content TEXT NOT NULL, -- This will be encrypted
+      FOREIGN KEY (userId) REFERENCES users (id) ON DELETE CASCADE
+    )
+  ''');
   }
 
   Future<void> _onUpgrade(Database db, int oldVersion, int newVersion) async {
@@ -98,6 +109,17 @@ class DatabaseService {
     }
     if (oldVersion < 6) {
       await db.execute('ALTER TABLE accounts ADD COLUMN customFields TEXT');
+    }
+    if (oldVersion < 7) {
+      await db.execute('''
+      CREATE TABLE secret_items(
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        userId INTEGER NOT NULL,
+        title TEXT NOT NULL,
+        content TEXT NOT NULL,
+        FOREIGN KEY (userId) REFERENCES users (id) ON DELETE CASCADE
+      )
+    ''');
     }
   }
 
@@ -313,5 +335,36 @@ class DatabaseService {
       limit: 1,
     );
     return result.isNotEmpty;
+  }
+
+  Future<int> addSecretItem(SecretItem item) async {
+    final db = await database;
+    return await db.insert('secret_items', item.toMap());
+  }
+  Future<List<SecretItem>> getSecretItems(int userId) async {
+    final db = await database;
+    final List<Map<String, dynamic>> maps = await db.query(
+      'secret_items',
+      where: 'userId = ?',
+      whereArgs: [userId],
+    );
+    return List.generate(maps.length, (i) => SecretItem.fromMap(maps[i]));
+  }
+  Future<void> deleteSecretItem(int id) async {
+    final db = await database;
+    await db.delete('secret_items', where: 'id = ?', whereArgs: [id]);
+  }
+  Future<void> updateSecretItem(SecretItem item) async {
+    final db = await database;
+    await db.update('secret_items', item.toMap(), where: 'id = ?', whereArgs: [item.id]);
+  }
+
+  Future<void> deleteAllSecretItemsForUser(int userId) async {
+    final db = await database;
+    await db.delete(
+      'secret_items',
+      where: 'userId = ?',
+      whereArgs: [userId],
+    );
   }
 }

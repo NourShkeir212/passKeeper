@@ -812,4 +812,70 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get excelHeaderCustomFields => 'الحقول المخصصة (JSON)';
+
+  @override
+  String get secretVaultTitle => 'الخزنة السرية';
+
+  @override
+  String get secretVaultPinScreenSetupTitle => 'أنشئ رمزاً سرياً';
+
+  @override
+  String get secretVaultPinScreenEnterTitle => 'أدخل الرمز السري';
+
+  @override
+  String get secretVaultPinScreenSetPinHeader => 'عيّن رمز PIN لخزنتك السرية';
+
+  @override
+  String get secretVaultPinScreenUnlockHeader => 'افتح خزنتك السرية';
+
+  @override
+  String get secretVaultPinScreenInstruction => 'أدخل رمز PIN مكون من 4 أرقام.';
+
+  @override
+  String get secretVaultEmptyTitle => 'خزنتك السرية فارغة';
+
+  @override
+  String get secretVaultEmptySubtitle =>
+      'اضغط على زر \'+\' لإضافة أول ملاحظة أو مفتاح سري لك.';
+
+  @override
+  String get secretVaultAddItemTitle => 'إضافة عنصر سري';
+
+  @override
+  String get secretVaultEditItemTitle => 'تعديل العنصر السري';
+
+  @override
+  String get secretVaultTitleHint => 'العنوان';
+
+  @override
+  String get secretVaultContentHint => 'المحتوى السري';
+
+  @override
+  String get secretVaultConfirmDelete =>
+      'هل أنت متأكد من رغبتك في حذف هذا العنصر السري؟';
+
+  @override
+  String get feedbackSecretItemContentCopied => 'تم نسخ المحتوى إلى الحافظة!';
+
+  @override
+  String get validationTitleEmpty => 'لا يمكن أن يكون العنوان فارغاً';
+
+  @override
+  String get validationContentEmpty => 'لا يمكن أن يكون المحتوى فارغاً';
+
+  @override
+  String get errorIncorrectPin => 'رمز PIN غير صحيح';
+
+  @override
+  String get dialogDeleteVaultTitle => 'حذف الخزنة السرية؟';
+
+  @override
+  String get dialogDeleteVaultContent =>
+      'هل أنت متأكد؟ سيتم حذف جميع العناصر السرية بشكل دائم. لا يمكن التراجع عن هذا الإجراء.';
+
+  @override
+  String get exportSuccess => 'تم التصدير بنجاح!';
+
+  @override
+  String get exportCancelled => 'تم إلغاء التصدير.';
 }

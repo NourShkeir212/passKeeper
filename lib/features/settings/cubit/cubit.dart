@@ -11,6 +11,7 @@ import '../../../core/services/secure_storage_service.dart';
 import '../../../core/services/session_manager.dart';
 import '../../../core/services/settings_service.dart';
 import '../../../model/account_model.dart';
+import '../../../model/secret_item_model.dart';
 import '../../home/cubit/account_cubit/cubit.dart';
 import '../../home/cubit/category_cubit/cubit.dart';
 import 'states.dart';
