@@ -14,27 +14,23 @@ A secure, offline-first password manager built with Flutter. PassKeeper allows y
 * **100% Offline:** All data is stored locally on your device in a secure SQLite database. Your data never leaves your phone.
 * **End-to-End Encryption:** All sensitive account information (especially passwords) is encrypted using the powerful **AES-256** algorithm.
 * **Zero Knowledge Model:** Your master password is **hashed** for verification and is **never stored**. It's the key to unlock your vault and exists only in your memory.
-* **Decoy Vault (Plausible Deniability):** Create an optional, secondary "decoy" profile with its own unique password. If forced to open the app, you can enter the decoy password to reveal a separate vault filled with believable fake data, keeping your real accounts completely hidden and secure.
+* **Decoy Vault (Plausible Deniability):** Create an optional, secondary "decoy" profile with its own unique password. If forced to open the app, you can enter the decoy password to reveal a separate vault filled with believable fake data, keeping your real accounts completely hidden.
+* **Secret Vault:** A hidden, high-security area within the app, protected by a separate PIN. Access it with a secret gesture (long-press on the app title) to store your most sensitive notes and keys.
 * **Secure Biometric Unlock:** Uses the device's Keychain (iOS) or Keystore (Android) via `flutter_secure_storage` to securely store the master password, allowing for a seamless and safe unlock with fingerprint or Face ID.
 * **Customizable Auto-Lock Timer:** For added security, the app automatically locks the vault if left in the background. The timer duration is fully customizable by the user.
-* **Unlock History:** Keep a log of recent vault unlock times for security auditing.
 * **Permanent Data Deletion:** Securely delete your entire user profile and all associated data with master password confirmation.
 
 ### 🗂️ Organization & Management
 * **Modern Home Screen UI:** The main screen features an interactive, horizontal list of category filter chips and a clean, expandable list of service groups.
 * **Smart Username Suggestions:** When adding a new account, the app can suggest usernames based on other accounts you've saved in a chosen category, speeding up data entry.
-* **Custom Categories:** Create, edit, delete, and reorder your own custom categories.
-* **Multi-Select & Batch Delete:** Easily select multiple categories at once to delete them in a single action from the management screen.
-* **Drag & Drop Reordering:** Intuitively reorder your accounts *within* their category group.
+* **Custom Categories:** Create, edit, delete, and reorder your own custom categories with multi-select and batch delete capabilities.
+* **Drag & Drop Reordering:** Intuitively reorder your accounts *within* their service group.
 * **Real-time Search:** A dedicated search bar on the home screen allows you to instantly find any account by its service name or username.
-* **Slidable Actions:** Quickly edit or delete accounts with modern swipe gestures.
-* **Password Generator:** Create strong, unique, and customizable passwords directly within the app.
-* **Password Strength Meter:** Get real-time feedback on the strength of your passwords as you type.
-* **Password Change Reminders:** Set optional, timed reminders on any account to notify you when it's time to change your password.
+* **Password Generator:** Create strong, unique, and customizable passwords directly within the app with a real-time strength meter.
 
 ### 🎨 Personalization & Accessibility
-* **Adaptive Theming:** The entire app is beautifully themed. Users can manually switch between **Light**, **Dark**, and **System default** themes from the settings screen for a personalized visual experience.
-* **Full Localization (i18n):** Complete support for both **English** and **Arabic**, including Right-to-Left (RTL) layouts. The app automatically detects the device language but allows the user to manually override it.
+* **Adaptive Theming:** The entire app is beautifully themed. Users can manually switch between **Light**, **Dark**, and **System default** themes.
+* **Full Localization (i18n):** Complete support for both **English** and **Arabic**, including Right-to-Left (RTL) layouts and a manual language switcher.
 
 ### 🔄 Data Portability
 * **Export to Excel:** Securely back up your vault by exporting it to an organized Excel (`.xlsx`) file. Passwords are **decrypted** for this export to ensure the backup is readable.
@@ -58,6 +54,7 @@ A secure, offline-first password manager built with Flutter. PassKeeper allows y
     * `google_fonts` for typography.
     * `flutter_svg` for scalable illustrations.
     * `collection` for advanced data manipulation.
+    * `pinput` for stylized PIN entry.
 
 ---
 
