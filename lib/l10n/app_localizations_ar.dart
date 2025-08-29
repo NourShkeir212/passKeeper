@@ -487,7 +487,10 @@ class AppLocalizationsAr extends AppLocalizations {
   String get excelHeaderRecovery => 'حساب الاسترداد';
 
   @override
-  String get excelHeaderPhone => 'أرقام الهواتف';
+  String get excelHeaderPhone => 'رقم الهاتف';
+
+  @override
+  String get excelHeaderNotes => 'الملاحظات';
 
   @override
   String get dialogUnlockToExportTitle => 'فتح الخزنة للتصدير';
@@ -878,4 +881,7 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get exportCancelled => 'تم إلغاء التصدير.';
+
+  @override
+  String get notes => 'الملاحظات';
 }

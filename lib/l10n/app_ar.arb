@@ -214,7 +214,8 @@
     "excelHeaderUsername": "اسم المستخدم/البريد الإلكتروني",
     "excelHeaderPassword": "كلمة المرور",
     "excelHeaderRecovery": "حساب الاسترداد",
-    "excelHeaderPhone": "أرقام الهواتف",
+    "excelHeaderPhone": "رقم الهاتف",
+    "excelHeaderNotes" : "الملاحظات",
     "dialogUnlockToExportTitle": "فتح الخزنة للتصدير",
     "dialogUnlockToExportContent": "الرجاء إدخال كلمة المرور الرئيسية لتصدير حساباتك.",
     "dialogUnlockToImportTitle": "فتح الخزنة للإستيراد",
@@ -344,5 +345,6 @@
     "dialogDeleteVaultTitle": "حذف الخزنة السرية؟",
     "dialogDeleteVaultContent": "هل أنت متأكد؟ سيتم حذف جميع العناصر السرية بشكل دائم. لا يمكن التراجع عن هذا الإجراء.",
     "exportSuccess": "تم التصدير بنجاح!",
-    "exportCancelled": "تم إلغاء التصدير."
+    "exportCancelled": "تم إلغاء التصدير.",
+    "notes": "الملاحظات"
 }

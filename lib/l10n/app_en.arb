@@ -213,7 +213,8 @@
     "excelHeaderUsername": "Username/Email",
     "excelHeaderPassword": "Password",
     "excelHeaderRecovery": "Recovery Account",
-    "excelHeaderPhone": "Phone Numbers",
+    "excelHeaderPhone": "Phone Number",
+    "excelHeaderNotes": "Note",
     "dialogUnlockToExportTitle": "Unlock to Export",
     "dialogUnlockToExportContent": "Please enter your master password to export your accounts.",
     "dialogUnlockToImportTitle": "Unlock to Import",
@@ -340,5 +341,6 @@
     "dialogDeleteVaultTitle": "Delete Secret Vault?",
     "dialogDeleteVaultContent": "Are you sure? All secret items will be permanently deleted. This action cannot be undone.",
     "exportSuccess": "Export successful!",
-    "exportCancelled": "Export cancelled."
+    "exportCancelled": "Export cancelled.",
+    "notes": "Notes"
 }

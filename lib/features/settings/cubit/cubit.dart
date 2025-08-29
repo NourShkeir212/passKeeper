@@ -1,8 +1,8 @@
 import 'package:encrypt/encrypt.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:path/path.dart';
 import 'package:secure_accounts/l10n/app_localizations.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import '../../../core/services/biometric_service.dart';
 import '../../../core/services/database_services.dart';
 import '../../../core/services/encryption_service.dart';
@@ -11,7 +11,6 @@ import '../../../core/services/secure_storage_service.dart';
 import '../../../core/services/session_manager.dart';
 import '../../../core/services/settings_service.dart';
 import '../../../model/account_model.dart';
-import '../../../model/secret_item_model.dart';
 import '../../home/cubit/account_cubit/cubit.dart';
 import '../../home/cubit/category_cubit/cubit.dart';
 import 'states.dart';
@@ -90,7 +89,8 @@ class SettingsCubit extends Cubit<SettingsState> {
     required String oldPassword,
     required String newPassword,
     required BuildContext context
-  }) async {
+  }) async
+  {
     // Keep the current state to restore it after the operation
     final currentState = state;
     emit(SettingsLoading());
@@ -172,7 +172,7 @@ class SettingsCubit extends Cubit<SettingsState> {
   Future<void> exportData() async {
     emit(SettingsExporting());
     try {
-      await _exportService.exportAccountsToExcel();
+      await _exportService.exportAccounts();
       emit(SettingsExportSuccess());
       // Revert to initial state after success
       loadSettings();
@@ -188,7 +188,7 @@ class SettingsCubit extends Cubit<SettingsState> {
   }) async {
     emit(SettingsImporting());
     try {
-      final message = await _exportService.importAccountsFromExcel();
+      final message = await _exportService.importAccounts();
 
       accountCubit.loadAccounts();
       categoryCubit.loadCategories();

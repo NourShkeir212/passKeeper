@@ -6,6 +6,7 @@ import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:iconsax_flutter/iconsax_flutter.dart';
 import '../../../core/services/encryption_service.dart';
 import '../../../core/theme/app_icons.dart';
+import '../../../core/widgets/custom_selectable_multiline_field.dart';
 import '../../../core/widgets/custom_text.dart';
 import '../../../core/widgets/empty_screen.dart';
 import '../../../core/widgets/master_password_dialog.dart';
@@ -308,6 +309,16 @@ class AccountList extends StatelessWidget {
                         account.phoneNumbers!.isNotEmpty)
                       _buildDetailRow(context, AppIcons.phone,  AppLocalizations.of(context)!.accountDetailsPhone,
                           account.phoneNumbers!),
+
+                    if (account.notes != null && account.notes!.isNotEmpty) ...[
+                      const Divider(height: 32),
+                      CustomSelectableMultiLineField(
+                        labelText: "Notes", // TODO: Localize
+                        text: account.notes!,
+                        prefixIcon: Icons.notes,
+                      ),
+                      SizedBox(height: 10,),
+                    ],
                     if (account.customFields.isNotEmpty) ...[
                       // Iterate through the map and build a row for each custom field
                       ...account.customFields.entries.map((entry) {
@@ -348,15 +359,28 @@ class AccountList extends StatelessWidget {
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Icon(icon, size: 20, color: Theme.of(context).colorScheme.primary),
+          Icon(icon, size: 20, color: Theme
+              .of(context)
+              .colorScheme
+              .primary),
           const SizedBox(width: 16),
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                CustomText(title, style: Theme.of(context).textTheme.bodySmall),
+                CustomText(title, style: Theme
+                    .of(context)
+                    .textTheme
+                    .bodySmall),
                 const SizedBox(height: 2),
-                CustomText(displayValue, style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w500,),maxLines: 2,),
+                CustomText(
+                  displayValue,
+                  style: const TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.w500,
+                  ),
+                  maxLines: 2,
+                ),
               ],
             ),
           ),

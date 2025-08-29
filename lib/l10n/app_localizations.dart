@@ -927,8 +927,14 @@ abstract class AppLocalizations {
   /// No description provided for @excelHeaderPhone.
   ///
   /// In en, this message translates to:
-  /// **'Phone Numbers'**
+  /// **'Phone Number'**
   String get excelHeaderPhone;
+
+  /// No description provided for @excelHeaderNotes.
+  ///
+  /// In en, this message translates to:
+  /// **'Note'**
+  String get excelHeaderNotes;
 
   /// No description provided for @dialogUnlockToExportTitle.
   ///
@@ -1643,6 +1649,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Export cancelled.'**
   String get exportCancelled;
+
+  /// No description provided for @notes.
+  ///
+  /// In en, this message translates to:
+  /// **'Notes'**
+  String get notes;
 }
 
 class _AppLocalizationsDelegate

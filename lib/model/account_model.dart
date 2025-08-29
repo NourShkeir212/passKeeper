@@ -11,6 +11,7 @@ class Account extends Equatable {
   final String password;
   final String? recoveryAccount;
   final String? phoneNumbers;
+  final String? notes;
   final bool isFavorite;
   final Map<String, String> customFields;
   final int accountOrder;
@@ -25,6 +26,7 @@ class Account extends Equatable {
     required this.password,
     this.recoveryAccount,
     this.phoneNumbers,
+    this.notes,
     this.isFavorite = false,
     this.customFields = const {},
     this.accountOrder = 0,
@@ -40,6 +42,7 @@ class Account extends Equatable {
     String? password,
     String? recoveryAccount,
     String? phoneNumbers,
+    String? notes,
     bool? isFavorite,
     int? accountOrder,
     String? profileTag,
@@ -54,6 +57,7 @@ class Account extends Equatable {
       password: password ?? this.password,
       recoveryAccount: recoveryAccount ?? this.recoveryAccount,
       phoneNumbers: phoneNumbers ?? this.phoneNumbers,
+      notes: notes ?? this.notes,
       isFavorite: isFavorite ?? this.isFavorite,
       accountOrder: accountOrder ?? this.accountOrder,
       profileTag: profileTag ?? this.profileTag,
@@ -71,6 +75,7 @@ class Account extends Equatable {
       'password': password,
       'recoveryAccount': recoveryAccount,
       'phoneNumbers': phoneNumbers,
+      'notes': notes,
       'isFavorite': isFavorite ? 1 : 0,
       'customFields': jsonEncode(customFields),
       'accountOrder': accountOrder,
@@ -88,6 +93,7 @@ class Account extends Equatable {
       password: map['password'],
       recoveryAccount: map['recoveryAccount'],
       phoneNumbers: map['phoneNumbers'],
+      notes: map['notes'],
       isFavorite: map['isFavorite'] == 1,
       accountOrder: map['accountOrder'] ?? 0,
       profileTag: map['profileTag'],
@@ -98,8 +104,19 @@ class Account extends Equatable {
   }
 
   @override
-  List<Object?> get props => [
-    id, userId, categoryId, serviceName, username, password,
-    recoveryAccount, phoneNumbers, isFavorite, accountOrder, profileTag
-  ];
+  List<Object?> get props =>
+      [
+        id,
+        userId,
+        categoryId,
+        serviceName,
+        username,
+        password,
+        recoveryAccount,
+        phoneNumbers,
+        notes,
+        isFavorite,
+        accountOrder,
+        profileTag
+      ];
 }

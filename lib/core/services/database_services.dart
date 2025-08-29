@@ -23,7 +23,7 @@ class DatabaseService {
     String path = join(await getDatabasesPath(), 'passkeeper.db');
     return await openDatabase(
       path,
-      version: 7, // Updated version
+      version: 8, // Updated version
       onCreate: _onCreate,
       onUpgrade: _onUpgrade,
       onConfigure: (db) async {
@@ -68,6 +68,7 @@ class DatabaseService {
         recoveryAccount TEXT,
         phoneNumbers TEXT,
         customFields TEXT,
+        notes TEXT,
         isFavorite INTEGER NOT NULL DEFAULT 0,
         accountOrder INTEGER NOT NULL DEFAULT 0,
         profileTag TEXT NOT NULL,
@@ -120,6 +121,9 @@ class DatabaseService {
         FOREIGN KEY (userId) REFERENCES users (id) ON DELETE CASCADE
       )
     ''');
+    }
+    if (oldVersion < 8) {
+      await db.execute('ALTER TABLE accounts ADD COLUMN notes TEXT');
     }
   }
 
